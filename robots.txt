@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: 
+Disallow:
 
-Sitemap: http://iacutone.github.io/sitemap.xml 
+Sitemap: http://iacutone.github.io/sitemap.xml
