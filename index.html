@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="The goal of this blog is to refine my writing skills. In order to fulfill this goal I will write about something interesting I learned on a weekly &hellip;">
+  <meta name="description" content="String Interpolation var name = &ldquo;Eric&rdquo; println(&ldquo;Hello, (name)&rdquo;) // &ldquo;Hello, Eric&rdquo; Dictionaries var response = [& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -39,6 +39,8 @@
 <body   class="collapse-sidebar sidebar-footer" >
   <header role="banner"><hgroup>
   <h1><a href="/">Iacutone Deep Thoughts</a></h1>
+  
+    <h2>coding and such</h2>
   
 </hgroup>
 
@@ -97,6 +99,154 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/09/swift-basics/">Swift Basics"</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-09T18:48:12-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:48 pm</span></time>
+        
+         | <a href="/blog/2015/09/09/swift-basics/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>String Interpolation</h1>
+
+<p>var name = &ldquo;Eric&rdquo;</p>
+
+<p>println(&ldquo;Hello, (name)&rdquo;)</p>
+
+<p>// &ldquo;Hello, Eric&rdquo;</p>
+
+<h1>Dictionaries</h1>
+
+<p>var response = [&ldquo;id&rdquo;:14,&ldquo;email&rdquo;:&ldquo;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x74;&#101;&#x73;&#116;&#64;&#101;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#116;&#x65;&#x73;&#116;&#64;&#101;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;</a>&rdquo;]</p>
+
+<p>let id = response[&ldquo;id&rdquo;]</p>
+
+<p>// 14</p>
+
+<p>let email = response[&ldquo;email&rdquo;]</p>
+
+<p>// <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x74;&#101;&#115;&#116;&#x40;&#101;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;">&#116;&#x65;&#x73;&#x74;&#64;&#101;&#x6d;&#97;&#105;&#108;&#46;&#99;&#x6f;&#109;</a></p>
+
+<h1>Tuples</h1>
+
+<h3>Unnamed Tuples</h3>
+
+<p>var coordinates = (100, 999)</p>
+
+<p>let (lat, lon) = coordinates</p>
+
+<p>println(&ldquo;Latitude is (lat)&rdquo;)</p>
+
+<p>// &ldquo;Latitude is 100&rdquo;</p>
+
+<p>println(&ldquo;Longtitude is (lon)&rdquo;)</p>
+
+<p>// Longitude is 999</p>
+
+<h3>Named Tuples</h3>
+
+<p>var response = (code: 200, message: &ldquo;All good&rdquo;)</p>
+
+<p>response.0
+// 200</p>
+
+<p>response.1
+// &ldquo;All good&rdquo;</p>
+
+<p>response.code
+// 200</p>
+
+<p>respsonse.message
+// &ldquo;All good&rdquo;</p>
+
+<h1>Swift Classes</h1>
+
+<h3>Creating a class</h3>
+
+<figure class='code'><figcaption><span>Person.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nl">Person</span><span class="p">:</span> <span class="bp">NSObject</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">var</span> <span class="nl">name</span><span class="p">:</span> <span class="n">String</span>
+</span><span class='line'>  <span class="k">var</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span>
+</span><span class='line'>  <span class="k">var</span> <span class="nl">zip</span><span class="p">:</span> <span class="n">Int</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">init</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">zip</span><span class="p">:</span> <span class="n">Int</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nb">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</span><span class='line'>      <span class="nb">self</span><span class="p">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
+</span><span class='line'>      <span class="nb">self</span><span class="p">.</span><span class="n">zip</span> <span class="o">=</span> <span class="n">zip</span>
+</span><span class='line'>      <span class="nb">super</span><span class="p">.</span><span class="k">init</span><span class="p">()</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Create data for Person Class</h3>
+
+<figure class='code'><figcaption><span>SampleData.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">let</span> <span class="n">personData</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>  <span class="n">Person</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="s">&quot;Eric&quot;</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="s">&quot;eric.iacutone@gmail.com&quot;</span><span class="p">,</span> <span class="nl">zip</span><span class="p">:</span> <span class="mi">12345</span><span class="p">)</span>
+</span><span class='line'><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Instantiating Person Class</h3>
+
+<figure class='code'><figcaption><span>PersonViewController.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="nl">person</span><span class="p">:</span> <span class="p">[</span><span class="n">Person</span><span class="p">]</span> <span class="o">=</span> <span class="n">personData</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, if you copy and paste the the files into a XCode Playground, you can call methods on your person object.</p>
+
+<figure class='code'><figcaption><span>Playground.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">count</span>
+</span><span class='line'><span class="c1">// 1</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">first</span><span class="o">?</span><span class="p">.</span><span class="n">zip</span>
+</span><span class='line'><span class="c1">// 12345</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>

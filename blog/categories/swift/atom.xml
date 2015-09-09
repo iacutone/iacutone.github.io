@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Swift | Iacutone Deep Thoughts]]></title>
+  <link href="http://iacutone.github.io/blog/categories/swift/atom.xml" rel="self"/>
+  <link href="http://iacutone.github.io/"/>
+  <updated>2015-09-09T18:51:23-05:00</updated>
+  <id>http://iacutone.github.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Swift Basics"]]></title>
+    <link href="http://iacutone.github.io/blog/2015/09/09/swift-basics/"/>
+    <updated>2015-09-09T18:48:12-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/09/09/swift-basics</id>
+    <content type="html"><![CDATA[<h1>String Interpolation</h1>
+
+<p>var name = &ldquo;Eric&rdquo;</p>
+
+<p>println(&ldquo;Hello, (name)&rdquo;)</p>
+
+<p>// &ldquo;Hello, Eric&rdquo;</p>
+
+<h1>Dictionaries</h1>
+
+<p>var response = [&ldquo;id&rdquo;:14,&ldquo;email&rdquo;:&ldquo;<a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x74;&#x65;&#x73;&#116;&#x40;&#101;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#116;&#101;&#x73;&#x74;&#64;&#x65;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;</a>&rdquo;]</p>
+
+<p>let id = response[&ldquo;id&rdquo;]</p>
+
+<p>// 14</p>
+
+<p>let email = response[&ldquo;email&rdquo;]</p>
+
+<p>// <a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#116;&#101;&#115;&#116;&#x40;&#101;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#x6d;">&#116;&#x65;&#x73;&#116;&#x40;&#x65;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#109;</a></p>
+
+<h1>Tuples</h1>
+
+<h3>Unnamed Tuples</h3>
+
+<p>var coordinates = (100, 999)</p>
+
+<p>let (lat, lon) = coordinates</p>
+
+<p>println(&ldquo;Latitude is (lat)&rdquo;)</p>
+
+<p>// &ldquo;Latitude is 100&rdquo;</p>
+
+<p>println(&ldquo;Longtitude is (lon)&rdquo;)</p>
+
+<p>// Longitude is 999</p>
+
+<h3>Named Tuples</h3>
+
+<p>var response = (code: 200, message: &ldquo;All good&rdquo;)</p>
+
+<p>response.0
+// 200</p>
+
+<p>response.1
+// &ldquo;All good&rdquo;</p>
+
+<p>response.code
+// 200</p>
+
+<p>respsonse.message
+// &ldquo;All good&rdquo;</p>
+
+<h1>Swift Classes</h1>
+
+<h3>Creating a class</h3>
+
+<pre><code class="swift Person.swift">
+class Person: NSObject {
+  var name: String
+  var email: String
+  var zip: Int
+
+  init(name: String, email: String, zip: Int) {
+      self.name = name
+      self.email = email
+      self.zip = zip
+      super.init()
+  }
+}
+</code></pre>
+
+<h3>Create data for Person Class</h3>
+
+<pre><code class="swift SampleData.swift">
+let personData = [
+  Person(name: "Eric", email: "eric.iacutone@gmail.com", zip: 12345)
+]
+</code></pre>
+
+<h3>Instantiating Person Class</h3>
+
+<pre><code class="swift PersonViewController.swift">
+var person: [Person] = personData
+</code></pre>
+
+<p>Now, if you copy and paste the the files into a XCode Playground, you can call methods on your person object.</p>
+
+<pre><code class="swift Playground.swift">
+person.count
+// 1
+
+person.first?.zip
+// 12345
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
