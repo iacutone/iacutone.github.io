@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Swift | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/swift/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-09-09T18:53:31-05:00</updated>
+  <updated>2015-09-09T19:01:15-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -20,7 +20,8 @@
     <id>http://iacutone.github.io/blog/2015/09/09/swift-basics</id>
     <content type="html"><![CDATA[<h1>String Interpolation</h1>
 
-<pre><code class="swift">var name = "Eric"
+<pre><code class="swift">
+var name = "Eric"
 
 println("Hello, \(name)")
 
@@ -29,53 +30,51 @@ println("Hello, \(name)")
 
 <h1>Dictionaries</h1>
 
-<p>`` swift
-var response = [&ldquo;id&rdquo;:14,&ldquo;email&rdquo;:&ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#116;&#101;&#115;&#116;&#x40;&#101;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x74;&#x65;&#x73;&#116;&#x40;&#101;&#109;&#x61;&#x69;&#108;&#46;&#99;&#111;&#109;</a>&rdquo;]</p>
+<pre><code class="swift">var response = ["id":14,"email":"test@email.com"]
 
-<p>let id = response[&ldquo;id&rdquo;]</p>
+let id = response["id"]
 
-<p>// 14</p>
+// 14
 
-<p>let email = response[&ldquo;email&rdquo;]</p>
+let email = response["email"]
 
-<p>// <a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x74;&#101;&#x73;&#x74;&#64;&#101;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#109;">&#x74;&#101;&#x73;&#116;&#x40;&#x65;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;</a>
-```</p>
+// test@email.com
+</code></pre>
 
 <h1>Tuples</h1>
 
 <h3>Unnamed Tuples</h3>
 
-<p>`` swift
-var coordinates = (100, 999)</p>
+<pre><code class="swift">
+var coordinates = (100, 999)
 
-<p>let (lat, lon) = coordinates</p>
+let (lat, lon) = coordinates
 
-<p>println(&ldquo;Latitude is (lat)&rdquo;)</p>
+println("Latitude is \(lat)")
 
-<p>// &ldquo;Latitude is 100&rdquo;</p>
+// "Latitude is 100"
 
-<p>println(&ldquo;Longtitude is (lon)&rdquo;)</p>
+println("Longtitude is \(lon)")
 
-<p>// Longitude is 999
-```</p>
+// Longitude is 999
+</code></pre>
 
 <h3>Named Tuples</h3>
 
-<p>`` swift
-var response = (code: 200, message: &ldquo;All good&rdquo;)</p>
+<pre><code class="swift">var response = (code: 200, message: "All good")
 
-<p>response.0
-// 200</p>
+response.0
+// 200
 
-<p>response.1
-// &ldquo;All good&rdquo;</p>
+response.1
+// "All good"
 
-<p>response.code
-// 200</p>
+response.code
+// 200
 
-<p>respsonse.message
-// &ldquo;All good&rdquo;
-```</p>
+respsonse.message
+// "All good"
+</code></pre>
 
 <h1>Swift Classes</h1>
 

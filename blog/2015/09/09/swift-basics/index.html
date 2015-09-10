@@ -5,11 +5,22 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Swift Basics" - Iacutone Deep Thoughts</title>
+  <title>Swift Basics - Iacutone Deep Thoughts</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content="String Interpolation var name = &ldquo;Eric&rdquo; println(&ldquo;Hello, (name)&rdquo;) // &ldquo;Hello, Eric&rdquo; Dictionaries var response = [& &hellip;">
+  <meta name="description" content="String Interpolation 1
+2
+3
+4
+5
+var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, Eric&quot; Dictionaries 1
+2
+3
+4
+5
+6
+7 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -40,7 +51,7 @@
   <header role="banner"><hgroup>
   <h1><a href="/">Iacutone Deep Thoughts</a></h1>
   
-    <h2>coding and such</h2>
+    <h2>coding and things</h2>
   
 </hgroup>
 
@@ -103,7 +114,7 @@
   <header>
     
       
-        <h1 class="entry-title">Swift Basics"</h1>
+        <h1 class="entry-title">Swift Basics</h1>
       
     
     
@@ -125,55 +136,101 @@
 
 <div class="entry-content"><h1>String Interpolation</h1>
 
-<p>var name = &ldquo;Eric&rdquo;</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Eric&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;Hello, \(name)&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// &quot;Hello, Eric&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>println(&ldquo;Hello, (name)&rdquo;)</p>
-
-<p>// &ldquo;Hello, Eric&rdquo;</p>
 
 <h1>Dictionaries</h1>
 
-<p>var response = [&ldquo;id&rdquo;:14,&ldquo;email&rdquo;:&ldquo;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x74;&#101;&#x73;&#116;&#64;&#101;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#116;&#x65;&#x73;&#116;&#64;&#101;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;</a>&rdquo;]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">response</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;id&quot;</span><span class="o">:</span><span class="mi">14</span><span class="p">,</span><span class="s">&quot;email&quot;</span><span class="o">:</span><span class="s">&quot;test@email.com&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">let</span> <span class="kt">id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s">&quot;id&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 14</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s">&quot;email&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// test@email.com</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>let id = response[&ldquo;id&rdquo;]</p>
-
-<p>// 14</p>
-
-<p>let email = response[&ldquo;email&rdquo;]</p>
-
-<p>// <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x74;&#101;&#115;&#116;&#x40;&#101;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;">&#116;&#x65;&#x73;&#x74;&#64;&#101;&#x6d;&#97;&#105;&#108;&#46;&#99;&#x6f;&#109;</a></p>
 
 <h1>Tuples</h1>
 
 <h3>Unnamed Tuples</h3>
 
-<p>var coordinates = (100, 999)</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">coordinates</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">999</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">let</span> <span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span> <span class="o">=</span> <span class="n">coordinates</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;Latitude is \(lat)&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// &quot;Latitude is 100&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;Longtitude is \(lon)&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Longitude is 999</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>let (lat, lon) = coordinates</p>
-
-<p>println(&ldquo;Latitude is (lat)&rdquo;)</p>
-
-<p>// &ldquo;Latitude is 100&rdquo;</p>
-
-<p>println(&ldquo;Longtitude is (lon)&rdquo;)</p>
-
-<p>// Longitude is 999</p>
 
 <h3>Named Tuples</h3>
 
-<p>var response = (code: 200, message: &ldquo;All good&rdquo;)</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">response</span> <span class="o">=</span> <span class="p">(</span><span class="nl">code</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="nl">message</span><span class="p">:</span> <span class="s">&quot;All good&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">response</span><span class="mf">.0</span>
+</span><span class='line'><span class="c1">// 200</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">response</span><span class="mf">.1</span>
+</span><span class='line'><span class="c1">// &quot;All good&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">response</span><span class="p">.</span><span class="n">code</span>
+</span><span class='line'><span class="c1">// 200</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">respsonse</span><span class="p">.</span><span class="n">message</span>
+</span><span class='line'><span class="c1">// &quot;All good&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>response.0
-// 200</p>
-
-<p>response.1
-// &ldquo;All good&rdquo;</p>
-
-<p>response.code
-// 200</p>
-
-<p>respsonse.message
-// &ldquo;All good&rdquo;</p>
 
 <h1>Swift Classes</h1>
 
