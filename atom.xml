@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-09-09T19:03:09-05:00</updated>
+  <updated>2015-09-09T19:38:41-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -52,7 +52,7 @@
 </span><span class='line'>
 </span><span class='line'><span class="k">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s">&quot;email&quot;</span><span class="p">]</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1">// test@email.com</span>
+</span><span class='line'><span class="c1">// &quot;test@email.com&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -140,10 +140,10 @@
 </span><span class='line'>  <span class="k">var</span> <span class="nl">zip</span><span class="p">:</span> <span class="n">Int</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">init</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">zip</span><span class="p">:</span> <span class="n">Int</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nb">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-</span><span class='line'>      <span class="nb">self</span><span class="p">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
-</span><span class='line'>      <span class="nb">self</span><span class="p">.</span><span class="n">zip</span> <span class="o">=</span> <span class="n">zip</span>
-</span><span class='line'>      <span class="nb">super</span><span class="p">.</span><span class="k">init</span><span class="p">()</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">zip</span> <span class="o">=</span> <span class="n">zip</span>
+</span><span class='line'>    <span class="nb">super</span><span class="p">.</span><span class="k">init</span><span class="p">()</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -180,6 +180,78 @@
 </span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">first</span><span class="o">?</span><span class="p">.</span><span class="n">zip</span>
 </span><span class='line'><span class="c1">// 12345</span>
 </span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Enums</h1>
+
+<p>An enumeration defines a common type for a group of related values and enables you to work with those values in a type-safe way within your code. - <a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Enumerations.html">Swift docs</a></p>
+
+<p>Use an enum when you need a consistent data value.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">enum</span> <span class="nl">CountryType</span><span class="p">:</span><span class="n">String</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">case</span> <span class="n">UnitedStates</span> <span class="o">=</span> <span class="s">&quot;United States&quot;</span>
+</span><span class='line'>    <span class="k">case</span> <span class="n">Spain</span> <span class="o">=</span> <span class="s">&quot;Spain&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">init</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nb">self</span> <span class="o">=</span> <span class="p">.</span><span class="n">UnitedStates</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">var</span> <span class="n">type</span> <span class="o">=</span> <span class="n">CountryType</span><span class="p">.</span><span class="n">UnitedStates</span><span class="p">.</span><span class="n">rawValue</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// &quot;United States&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Structs</h1>
+
+<p>A struct allows you to create a structured data type which provides storage of data using properties and extending its functionality via methods. -<a href="http://blog.teamtreehouse.com/enums-structs-swift">Tree House</a></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">struct</span> <span class="n">Person</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">var</span> <span class="nl">name</span><span class="p">:</span> <span class="n">String</span>
+</span><span class='line'>    <span class="k">var</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span>
+</span><span class='line'>    <span class="k">var</span> <span class="nl">country</span><span class="p">:</span> <span class="n">CountryType</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">var</span> <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="s">&quot;Eric&quot;</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="s">&quot;eric.iacutone@gmail.com&quot;</span><span class="p">,</span> <span class="nl">country</span><span class="p">:</span> <span class="n">CountryType</span><span class="p">.</span><span class="n">UnitedStates</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">name</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// &quot;Eric&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">country</span><span class="p">.</span><span class="n">rawValue</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// &quot;United States&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 
 ]]></content>
   </entry>

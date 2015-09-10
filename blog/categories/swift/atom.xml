@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Swift | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/swift/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-09-09T19:03:09-05:00</updated>
+  <updated>2015-09-09T19:38:41-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -38,7 +38,7 @@ let id = response["id"]
 
 let email = response["email"]
 
-// test@email.com
+// "test@email.com"
 </code></pre>
 
 <h1>Tuples</h1>
@@ -87,10 +87,10 @@ class Person: NSObject {
   var zip: Int
 
   init(name: String, email: String, zip: Int) {
-      self.name = name
-      self.email = email
-      self.zip = zip
-      super.init()
+    self.name = name
+    self.email = email
+    self.zip = zip
+    super.init()
   }
 }
 </code></pre>
@@ -117,6 +117,49 @@ person.count
 
 person.first?.zip
 // 12345
+</code></pre>
+
+<h1>Enums</h1>
+
+<p>An enumeration defines a common type for a group of related values and enables you to work with those values in a type-safe way within your code. - <a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Enumerations.html">Swift docs</a></p>
+
+<p>Use an enum when you need a consistent data value.</p>
+
+<pre><code class="swift">
+enum CountryType:String {
+    case UnitedStates = "United States"
+    case Spain = "Spain"
+
+    init() {
+      self = .UnitedStates
+    }
+}
+
+var type = CountryType.UnitedStates.rawValue
+
+// "United States"
+</code></pre>
+
+<h1>Structs</h1>
+
+<p>A struct allows you to create a structured data type which provides storage of data using properties and extending its functionality via methods. -<a href="http://blog.teamtreehouse.com/enums-structs-swift">Tree House</a></p>
+
+<pre><code class="swift">
+struct Person {
+    var name: String
+    var email: String
+    var country: CountryType
+}
+
+var person = Person(name: "Eric", email: "eric.iacutone@gmail.com", country: CountryType.UnitedStates)
+
+person.name
+
+// "Eric"
+
+person.country.rawValue
+
+// "United States"
 </code></pre>
 ]]></content>
   </entry>
