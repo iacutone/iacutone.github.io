@@ -9,18 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="String Interpolation 1
-2
-3
-4
-5
-var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, Eric&quot; Dictionaries 1
-2
-3
-4
-5
-6
-7 &hellip;">
+  <meta name="description" content="Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,6 +99,106 @@ var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, 
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/18/rubys-fetch-method/">Ruby's Fetch Method</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-18T18:15:29-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:15 pm</span></time>
+        
+         | <a href="/blog/2015/09/18/rubys-fetch-method/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash.</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The code above will call #present? on nil if params[:search][:organization_id] does not exist.</p>
+
+<p>A better way to write the conditional:</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">].</span><span class="n">present</span> <span class="ow">and</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Writing a similar conditional with #fetch:</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s break this method down into simpler components:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;searched!&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="s2">&quot;searched!&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="kp">nil</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:organization_id</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I like the ability to call #fetch with a default return value if one does not exist. This leads to better ways to handle nil or catch errors.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -280,7 +369,7 @@ var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, 
 <h3>Instantiating Person Class</h3>
 
 <figure class='code'><figcaption><span>PersonViewController.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="nl">person</span><span class="p">:</span> <span class="p">[</span><span class="n">Person</span><span class="p">]</span> <span class="o">=</span> <span class="n">personData</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="nl">person</span><span class="p">:</span><span class="n">Array</span> <span class="o">=</span> <span class="n">personData</span>
 </span></code></pre></td></tr></table></div></figure>
 
 

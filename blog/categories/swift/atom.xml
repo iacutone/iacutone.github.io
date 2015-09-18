@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Swift | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/swift/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-09-09T19:38:41-05:00</updated>
+  <updated>2015-09-18T18:42:19-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -106,7 +106,7 @@ let personData = [
 <h3>Instantiating Person Class</h3>
 
 <pre><code class="swift PersonViewController.swift">
-var person: [Person] = personData
+var person:Array = personData
 </code></pre>
 
 <p>Now, if you copy and paste the the files into a XCode Playground, you can call methods on your person object.</p>

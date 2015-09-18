@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-09-09T19:38:41-05:00</updated>
+  <updated>2015-09-18T18:42:19-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby's Fetch Method]]></title>
+    <link href="http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/"/>
+    <updated>2015-09-18T18:15:29-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method</id>
+    <content type="html"><![CDATA[<p>Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash.</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The code above will call #present? on nil if params[:search][:organization_id] does not exist.</p>
+
+<p>A better way to write the conditional:</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">].</span><span class="n">present</span> <span class="ow">and</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Writing a similar conditional with #fetch:</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s break this method down into simpler components:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;searched!&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="s2">&quot;searched!&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="kp">nil</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:organization_id</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I like the ability to call #fetch with a default return value if one does not exist. This leads to better ways to handle nil or catch errors.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Swift Basics]]></title>
@@ -163,7 +240,7 @@
 <h3>Instantiating Person Class</h3>
 
 <figure class='code'><figcaption><span>PersonViewController.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="nl">person</span><span class="p">:</span> <span class="p">[</span><span class="n">Person</span><span class="p">]</span> <span class="o">=</span> <span class="n">personData</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="nl">person</span><span class="p">:</span><span class="n">Array</span> <span class="o">=</span> <span class="n">personData</span>
 </span></code></pre></td></tr></table></div></figure>
 
 

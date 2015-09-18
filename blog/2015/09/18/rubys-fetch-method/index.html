@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - Iacutone Deep Thoughts</title>
+  <title>Ruby's Fetch Method - Iacutone Deep Thoughts</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content=" Blog Archive 2015 Ruby's Fetch Method
-Sep 18 2015 posted in rails, ruby Swift Basics
-Sep 09 2015 posted in swift My Return to Blogging
-Sep 04 2015 ">
+  <meta name="description" content="Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ Sep 04 2015 ">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://iacutone.github.io/blog/archives">
+  <link rel="canonical" href="http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Iacutone Deep Thoughts" type="application/atom+xml">
@@ -101,70 +98,155 @@ Sep 04 2015 ">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      
+        <h1 class="entry-title">Ruby's Fetch Method</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-18T18:15:29-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:15 pm</span></time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+<div class="entry-content"><p>Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash.</p>
 
-  
-  <h2>2015</h2>
-
-<article>
-  
-<h1><a href="/blog/2015/09/18/rubys-fetch-method/">Ruby's Fetch Method</a></h1>
-<time datetime="2015-09-18T18:15:29-05:00" pubdate><span class='month'>Sep</span> <span class='day'>18</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>The code above will call #present? on nil if params[:search][:organization_id] does not exist.</p>
+
+<p>A better way to write the conditional:</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">].</span><span class="n">present</span> <span class="ow">and</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Writing a similar conditional with #fetch:</p>
 
-<article>
-  
-<h1><a href="/blog/2015/09/09/swift-basics/">Swift Basics</a></h1>
-<time datetime="2015-09-09T18:48:12-05:00" pubdate><span class='month'>Sep</span> <span class='day'>09</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/swift/'>swift</a></span>
-</footer>
-
-
-</article>
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Let&rsquo;s break this method down into simpler components:</p>
 
-<article>
-  
-<h1><a href="/blog/2015/09/04/my-return-to-blogging/">My Return to Blogging</a></h1>
-<time datetime="2015-09-04T19:45:08-05:00" pubdate><span class='month'>Sep</span> <span class='day'>04</span> <span class='year'>2015</span></time>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;searched!&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="s2">&quot;searched!&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="kp">nil</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:organization_id</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
-
+<p>I like the ability to call #fetch with a default return value if one does not exist. This leads to better ways to handle nil or catch errors.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
-</article>
 
 
-</div>
 
-<aside class="sidebar">
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-09-18T18:15:29-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:15 pm</span></time>
+      
+      
+
+<span class="categories">
   
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
     
+      <div class="sharing">
   
-</aside>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/" >Tweet</a>
+  
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/09/09/swift-basics/" title="Previous Post: Swift Basics">&laquo; Swift Basics</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+</div>
 
     </div>
   </div>
@@ -180,7 +262,10 @@ Sep 04 2015 ">
       var disqus_shortname = 'iacutone';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/';
+        var disqus_url = 'http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
