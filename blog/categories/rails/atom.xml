@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-10-23T18:02:12-05:00</updated>
+  <updated>2015-10-23T18:04:05-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -41,7 +41,7 @@ end
 
 <p>Currently, both implementations for downcasing an email are straightforward. However, as the application grows, the before_save callback is more difficult to test and maintain. The before_save is implicit and might have unexpected side effects. Here is a basic spec.</p>
 
-<pre><code class="user_spec.rb">
+<pre><code class="ruby user_spec.rb">
 describe User do
 
   let(:user) { FactoryGirl.create(:user) }
@@ -58,7 +58,7 @@ end
 
 <p>Instead, let&rsquo;s test the <em>behavior</em> of what we expect.</p>
 
-<pre><code class="user_creation_spec.rb">
+<pre><code class="ruby user_creation_spec.rb">
 describe 'User Creation' do
   let(:user) { FactoryGirl.create(:user) }
 
