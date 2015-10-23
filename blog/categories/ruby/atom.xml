@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-09-18T18:42:19-05:00</updated>
+  <updated>2015-10-23T18:02:12-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Setter Method in a Rails Model]]></title>
+    <link href="http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model/"/>
+    <updated>2015-10-23T15:30:53-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model</id>
+    <content type="html"><![CDATA[<p>At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&rsquo;s say we need to do something in a before_save callback such as lowercase a user&rsquo;s email.</p>
+
+<pre><code class="ruby user.rb">
+before_save: lowercase_email
+
+def lowercase_email
+  self.email = self.email.downcase
+end
+</code></pre>
+
+<p>How is this code implemented without using before_save? One method would be overriding the setter accessor.</p>
+
+<pre><code class="ruby user.rb">
+def email=(value)
+ email = value.downcase
+ super(email)
+end
+</code></pre>
+
+<p>Now, when the email attribute is updated, my email setter method is called.</p>
+
+<p>Currently, both implementations for downcasing an email are straightforward. However, as the application grows, the before_save callback is more difficult to test and maintain. The before_save is implicit and might have unexpected side effects. Here is a basic spec.</p>
+
+<pre><code class="user_spec.rb">
+describe User do
+
+  let(:user) { FactoryGirl.create(:user) }
+
+  describe '#lowercase_email' do
+    before { user.email = 'GNARLY@email.com' }
+
+    it 'lowercases the email' do
+      expect(user.lowercase_email).to eq 'gnarly@email.com'
+    end
+  end
+end
+</code></pre>
+
+<p>Instead, let&rsquo;s test the <em>behavior</em> of what we expect.</p>
+
+<pre><code class="user_creation_spec.rb">
+describe 'User Creation' do
+  let(:user) { FactoryGirl.create(:user) }
+
+  describe ':email' do
+    before { user.email = 'GNARLY@email.com' }
+
+    'it returns a standardized email' do
+      expect(user.email).to eq 'gnarly@email.com'
+    end
+  end
+end
+</code></pre>
+
+<p>The first spec is directly testing the callback, whereas the latter spec is testing the <em>behavior</em> of the expected outcome. The latter spec is easier to reason about and change. This is an easy example, but every additional callback adds additional implicit behavior to think about and can be a nightmare when behavior needs to me modified. This is especially true if the callbacks are coupled with other models.</p>
+
+<p><em>Helpful Links</em></p>
+
+<p><a href="http://stackoverflow.com/questions/10464793/what-is-the-right-way-to-override-a-setter-method-in-ruby-on-rails">What is the right way to override a setter method in Ruby on Rails?</a></p>
+
+<p><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#class-ActiveRecord%3a%3aBase-label-Overwriting+default+accessors">Overwriting default accessors</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ruby's Fetch Method]]></title>
