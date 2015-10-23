@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-10-23T18:04:05-05:00</updated>
+  <updated>2015-10-23T18:27:58-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -72,7 +72,7 @@ describe 'User Creation' do
 end
 </code></pre>
 
-<p>The first spec is directly testing the callback, whereas the latter spec is testing the <em>behavior</em> of the expected outcome. The latter spec is easier to reason about and change. This is an easy example, but every additional callback adds additional implicit behavior to think about and can be a nightmare when behavior needs to me modified. This is especially true if the callbacks are coupled with other models.</p>
+<p>The first spec is directly testing the callback, whereas the latter spec is testing the <em>behavior</em> of the expected outcome. The latter spec is easier to reason about and change. This is an easy example, but as callbacks grow changing their behavior becomes more difficult. This is especially true if the callbacks are coupled with other models.</p>
 
 <p><em>Helpful Links</em></p>
 
