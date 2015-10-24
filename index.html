@@ -620,7 +620,992 @@
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/16/exceptions-in-ruby/">Exceptions in Ruby</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-02-16T18:40:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:40 pm</span></time>
+        
+         | <a href="/blog/2014/02/16/exceptions-in-ruby/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I inherited some interesting code last week.  A user has the ability to sign into the website with omniauth.</p>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">num</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Enter a number&quot;</span>
+</span><span class='line'>  <span class="n">num</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">chomp</span><span class="o">.</span><span class="n">to_i</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">3</span>
+</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;It&#39;s a 3!&quot;</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>          <span class="k">raise</span> <span class="s2">&quot;Wrong number, you entered a </span><span class="si">#{</span><span class="n">num</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">num2</span>
+</span><span class='line'>  <span class="n">num</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">begin</span>
+</span><span class='line'>  <span class="n">num2</span>
+</span><span class='line'><span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">ex</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">ex</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>Reference</p>
+
+
+<p><a href='http://www.ruby-doc.org/core-2.1.0/Exception.html'>Ruby Exception Class</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/21/refactoring-client-side-validations/">Refactoring Client Side Validations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-01-21T23:46:00-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>11:46 pm</span></time>
+        
+         | <a href="/blog/2014/01/21/refactoring-client-side-validations/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p> I have been working on refactoring my client side JavaScript validations on an application.  My tech lead gave me some illuminating tips on how to refactor my non-DRY code.  Here is an example of the pre-refactored code.</p>
+
+
+
+
+<figure class='code'><figcaption><span>_form.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%=</span> <span class="n">form_for</span><span class="p">(</span><span class="vi">@order</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;div class=&#39;your_info&#39;&gt;</span>
+</span><span class='line'><span class="x">    &lt;h3&gt;2. Your Information&lt;/h3&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:first_name</span><span class="p">,</span> <span class="s1">&#39;First name*&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:first_name</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;first_name_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        </span><span class="cp">&lt;%#</span><span class="c">= f.hidden_field :customer_id, value: current_user.id unless current_user.id == nil </span><span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:last_name</span><span class="p">,</span> <span class="s1">&#39;Last name*&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:last_name</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;last_name_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:email</span><span class="p">,</span> <span class="s1">&#39;Email*&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:email</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;email_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">  &lt;/div&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span> <span class="s2">&quot;Submit your Order&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s1">&#39;btn btn-primary btn-lg&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="ss">data</span><span class="p">:</span> <span class="p">{</span> <span class="ss">confirm</span><span class="p">:</span> <span class="s2">&quot;Place order?&quot;</span> <span class="p">}</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>So, let's start with this basic form and sprinkle it with some JQuery and Javascript for client side validations.</p>
+
+
+
+
+<figure class='code'><figcaption><span>users.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// Initial State for Form</span>
+</span><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.your_info&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// validations</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">first_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input#order_first_name&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">last_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input#order_last_name&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input#order_email&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// event listeners</span>
+</span><span class='line'><span class="nx">first_name</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">validateFirstName</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">last_name</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">validateLastName</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">email</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">validateEmail</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">validateFirstName</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">first_name_val</span> <span class="o">=</span> <span class="nx">first_name</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">first_name_val</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">first_name_error</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="s2">&quot;First name needed.&quot;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;error_class&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">first_name_error</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">validateLastName</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">last_name_val</span> <span class="o">=</span> <span class="nx">last_name</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">last_name_val</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">last_name_error</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="s2">&quot;Last name needed.&quot;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;error_class&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">last_name_error</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">validateEmail</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">email_val</span> <span class="o">=</span> <span class="nx">email</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">email_val</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">email_error</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="s2">&quot;Email needed.&quot;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;error_class&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">email_error</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>Clearly, this is not DRY and will easily get out of comtrol.  However, using HTML data attributes solves this problem.  Here is a good <a href='http://ejohn.org/blog/html-5-data-attributes/'>summary</a> about data attributes by John Resig.</p>
+
+
+
+
+<figure class='code'><figcaption><span>_form.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%=</span> <span class="n">form_for</span><span class="p">(</span><span class="vi">@order</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;div class=&#39;your_info&#39;&gt;</span>
+</span><span class='line'><span class="x">    &lt;h3&gt;2. Your Information&lt;/h3&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:first_name</span><span class="p">,</span> <span class="s1">&#39;First name*&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:first_name</span><span class="p">,</span> <span class="ss">:data</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:error</span> <span class="o">=&gt;</span> <span class="s1">&#39;First name&#39;</span><span class="p">}</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;first_name_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:last_name</span><span class="p">,</span> <span class="s1">&#39;Last name*&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:last_name</span><span class="p">,</span> <span class="ss">:data</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:error</span> <span class="o">=&gt;</span> <span class="s1">&#39;Last name&#39;</span><span class="p">}</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;last_name_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:email</span><span class="p">,</span> <span class="s1">&#39;Email*&#39;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:email</span><span class="p">,</span> <span class="ss">:data</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:error</span> <span class="o">=&gt;</span> <span class="s1">&#39;Email&#39;</span><span class="p">}</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;email_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">  </span><span class="cp">&lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span> <span class="s2">&quot;Submit your Order&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s1">&#39;btn btn-primary btn-lg&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="ss">data</span><span class="p">:</span> <span class="p">{</span> <span class="ss">confirm</span><span class="p">:</span> <span class="s2">&quot;Place order?&quot;</span> <span class="p">}</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>users.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">).</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">blankValidation</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">blankValidation</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">error_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error_name</span><span class="p">);</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">error_name</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">){</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">error_id</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;#&#39;</span> <span class="o">+</span> <span class="nx">error_name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;_error&#39;</span><span class="p">));</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">error_message</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">error_id</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">error_message</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="nx">error_name</span> <span class="o">+</span> <span class="s2">&quot; needed.&quot;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;error_class&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">error_message</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>We can dynamically call the data attribute for each element.  For example, the error_name value the keyup event(m) will console.log (=> First name, m). The call method allows us to refactor all of our keyup event listeners into one method.  The call method as defined by the Mozilla guide "calls a function with a given this value and arguments provided individually."</p>
+
+
+<p>h/t Dan Porter</p>
+
+
+
+
+<p>Reference</p>
+
+
+<ul>
+  <li><a href='http://yehudakatz.com/2011/08/11/understanding-JavaScript-function-invocation-and-this/'>Understanding JavaScript Function Invocation and this</a></li>
+  <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call'>Function.prototype.call()</a></li>
+  <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply'>Function.prototype.apply()</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/22/testing-your-way-to-success/">Testing Your Way to Success</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-10-22T21:36:00-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>9:36 pm</span></time>
+        
+         | <a href="/blog/2013/10/22/testing-your-way-to-success/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been immersed in production codebases for my <a href='fohrcard.com'>Fohr Card</a> and <a href='http://www.fracturedatlas.org/'>Fractured Atlas</a> projects.  At first, it feel initimidating trying to figure out all of the models and related associations.  I have found that a great way to wrap your head around the code base is to create a new branch and test the code.</p>
+
+
+
+
+<p>A good basic set-up is to start unit testing the models.  In order to do this depends on if your codebase is using a relational database or something like Mongoid.</p>
+
+
+
+
+<h3>Relational Databases</h3>
+
+
+<figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;guard-rspec&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;rspec-rails&#39;</span>
+</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;factory_girl_rails&#39;</span>
+</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;faker&#39;</span>
+</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;shoulda-matchers&#39;</span>
+</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;terminal-notifier-guard&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<ul>
+    <li>Guard RSpec waits for you to save your files and automatically runs your tests, thereby reducing the time needed to run tests.</li>
+    <li>I like the RSpec syntax over Unit Test and Mini Test.</li>
+    <li>Factory Girl Rails creates objects for your tests.  This gem deserves its own blog post. </li>
+    <li>The Faker Gem is used in conjunction with Factory Girl Rails to create fake data.</li>
+    <li>I like to use Shoulda Matchers to test validaitons and associations in the code.  This gem and firing up Rails Console to play with the objects in my testing is the crux to learning a new codebase.</li>
+    <li>Some people find Terminal Notifier annoying, but it helps me know if my tests pass when I have Sublime maximized on my 11 inch MacBook Air screen.</li>
+</ul>
+
+
+<p></p>
+
+<h3>Mongoid</h3>
+
+
+<figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;guard-rspec&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;fabrication&#39;</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;faker&#39;</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;rspec-rails&#39;</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;mongoid-rspec&#39;</span>
+</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;terminal-notifier-guard&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p><p>The gems for Mongoid testing are similar to those used in testing with a relational database.<p>
+<ul>
+    <li>The Fabrication gem is similar to building objects with Factory Girl, except the documentation website <a href='http://www.fabricationgem.org/'>rocks.</a></li>
+    <li>The Mongoid RSpec gem is similar to Shoulda-Matchers</li>
+</ul></p>
+
+<p><h3>Gems</h3>
+<a href='https://github.com/guard/guard-rspec'>Guard RSpec</a></br>
+<a href='https://github.com/rspec/rspec-rails'>RSpec Rails</a></br>
+<a href='https://github.com/thoughtbot/factory_girl_rails'>Factory Girl Rails</a></br>
+<a href='https://github.com/btelles/faker'>Faker</a></br>
+<a href='https://github.com/thoughtbot/shoulda-matchers'>Shoulda Matchers</a></br>
+<a href='https://github.com/Springest/terminal-notifier-guard'>Terminal Notifier Guard</a></br>
+<a href='https://github.com/paulelliott/fabrication'>Fabrication</a></br>
+<a href='https://github.com/evansagge/mongoid-rspec'>Mongoid RSpec</a></br></br></p>
+
+<p><h3>Other Resources</h3>
+<p>I found this book invaluable in learning best practices in testing: <a href='https://leanpub.com/everydayrailsrspec'>Everday RSpec</a></br>h/t Victoria Friedman</p></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/07/changing-your-password-from-scratch/">Changing Your Password From Scratch</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-09-07T01:08:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:08 am</span></time>
+        
+         | <a href="/blog/2013/09/07/changing-your-password-from-scratch/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p> So say you are using devise and have none of the has_secure_password medthod available to you.  One should learn the bcrypt gem... and needs to abstract some methods in order to parse an encrypted password.  Cool, Bcrypt can do that, as located <a href ='  https://github.com/rails/rails/blob/b965ce361b89ad33a4a4b422f8e564233926c723/activemodel/lib/active_model/secure_password.rb#L42
+'>here.</a> Here is my modified code in order to confirm if a new password in order to apply a boolean value to an inputed password.</p>
+
+
+
+
+<figure class='code'><figcaption><span>edit.html.haml lang: ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'> <span class="nt">%li</span>
+</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:current_password</span>
+</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">password_field</span> <span class="ss">:current_password</span>
+</span><span class='line'>      # =&gt; &#39;password&#39;
+</span><span class='line'>    <span class="nt">%li</span>
+</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:new_password</span><span class="p">,</span> <span class="s1">&#39;New Password&#39;</span>
+</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">password_field</span> <span class="ss">:new_password</span>
+</span><span class='line'>      # =&gt; &#39;new_password&#39;
+</span><span class='line'>
+</span><span class='line'>  <span class="nc">.buttons</span>
+</span><span class='line'>    <span class="nt">%button</span> Save
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>user.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="n">unencrypted_password</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span> <span class="o">==</span> <span class="n">unencrypted_password</span> <span class="o">&amp;&amp;</span> <span class="nb">self</span>
+</span><span class='line'>      <span class="n">bcrypt</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># creates a bcrypt variable if the encrypted passwors result is true</span>
+</span><span class='line'>      <span class="c1"># =&gt; &quot;$2a$10$wgOzLhy84peHUD9wr9UkgOKRpwfls/0h48NYVvKIOdUdbz3XOEpSK&quot; </span>
+</span><span class='line'>      <span class="n">password</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">hash_secret</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">bcrypt</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># then salts the new password</span>
+</span><span class='line'>      <span class="c1"># =&gt; &quot;$2a$10$VUNoD3xdAp7ytTIsTyH5feY.DNUKA4efIdkcI6ViBQ532o8lyNV/e&quot; </span>
+</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="kp">nil</span> <span class="k">unless</span> <span class="n">reset_secure_compare</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">encrypted_password</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="k">else</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span> <span class="o">!=</span> <span class="n">unencrypted_password</span> <span class="o">&amp;&amp;</span> <span class="nb">self</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> <p>You might be wondering what the reset_secure_password method is doing.  Well, it is pulled from the Devise docs and is preventing <a href='http://en.wikipedia.org/wiki/Timing_attack'>timing attacks,</a> when an attacker attempts to compromise an encryption by analyzing the time taken in order to execute the password and salting algorithms.</p></p>
+
+<p>Cool, now I can pass my current_password attribute to make sure it is true.  I need to make a custom <a href='http://edgeguides.rubyonrails.org/active_record_validations.html'>Active Record Validations.</a></p>
+
+
+
+
+<figure class='code'><figcaption><span>user.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="k">def</span> <span class="nf">correct_password_update_validator</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">true</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">encrypted_password</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">new_password</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>   <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>If this validates, encrypted_password on the database returns true.  Now I need validations for events with blank fields (I want nothing to happen), and also, if current_password is blank and new_password and present, visa versa.</p>
+
+
+
+
+<figure class='code'><figcaption><span>user.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">validate</span> <span class="ss">:incorrect_password_update_validator</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:correct_password_update_validator</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:current_password_present</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:new_password_present</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:current_password_true_present</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">current_password_true_present</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">true</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">blank?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:new_password</span><span class="p">,</span> <span class="s2">&quot; needs to be filled out.&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">current_password_present</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:current_password</span><span class="p">,</span> <span class="s2">&quot; needs to be filled out.&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">new_password_present</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">blank?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:new_password</span><span class="p">,</span> <span class="s2">&quot; needs to be filled out.&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">incorrect_password_update_validator</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:current_password</span><span class="p">,</span> <span class="s2">&quot; does not match.&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">reset_secure_compare</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">blank?</span> <span class="o">||</span> <span class="n">b</span><span class="o">.</span><span class="n">blank?</span> <span class="o">||</span> <span class="n">a</span><span class="o">.</span><span class="n">bytesize</span> <span class="o">!=</span> <span class="n">b</span><span class="o">.</span><span class="n">bytesize</span>
+</span><span class='line'>    <span class="n">l</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">unpack</span> <span class="s2">&quot;C</span><span class="si">#{</span><span class="n">a</span><span class="o">.</span><span class="n">bytesize</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="n">b</span><span class="o">.</span><span class="n">each_byte</span> <span class="p">{</span> <span class="o">|</span><span class="n">byte</span><span class="o">|</span> <span class="n">res</span> <span class="o">|=</span> <span class="n">byte</span> <span class="o">^</span> <span class="n">l</span><span class="o">.</span><span class="n">shift</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>Now, all use cases of the user improperly editing the form result in false and a validation error occurs.</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/">Grep and Scan Methods With Regular Expressions in Ruby</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-08-22T18:56:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>6:56 pm</span></time>
+        
+         | <a href="/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am creating an app to provide food cart locations in Manhattan.  <a href='https://github.com/iacutone/food-truck'>Here</a> is the code.  Food carts generally post their locations on Twitter; in order to create latitude and longitude coordinates, I needed to parse tweets.  This is where scan and grep play their role, to match elements in a tweet string.  Let's say this is our tweet: "53rd and park. Ready by 11!"  This string is database column in my locations model.</p>
+
+
+
+
+<p>Code for scan method.</p>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">tweet</span> <span class="o">=</span> <span class="s2">&quot;53rd and park. Ready by 11!&quot;</span>
+</span><span class='line'>  <span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/53/</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;53&quot;] </span>
+</span><span class='line'>  <span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;park&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>The scan method takes a string as an input.  Also, the i is used in the regular expression in order to make it case insensitive.</p>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/Park/</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1">#  =&gt; [] </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Code for grep method.</p>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">tweet</span> <span class="o">=</span> <span class="s2">&quot;53rd and park. Ready by 11!&quot;</span>
+</span><span class='line'>  <span class="n">tweet_array</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">split</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;53rd&quot;, &quot;and&quot;, &quot;park.&quot;, &quot;Ready&quot;, &quot;by&quot;, &quot;11!&quot;] </span>
+</span><span class='line'>  <span class="n">tweet_array</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/53/</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;53rd&quot;]</span>
+</span><span class='line'>  <span class="n">tweet_array</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;park.&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p><p>The grep method takes an array as an input, so use the string split method to turn it into an array seperated by commas.  Also, the regular expression matches the entire string.  The grep method seems to be more suited as an alternative for the select and map methods.  <a href='http://zigzag.github.io/2010/03/31/grep-in-ruby----a-powerful-enumerable-method.html'>This</a> blog post goes into further detail explaining more cases to use the grep method over more familiar methods.<p></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/15/adventures-in-jquery/">Hiding Multiple Checkboxes With JQuery</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-08-15T21:09:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:09 pm</span></time>
+        
+         | <a href="/blog/2013/08/15/adventures-in-jquery/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been developing a <a href='https://github.com/iacutone/new-quiz'>quiz app</a> for practice with a more complex schema interface.  I wanted to dive deeper into CoffeScript and found the opportunity while trying to figure out how a student can add an answer to a given quiz.  If a checkbox for a given answer is checked, I wanted the remaining checkboxes to disappear.  Also, if the student checked the incorrect box, the browser should render all checkboxes again.  Here is my <a href='https://gist.github.com/iacutone/c28e8fa1324f82b508e0'>code.</a></p>
+
+
+
+
+<figure class='code'><figcaption><span>questions.js.coffee </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'>   <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;.checker&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>      <span class="nx">boxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:checked&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="nx">nboxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:not(:checked)&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
+</span><span class='line'>          <span class="nx">nboxes</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
+</span><span class='line'>          <span class="nx">nboxes</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>... and the view</p>
+
+
+
+
+<figure class='code'><figcaption><span>_form.html.haml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Quiz</span><span class="p">:</span>
+</span><span class='line'><span class="o">=</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">name</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span> <span class="n">form_for</span> <span class="vi">@question</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">hidden_field</span> <span class="ss">:quiz_id</span><span class="p">,</span> <span class="ss">value</span><span class="p">:</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">id</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="s2">&quot;What is your question?&quot;</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
+</span><span class='line'>  <span class="o">%</span><span class="n">br</span>
+</span><span class='line'>  <span class="o">%</span><span class="n">fieldset</span>
+</span><span class='line'>      <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">fields_for</span> <span class="ss">:answers</span> <span class="k">do</span> <span class="o">|</span><span class="n">builder</span><span class="o">|</span>
+</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="ss">:content</span><span class="p">,</span> <span class="s2">&quot;Answer&quot;</span>
+</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
+</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="s2">&quot;Correct answer?&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span><span class="s1">&#39;checker_label&#39;</span>
+</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">check_box</span> <span class="ss">:is_correct</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s1">&#39;checker&#39;</span>
+</span><span class='line'>      <span class="o">%</span><span class="n">br</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">link_to_add_fields</span> <span class="s2">&quot;Add an answer choice&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="ss">:answers</span>
+</span><span class='line'>  <span class="o">%</span><span class="n">br</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
+    
+      <a class="prev" href="/posts/2">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
