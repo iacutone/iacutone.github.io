@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Bash | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/bash/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-10-31T17:35:01-05:00</updated>
+  <updated>2015-10-31T17:37:10-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -21,9 +21,7 @@
     <content type="html"><![CDATA[<p>I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video sites.&rdquo; It&rsquo;s super useful. However, it default downloads to the current terminal directory. Let&rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.</p>
 
 <pre><code class="sh .zshrc">function mp3 {
-  # Download all of the things to /Downloads/
-
-  function thing {
+  # Download all of the things to /Downloads
 
   youtube-dl --default-search=ytsearch: \
              --output="Downloads/%(title)s.%(ext)s" "$*"
