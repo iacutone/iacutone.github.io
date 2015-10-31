@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Jquery, | Iacutone Deep Thoughts]]></title>
+  <title><![CDATA[Category: Jquery | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/jquery/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-10-23T20:23:37-05:00</updated>
+  <updated>2015-10-30T22:45:14-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,6 +14,186 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Refactoring Client Side Validations]]></title>
+    <link href="http://iacutone.github.io/blog/2014/01/21/refactoring-client-side-validations/"/>
+    <updated>2014-01-21T23:46:00-05:00</updated>
+    <id>http://iacutone.github.io/blog/2014/01/21/refactoring-client-side-validations</id>
+    <content type="html"><![CDATA[<p> I have been working on refactoring my client side JavaScript validations on an application.  My tech lead gave me some illuminating tips on how to refactor my non-DRY code.  Here is an example of the pre-refactored code.</p>
+
+
+<p>{% codeblock _form.html.erb lang:erb %}
+&lt;%= form_for(@order) do |f| %>
+  <div class='your_info'>
+    <h3>2. Your Information</h3>
+    <div class="clearfix">
+      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :first_name %>
+        <span id="first_name_error"></span>
+      </div>
+      <div class="input">
+        &lt;%#= f.hidden_field :customer_id, value: current_user.id unless current_user.id == nil %>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :last_name %>
+        <span id="last_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :email, &lsquo;Email*&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :email %>
+        <span id="email_error"></span>
+      </div>
+    </div>
+  </div>
+  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %>
+&lt;% end %>
+{% endcodeblock %}</p>
+
+<p>So, let's start with this basic form and sprinkle it with some JQuery and Javascript for client side validations.</p>
+
+
+<p>{% codeblock users.js lang:js %}
+// Initial State for Form
+$(&lsquo;.your_info&rsquo;).hide();</p>
+
+<p>// validations
+var first_name = $(&lsquo;input#order_first_name&rsquo;);
+var last_name = $(&lsquo;input#order_last_name&rsquo;);
+var email = $(&lsquo;input#order_email&rsquo;);</p>
+
+<p>// event listeners
+first_name.keyup(function(){
+  validateFirstName();
+});</p>
+
+<p>last_name.keyup(function(){
+  validateLastName();
+});</p>
+
+<p>email.keyup(function(){
+  validateEmail();
+});</p>
+
+<p>function validateFirstName(){
+  var first_name_val = first_name.val();
+  if(first_name_val.length == 0) {
+    first_name_error.show().text(&ldquo;First name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    first_name_error.hide();
+    return true;
+  }
+}</p>
+
+<p>function validateLastName(){
+  var last_name_val = last_name.val();
+  if(last_name_val.length == 0) {
+    last_name_error.show().text(&ldquo;Last name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    last_name_error.hide();
+    return true;
+  }
+}</p>
+
+<p>function validateEmail(){
+  var email_val = email.val();
+  if(email_val.length == 0) {
+    email_error.show().text(&ldquo;Email needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    email_error.hide();
+    return true;
+  }
+}
+{% endcodeblock %}</p>
+
+<p>Clearly, this is not DRY and will easily get out of comtrol.  However, using HTML data attributes solves this problem.  Here is a good <a href='http://ejohn.org/blog/html-5-data-attributes/'>summary</a> about data attributes by John Resig.</p>
+
+
+<p>{% codeblock _form.html.erb lang:erb %}
+&lt;%= form_for(@order) do |f| %>
+  <div class='your_info'>
+    <h3>2. Your Information</h3>
+    <div class="clearfix">
+      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :first_name, :data => {:error => &lsquo;First name&rsquo;} %>
+        <span id="first_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :last_name, :data => {:error => &lsquo;Last name&rsquo;} %>
+        <span id="last_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :email, &lsquo;Email*&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :email, :data => {:error => &lsquo;Email&rsquo;} %>
+        <span id="email_error"></span>
+      </div>
+    </div>
+  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %>
+&lt;% end %>
+{% endcodeblock %}</p>
+
+<p>{% codeblock users.js lang:js %}
+$(&lsquo;input&rsquo;).keyup(function(){
+  blankValidation.call(this);
+});</p>
+
+<p>function blankValidation(){
+  var error_name = $(this).data(&lsquo;error&rsquo;);
+  console.log(error_name);
+  var value = $(this).val();
+  console.log(value);
+  if(error_name !== undefined){
+    var error_id = (&lsquo;#&rsquo; + error_name.toLowerCase().replace(&lsquo; &rsquo;, &lsquo;<em>&rsquo;) + (&lsquo;</em>error&rsquo;));
+    var error_message = $(error_id);
+    if(value.length === 0) {
+      error_message.show().text(error_name + &ldquo; needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+      return false;
+    }
+    else {
+      error_message.hide();
+      return true;
+    }
+  }
+}
+{% endcodeblock %}</p>
+
+<p>We can dynamically call the data attribute for each element.  For example, the error_name value the keyup event(m) will console.log (=> First name, m). The call method allows us to refactor all of our keyup event listeners into one method.  The call method as defined by the Mozilla guide "calls a function with a given this value and arguments provided individually."</p>
+
+
+<p>h/t Dan Porter</p>
+
+
+
+
+<p>Reference</p>
+
+
+<ul>
+  <li><a href='http://yehudakatz.com/2011/08/11/understanding-JavaScript-function-invocation-and-this/'>Understanding JavaScript Function Invocation and this</a></li>
+  <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call'>Function.prototype.call()</a></li>
+  <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply'>Function.prototype.apply()</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Hiding Multiple Checkboxes With JQuery]]></title>
     <link href="http://iacutone.github.io/blog/2013/08/15/adventures-in-jquery/"/>
     <updated>2013-08-15T21:09:00-05:00</updated>
@@ -21,86 +201,144 @@
     <content type="html"><![CDATA[<p>I have been developing a <a href='https://github.com/iacutone/new-quiz'>quiz app</a> for practice with a more complex schema interface.  I wanted to dive deeper into CoffeScript and found the opportunity while trying to figure out how a student can add an answer to a given quiz.  If a checkbox for a given answer is checked, I wanted the remaining checkboxes to disappear.  Also, if the student checked the incorrect box, the browser should render all checkboxes again.  Here is my <a href='https://gist.github.com/iacutone/c28e8fa1324f82b508e0'>code.</a></p>
 
 
-<p><figure class='code'><figcaption><span>questions.js.coffee </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;.checker&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">-&amp;</span><span class="nx">gt</span><span class="p">;</span>
-</span><span class='line'>    <span class="nx">boxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:checked&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nx">nboxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:not(:checked)&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span>
-</span><span class='line'>        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
-</span><span class='line'>        <span class="nx">nboxes</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
-</span><span class='line'>        <span class="nx">nboxes</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock questions.js.coffee lang:js %}</p>
+
+<pre><code>$('form').on 'click', '.checker', (event) -&gt;
+    boxes = $(":checkbox:checked")
+    nboxes = $(":checkbox:not(:checked)")
+    if boxes.length == 1
+        $('.checker_label').hide()
+        nboxes.hide()
+    if boxes.length == 0
+        $('.checker_label').show()
+        nboxes.show()
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>... and the view</p>
 
 
-<p><figure class='code'><figcaption><span>_form.html.haml </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;Quiz:</span>
-</span><span class='line'><span class="sr">= @quiz.name&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;=</span> <span class="n">form_for</span> <span class="vi">@question</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
-</span><span class='line'>    <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">hidden_field</span> <span class="ss">:quiz_id</span><span class="p">,</span> <span class="ss">value</span><span class="p">:</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">id</span>
-</span><span class='line'>    <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">What</span> <span class="n">is</span> <span class="n">your</span> <span class="n">question?</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
-</span><span class='line'>    <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
-</span><span class='line'>    <span class="o">%</span><span class="n">br</span>
-</span><span class='line'>    <span class="o">%</span><span class="n">fieldset</span>
-</span><span class='line'>        <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">fields_for</span> <span class="ss">:answers</span> <span class="k">do</span> <span class="o">|</span><span class="n">builder</span><span class="o">|</span>
-</span><span class='line'>            <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="ss">:content</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Answer</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
-</span><span class='line'>            <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
-</span><span class='line'>            <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Correct</span> <span class="n">answer?</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="ss">class</span><span class="p">:</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">checker_label</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
-</span><span class='line'>            <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">check_box</span> <span class="ss">:is_correct</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">checker</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
-</span><span class='line'>        <span class="o">%</span><span class="n">br</span>
-</span><span class='line'>    <span class="o">=</span> <span class="n">link_to_add_fields</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Add</span> <span class="n">an</span> <span class="n">answer</span> <span class="n">choice</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">f</span><span class="p">,</span> <span class="ss">:answers</span>
-</span><span class='line'>    <span class="o">%</span><span class="n">br</span>
-</span><span class='line'>    <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock _form.html.haml lang:ruby %}</p>
+
+<p>Quiz:
+= @quiz.name</p>
+
+<p>= form_for @question do |f|
+    = f.hidden_field :quiz_id, value: @quiz.id
+    = f.label &ldquo;What is your question?&rdquo;
+    = f.text_field :content
+    %br
+    %fieldset
+        = f.fields_for :answers do |builder|
+            = builder.label :content, &ldquo;Answer&rdquo;
+            = builder.text_field :content
+            = builder.label &ldquo;Correct answer?&rdquo;, class:&lsquo;checker_label&rsquo;
+            = builder.check_box :is_correct, class: &lsquo;checker&rsquo;
+        %br
+    = link_to_add_fields &ldquo;Add an answer choice&rdquo;, f, :answers
+    %br
+    = f.submit</p>
+
+<p>{% endcodeblock %}</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Gon Gem]]></title>
+    <link href="http://iacutone.github.io/blog/2013/06/30/gon-gem/"/>
+    <updated>2013-06-30T00:04:00-05:00</updated>
+    <id>http://iacutone.github.io/blog/2013/06/30/gon-gem</id>
+    <content type="html"><![CDATA[<p>I ran into difficulties trying to find a way to implement jQuery in a modal.  It is not possible to use remote: true in a form_tag with Twitter Bootstrap.  I successfully used the <a href='https://github.com/gazay/gon'>Gon Gem</a> in order to remove elements from the DOM when an instance variable reached a certain number.  If you find yourself in the position of needing to remove elements from a modal, this gem seems to be the way to go.</p>
+
+
+<p>{% codeblock user_controller.rb lang:ruby %}</p>
+
+<pre><code>def create
+  @user = User.new(params[:user])
+
+  if @user.save
+
+    @day_one_counter = []
+    @day_one_counter = User.pluck(:time1)
+
+    #@day_one_counter outputs an array of elements from the :time1 column. =&gt; ["11:00", "11:00", nil, nil, nil]
+
+    b = Hash.new(0)
+
+    @day_one_counter.each do |v|
+      b[v] += 1
+    end
+
+    #the block increments the key/value pairs in the instantiated Hash. =&gt; {"11:00"=&gt;2, nil=&gt;3}
+
+    @time1 = b["11:00"]
+    gon.time1 = @time1
+
+    #@time1 pulls out the value of the pair =&gt; 2
+    #gon.time1 =&gt; 2, in order to use the @time1 instance variable in users.js
+
+    @time2 = b["11:20"] 
+    gon.time2 = @time2
+
+    @time3 = b["11:40"]
+    gon.time3 = @time3
+
+    render :time
+  else
+    render :new
+  end
+end
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p>This is a conintuation of the Pluck Method from my last blog post.  For an overview of what is happening, read the comments provided above.  With the gone.time1 variable, I can now use jQuery in my users.js file in order to remove elements from the DOM that go over a given number, in this case 5.</p>
+
+
+<p>{% codeblock users.js lang:js %}</p>
+
+<pre><code>if (gon.time1 &gt; 4) {
+    $('.wrapper1').remove();
+}
+
+if (gon.time2 &gt; 4) {
+    $('.wrapper2').remove();
+}
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p>...and the form</p>
+
+
+<p>{% codeblock _time1.html.erb lang:ruby %}</p>
+
+<pre><code>&lt;%= form_for @user do |f| %&gt;
+    &lt;div class='wrapper1' id='pad'&gt;11:00 A.M. &lt;%= f.radio_button(:time1, '11:00') %&gt;&lt;br /&gt;&lt;%= 5 - @time1 unless @time1 == nil %&gt; spots remaining.&lt;/div&gt; 
+    &lt;div class='wrapper2' id='pad'&gt;11:20 A.M. &lt;%= f.radio_button(:time1, '11:20') %&gt;&lt;br /&gt;&lt;%= 5 - @time2 unless @time2 == nil %&gt; spots remaining.&lt;/div&gt;
+    &lt;div class='wrapper'&gt;&lt;%= f.radio_button(:time1, 'No time.') %&gt;  Interested but not available during these times. Please inform me of future conversation opportunities.&lt;br /&gt;&lt;/div&gt;
+&lt;%= f.hidden_field :day, :value =&gt; 'July 10' %&gt;
+&lt;button class="btn btn-inverse" type="submit"class="actions"&gt;Submit&lt;/button&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p>Since the @time1 instance variable and therefore, gon.time1 are saved after my create action, the applicable time is > 4 if I want a total of 5 elements for a particular time on my :time1 column.  The next time the modal is visited, the element will be removed!</p>
+
+
+
+
+<p>I am so excited I found this gem and got my modal to work correctly! Also, a thanks for Railscast for the tutorial on the gem.</p>
+
+
+
+
+<p><a href='http://railscasts.com/episodes/324-passing-data-to-javascript'>Passing Data to Javascript</a></p>
+
+
+
 ]]></content>
   </entry>
   

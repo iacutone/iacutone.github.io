@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://iacutone.github.io/blog/2015/10/30/shell-function/</loc>
+    <lastmod>2015-10-30T22:34:34-05:00</lastmod>
+  </url>
+  <url>
     <loc>http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model/</loc>
     <lastmod>2015-10-23T15:30:53-05:00</lastmod>
   </url>
@@ -104,13 +108,7 @@
     <loc>http://iacutone.github.io/blog/categories/javascript/</loc>
   </url>
   <url>
-    <loc>http://iacutone.github.io/blog/categories/rails/</loc>
-  </url>
-  <url>
     <loc>http://iacutone.github.io/blog/categories/ruby/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/blog/categories/javascript/</loc>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/categories/jquery/</loc>
@@ -119,22 +117,13 @@
     <loc>http://iacutone.github.io/blog/categories/sidekiq/</loc>
   </url>
   <url>
-    <loc>http://iacutone.github.io/blog/categories/jquery/</loc>
-  </url>
-  <url>
     <loc>http://iacutone.github.io/blog/categories/coffeescript/</loc>
   </url>
   <url>
-    <loc>http://iacutone.github.io/blog/categories/regular/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/blog/categories/expressions/</loc>
+    <loc>http://iacutone.github.io/blog/categories/regex/</loc>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/categories/grep/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/blog/categories/scan/</loc>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/categories/password/</loc>
@@ -152,15 +141,9 @@
     <loc>http://iacutone.github.io/blog/categories/refactoring/</loc>
   </url>
   <url>
-    <loc>http://iacutone.github.io/blog/categories/ruby/</loc>
-  </url>
-  <url>
     <loc>http://iacutone.github.io/blog/categories/swift/</loc>
   </url>
   <url>
-    <loc>http://iacutone.github.io/posts/2/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/posts/3/</loc>
+    <loc>http://iacutone.github.io/blog/categories/bash/</loc>
   </url>
 </urlset>

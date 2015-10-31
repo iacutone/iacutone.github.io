@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-10-23T20:23:37-05:00</updated>
+  <updated>2015-10-30T22:45:14-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -140,291 +140,157 @@ end
     <content type="html"><![CDATA[<p> I have been working on refactoring my client side JavaScript validations on an application.  My tech lead gave me some illuminating tips on how to refactor my non-DRY code.  Here is an example of the pre-refactored code.</p>
 
 
-<p><figure class='code'><figcaption><span>_form.html.erb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&amp;lt;%= form_for(@order) do |f| </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">  &lt;div class=&#39;your_info&#39;&gt;</span>
-</span><span class='line'><span class="x">    &lt;h3&gt;2. Your Information&lt;/h3&gt;</span>
-</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
-</span><span class='line'><span class="x">      &amp;lt;%= f.label :first_name, &amp;lsquo;First name&lt;em&gt;&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
-</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :first_name </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">        &lt;span id=&quot;first_name_error&quot;&gt;&lt;/span&gt;</span>
-</span><span class='line'><span class="x">      &lt;/div&gt;</span>
-</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
-</span><span class='line'><span class="x">        &amp;lt;%#= f.hidden_field :customer_id, value: current_user.id unless current_user.id == nil </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">      &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
-</span><span class='line'><span class="x">      &amp;lt;%= f.label :last_name, &amp;lsquo;Last name&lt;/em&gt;&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
-</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :last_name </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">        &lt;span id=&quot;last_name_error&quot;&gt;&lt;/span&gt;</span>
-</span><span class='line'><span class="x">      &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
-</span><span class='line'><span class="x">      &amp;lt;%= f.label :email, &amp;lsquo;Email*&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
-</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :email </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">        &lt;span id=&quot;email_error&quot;&gt;&lt;/span&gt;</span>
-</span><span class='line'><span class="x">      &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;/div&gt;</span>
-</span><span class='line'><span class="x">  &lt;/div&gt;</span>
-</span><span class='line'><span class="x">  &amp;lt;%= f.submit &amp;ldquo;Submit your Order&amp;rdquo;, class: &amp;lsquo;btn btn-primary btn-lg&amp;rsquo;, id: &amp;lsquo;button&amp;rsquo;, data: { confirm: &amp;ldquo;Place order?&amp;rdquo; } </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">&amp;lt;% end </span><span class="err">%&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock _form.html.erb lang:erb %}
+&lt;%= form_for(@order) do |f| %>
+  <div class='your_info'>
+    <h3>2. Your Information</h3>
+    <div class="clearfix">
+      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :first_name %>
+        <span id="first_name_error"></span>
+      </div>
+      <div class="input">
+        &lt;%#= f.hidden_field :customer_id, value: current_user.id unless current_user.id == nil %>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :last_name %>
+        <span id="last_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :email, &lsquo;Email*&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :email %>
+        <span id="email_error"></span>
+      </div>
+    </div>
+  </div>
+  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %>
+&lt;% end %>
+{% endcodeblock %}</p>
 
 <p>So, let's start with this basic form and sprinkle it with some JQuery and Javascript for client side validations.</p>
 
 
-<p><figure class='code'><figcaption><span>users.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// Initial State for Form</span>
-</span><span class='line'><span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;.</span><span class="nx">your_info</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;).</span><span class="nx">hide</span><span class="p">();</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// validations</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">first_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">input</span><span class="err">#</span><span class="nx">order_first_name</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">last_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">input</span><span class="err">#</span><span class="nx">order_last_name</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">input</span><span class="err">#</span><span class="nx">order_email</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// event listeners</span>
-</span><span class='line'><span class="nx">first_name</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-</span><span class='line'>  <span class="nx">validateFirstName</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">last_name</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-</span><span class='line'>  <span class="nx">validateLastName</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">email</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-</span><span class='line'>  <span class="nx">validateEmail</span><span class="p">();</span>
-</span><span class='line'><span class="p">});</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">validateFirstName</span><span class="p">(){</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">first_name_val</span> <span class="o">=</span> <span class="nx">first_name</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">first_name_val</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">first_name_error</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">First</span> <span class="nx">name</span> <span class="nx">needed</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">addClass</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error_class</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">first_name_error</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">validateLastName</span><span class="p">(){</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">last_name_val</span> <span class="o">=</span> <span class="nx">last_name</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">last_name_val</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">last_name_error</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">Last</span> <span class="nx">name</span> <span class="nx">needed</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">addClass</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error_class</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">last_name_error</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">validateEmail</span><span class="p">(){</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">email_val</span> <span class="o">=</span> <span class="nx">email</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">email_val</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">email_error</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">Email</span> <span class="nx">needed</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">addClass</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error_class</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">email_error</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock users.js lang:js %}
+// Initial State for Form
+$(&lsquo;.your_info&rsquo;).hide();</p>
+
+<p>// validations
+var first_name = $(&lsquo;input#order_first_name&rsquo;);
+var last_name = $(&lsquo;input#order_last_name&rsquo;);
+var email = $(&lsquo;input#order_email&rsquo;);</p>
+
+<p>// event listeners
+first_name.keyup(function(){
+  validateFirstName();
+});</p>
+
+<p>last_name.keyup(function(){
+  validateLastName();
+});</p>
+
+<p>email.keyup(function(){
+  validateEmail();
+});</p>
+
+<p>function validateFirstName(){
+  var first_name_val = first_name.val();
+  if(first_name_val.length == 0) {
+    first_name_error.show().text(&ldquo;First name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    first_name_error.hide();
+    return true;
+  }
+}</p>
+
+<p>function validateLastName(){
+  var last_name_val = last_name.val();
+  if(last_name_val.length == 0) {
+    last_name_error.show().text(&ldquo;Last name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    last_name_error.hide();
+    return true;
+  }
+}</p>
+
+<p>function validateEmail(){
+  var email_val = email.val();
+  if(email_val.length == 0) {
+    email_error.show().text(&ldquo;Email needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    email_error.hide();
+    return true;
+  }
+}
+{% endcodeblock %}</p>
 
 <p>Clearly, this is not DRY and will easily get out of comtrol.  However, using HTML data attributes solves this problem.  Here is a good <a href='http://ejohn.org/blog/html-5-data-attributes/'>summary</a> about data attributes by John Resig.</p>
 
 
-<p><figure class='code'><figcaption><span>_form.html.erb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&amp;lt;%= form_for(@order) do |f| </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">  &lt;div class=&#39;your_info&#39;&gt;</span>
-</span><span class='line'><span class="x">    &lt;h3&gt;2. Your Information&lt;/h3&gt;</span>
-</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
-</span><span class='line'><span class="x">      &amp;lt;%= f.label :first_name, &amp;lsquo;First name&lt;em&gt;&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
-</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :first_name, :data =&gt; {:error =&gt; &amp;lsquo;First name&amp;rsquo;} </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">        &lt;span id=&quot;first_name_error&quot;&gt;&lt;/span&gt;</span>
-</span><span class='line'><span class="x">      &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
-</span><span class='line'><span class="x">      &amp;lt;%= f.label :last_name, &amp;lsquo;Last name&lt;/em&gt;&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
-</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :last_name, :data =&gt; {:error =&gt; &amp;lsquo;Last name&amp;rsquo;} </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">        &lt;span id=&quot;last_name_error&quot;&gt;&lt;/span&gt;</span>
-</span><span class='line'><span class="x">      &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
-</span><span class='line'><span class="x">      &amp;lt;%= f.label :email, &amp;lsquo;Email*&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
-</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :email, :data =&gt; {:error =&gt; &amp;lsquo;Email&amp;rsquo;} </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">        &lt;span id=&quot;email_error&quot;&gt;&lt;/span&gt;</span>
-</span><span class='line'><span class="x">      &lt;/div&gt;</span>
-</span><span class='line'><span class="x">    &lt;/div&gt;</span>
-</span><span class='line'><span class="x">  &amp;lt;%= f.submit &amp;ldquo;Submit your Order&amp;rdquo;, class: &amp;lsquo;btn btn-primary btn-lg&amp;rsquo;, id: &amp;lsquo;button&amp;rsquo;, data: { confirm: &amp;ldquo;Place order?&amp;rdquo; } </span><span class="err">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="x">&amp;lt;% end </span><span class="err">%&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock _form.html.erb lang:erb %}
+&lt;%= form_for(@order) do |f| %>
+  <div class='your_info'>
+    <h3>2. Your Information</h3>
+    <div class="clearfix">
+      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :first_name, :data => {:error => &lsquo;First name&rsquo;} %>
+        <span id="first_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :last_name, :data => {:error => &lsquo;Last name&rsquo;} %>
+        <span id="last_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :email, &lsquo;Email*&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :email, :data => {:error => &lsquo;Email&rsquo;} %>
+        <span id="email_error"></span>
+      </div>
+    </div>
+  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %>
+&lt;% end %>
+{% endcodeblock %}</p>
 
-<p><figure class='code'><figcaption><span>users.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">input</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;).</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-</span><span class='line'>  <span class="nx">blankValidation</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">blankValidation</span><span class="p">(){</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">error_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
-</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error_name</span><span class="p">);</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
-</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">error_name</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">){</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">error_id</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="err">#</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span> <span class="o">+</span> <span class="nx">error_name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span> <span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="nx">em</span><span class="o">&gt;&amp;</span><span class="nx">rsquo</span><span class="p">;)</span> <span class="o">+</span> <span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="err">/em&gt;error&amp;rsquo;));</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">error_message</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">error_id</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">error_message</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="nx">error_name</span> <span class="o">+</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span> <span class="nx">needed</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">addClass</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error_class</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">error_message</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock users.js lang:js %}
+$(&lsquo;input&rsquo;).keyup(function(){
+  blankValidation.call(this);
+});</p>
+
+<p>function blankValidation(){
+  var error_name = $(this).data(&lsquo;error&rsquo;);
+  console.log(error_name);
+  var value = $(this).val();
+  console.log(value);
+  if(error_name !== undefined){
+    var error_id = (&lsquo;#&rsquo; + error_name.toLowerCase().replace(&lsquo; &rsquo;, &lsquo;<em>&rsquo;) + (&lsquo;</em>error&rsquo;));
+    var error_message = $(error_id);
+    if(value.length === 0) {
+      error_message.show().text(error_name + &ldquo; needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+      return false;
+    }
+    else {
+      error_message.hide();
+      return true;
+    }
+  }
+}
+{% endcodeblock %}</p>
 
 <p>We can dynamically call the data attribute for each element.  For example, the error_name value the keyup event(m) will console.log (=> First name, m). The call method allows us to refactor all of our keyup event listeners into one method.  The call method as defined by the Mozilla guide "calls a function with a given this value and arguments provided individually."</p>
 
@@ -447,180 +313,201 @@ end
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Pluck Method in Active Record]]></title>
-    <link href="http://iacutone.github.io/blog/2013/06/23/pluck-method-in-active-record/"/>
-    <updated>2013-06-23T01:59:00-05:00</updated>
-    <id>http://iacutone.github.io/blog/2013/06/23/pluck-method-in-active-record</id>
-    <content type="html"><![CDATA[<p>The past few days, I have been building a database to store some information for my friend Shari, a Peace Corps recruiter.  The database includes, a name, email and phone number.  Things got tricky building a date/time models and validations.  Every given time has six time slots for a user to sign up.  My conclusion to this problem was to create a different database column for every given time slot.  Then, I used the <a href='http://apidock.com/rails/ActiveRecord/Calculations/pluck'>pluck method</a> on my Active Record database in order to turn all of my time columns into strings in an array.  However, in Rails 3, pluck only excepts one column to turn into an array.  This feature is being changed in Rails 4 according to <a href ='http://meltingice.net/2013/06/11/pluck-multiple-columns-rails/'>this</a> blog post where he describes how to tamper with the the Active Record library or create a module to provide a pluck_all method for a Rails 3 application.  I implemented this code, and was returned an array of hashes which did not help my cause.  But this is an interesting concept and it was fun and insightful reading the source code.</p>
+    <title type="html"><![CDATA[Testing Your Way to Success]]></title>
+    <link href="http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success/"/>
+    <updated>2013-10-22T21:36:00-05:00</updated>
+    <id>http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success</id>
+    <content type="html"><![CDATA[<p>I have been immersed in production codebases for my <a href='fohrcard.com'>Fohr Card</a> and <a href='http://www.fracturedatlas.org/'>Fractured Atlas</a> projects.  At first, it feel initimidating trying to figure out all of the models and related associations.  I have found that a great way to wrap your head around the code base is to create a new branch and test the code.</p>
 
 
-<p><figure class='code'><figcaption><span>users_controller.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  def create</span>
-</span><span class='line'><span class="sr">    @user = User.new(params[:user])&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="vi">@day_one_counter</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>  <span class="vi">@day_one_counter</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:time1</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="vi">@day_two_counter</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>  <span class="vi">@day_two_counter</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:time2</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">b</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">c</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="vi">@day_one_counter</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">v</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">b</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="vi">@day_two_counter</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">v</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">c</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="vi">@time1</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time2</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time3</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;12:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time4</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;12:15&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time5</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;12:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time6</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;12:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time7</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;1:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time8</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;1:15&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time9</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;1:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time10</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;1:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time11</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;5:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time12</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;5:15&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time13</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;5:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time14</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;5:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time15</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;6:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time16</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;6:15&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time17</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;6:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time18</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;6:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time19</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;7:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time20</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;7:15&quot;</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="vi">@time21</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;11:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time22</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;11:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time23</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;12:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time24</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;12:15&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time25</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;12:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time26</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;12:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time27</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;1:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time28</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;1:15&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time29</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;1:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time30</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;1:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time31</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;5:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time32</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;5:15&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time33</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;5:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time34</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;5:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time35</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;6:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time36</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;6:15&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time37</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;6:30&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time38</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;6:45&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time39</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;7:00&quot;</span><span class="o">]</span>
-</span><span class='line'>  <span class="vi">@time40</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;7:15&quot;</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># respond_to do |format|</span>
-</span><span class='line'>  <span class="c1">#   format.html</span>
-</span><span class='line'>  <span class="c1">#   format.js</span>
-</span><span class='line'>  <span class="c1"># end   </span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">render</span> <span class="ss">:time</span>
-</span><span class='line'><span class="k">else</span>
-</span><span class='line'>  <span class="n">render</span> <span class="ss">:new</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
 
-<p>This code gets really cumbersome the more time columns I add, so my next step is to DRY this shit up.  But hell, it works and is going to make my friend's life easier, yay! for technology.</p>
+
+<p>A good basic set-up is to start unit testing the models.  In order to do this depends on if your codebase is using a relational database or something like Mongoid.</p>
+
+
+
+
+<h3>Relational Databases</h3>
+
+
+<p>{% codeblock Gemfile lang:ruby %}</p>
+
+<pre><code>group :development do
+  gem 'guard-rspec', require: false
+end
+
+group :test do
+   gem 'rspec-rails'
+   gem 'factory_girl_rails'
+   gem 'faker'
+   gem 'shoulda-matchers'
+   gem 'terminal-notifier-guard' 
+end
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<ul>
+    <li>Guard RSpec waits for you to save your files and automatically runs your tests, thereby reducing the time needed to run tests.</li>
+    <li>I like the RSpec syntax over Unit Test and Mini Test.</li>
+    <li>Factory Girl Rails creates objects for your tests.  This gem deserves its own blog post. </li>
+    <li>The Faker Gem is used in conjunction with Factory Girl Rails to create fake data.</li>
+    <li>I like to use Shoulda Matchers to test validaitons and associations in the code.  This gem and firing up Rails Console to play with the objects in my testing is the crux to learning a new codebase.</li>
+    <li>Some people find Terminal Notifier annoying, but it helps me know if my tests pass when I have Sublime maximized on my 11 inch MacBook Air screen.</li>
+</ul>
 
 
 <p></p>
+
+<h3>Mongoid</h3>
+
+
+<p>{% codeblock Gemfile lang:ruby %}</p>
+
+<pre><code>group :development do
+  gem 'guard-rspec', require: false
+end
+
+group :test do
+  gem 'fabrication'
+  gem 'faker'
+  gem 'rspec-rails'
+  gem 'mongoid-rspec'
+  gem 'terminal-notifier-guard' 
+end
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p><p>The gems for Mongoid testing are similar to those used in testing with a relational database.<p>
+<ul>
+    <li>The Fabrication gem is similar to building objects with Factory Girl, except the documentation website <a href='http://www.fabricationgem.org/'>rocks.</a></li>
+    <li>The Mongoid RSpec gem is similar to Shoulda-Matchers</li>
+</ul></p>
+
+<p><h3>Gems</h3>
+<a href='https://github.com/guard/guard-rspec'>Guard RSpec</a></br>
+<a href='https://github.com/rspec/rspec-rails'>RSpec Rails</a></br>
+<a href='https://github.com/thoughtbot/factory_girl_rails'>Factory Girl Rails</a></br>
+<a href='https://github.com/btelles/faker'>Faker</a></br>
+<a href='https://github.com/thoughtbot/shoulda-matchers'>Shoulda Matchers</a></br>
+<a href='https://github.com/Springest/terminal-notifier-guard'>Terminal Notifier Guard</a></br>
+<a href='https://github.com/paulelliott/fabrication'>Fabrication</a></br>
+<a href='https://github.com/evansagge/mongoid-rspec'>Mongoid RSpec</a></br></br></p>
+
+<p><h3>Other Resources</h3>
+<p>I found this book invaluable in learning best practices in testing: <a href='https://leanpub.com/everydayrailsrspec'>Everday RSpec</a></br>h/t Victoria Friedman</p></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Changing Your Password From Scratch]]></title>
+    <link href="http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch/"/>
+    <updated>2013-09-07T01:08:00-05:00</updated>
+    <id>http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch</id>
+    <content type="html"><![CDATA[<p> So say you are using devise and have none of the has_secure_password medthod available to you.  One should learn the bcrypt gem... and needs to abstract some methods in order to parse an encrypted password.  Cool, Bcrypt can do that, as located <a href ='  https://github.com/rails/rails/blob/b965ce361b89ad33a4a4b422f8e564233926c723/activemodel/lib/active_model/secure_password.rb#L42
+'>here.</a> Here is my modified code in order to confirm if a new password in order to apply a boolean value to an inputed password.</p>
+
+
+<p>{% codeblock edit.html.haml lang: ruby %}
+ %li
+      = f.label :current_password
+      = f.password_field :current_password
+      # => &lsquo;password&rsquo;
+    %li
+      = f.label :new_password, &lsquo;New Password&rsquo;
+      = f.password_field :new_password
+      # => &lsquo;new_password&rsquo;</p>
+
+<p>  .buttons
+    %button Save
+{% endcodeblock %}</p>
+
+<p>{% codeblock user.rb lang:ruby %} <br/>
+    def authenticate(unencrypted_password)
+    if BCrypt::Password.new(encrypted_password) == unencrypted_password &amp;&amp; self
+      bcrypt = ::BCrypt::Password.new(encrypted_password)
+      # creates a bcrypt variable if the encrypted passwors result is true
+      # => &ldquo;$2a$10$wgOzLhy84peHUD9wr9UkgOKRpwfls/0h48NYVvKIOdUdbz3XOEpSK&rdquo;
+      password = ::BCrypt::Engine.hash_secret(password, bcrypt.salt)
+      # then salts the new password
+      # => &ldquo;$2a$10$VUNoD3xdAp7ytTIsTyH5feY.DNUKA4efIdkcI6ViBQ532o8lyNV/e&rdquo;
+      user = nil unless reset_secure_compare(password, encrypted_password)
+      return true
+    else BCrypt::Password.new(encrypted_password) != unencrypted_password &amp;&amp; self
+      return false
+    end
+  end
+{% endcodeblock %}</p>
+
+<p> <p>You might be wondering what the reset_secure_password method is doing.  Well, it is pulled from the Devise docs and is preventing <a href='http://en.wikipedia.org/wiki/Timing_attack'>timing attacks,</a> when an attacker attempts to compromise an encryption by analyzing the time taken in order to execute the password and salting algorithms.</p></p>
+
+<p>Cool, now I can pass my current_password attribute to make sure it is true.  I need to make a custom <a href='http://edgeguides.rubyonrails.org/active_record_validations.html'>Active Record Validations.</a></p>
+
+
+<p>{% codeblock user.rb lang:ruby %}
+    def correct_password_update_validator
+      if self.authenticate(current_password) == true and current_password.present? and new_password.present?
+        self.encrypted_password = ::BCrypt::Password.create(new_password)
+      end
+     end
+{% endcodeblock %}</p>
+
+<p>If this validates, encrypted_password on the database returns true.  Now I need validations for events with blank fields (I want nothing to happen), and also, if current_password is blank and new_password and present, visa versa.</p>
+
+
+<p>{% codeblock user.rb lang:ruby %}</p>
+
+<pre><code>validate :incorrect_password_update_validator, on: :update
+</code></pre>
+
+<p>  validate :correct_password_update_validator, on: :update
+  validate :current_password_present, on: :update
+  validate :new_password_present, on: :update
+  validate :current_password_true_present, on: :update</p>
+
+<p>  private</p>
+
+<pre><code>def current_password_true_present
+if self.authenticate(current_password) == true and new_password.blank? and current_password.present?
+  errors.add(:new_password, " needs to be filled out.")
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  def current_password_present
+    if self.authenticate(current_password) == false and new_password.present? and current_password.blank?
+      errors.add(:current_password, &ldquo; needs to be filled out.&rdquo;)
+    end
+  end</p>
+
+<p>  def new_password_present
+    if self.authenticate(current_password) == false and new_password.blank? and current_password.present?
+      errors.add(:new_password, &ldquo; needs to be filled out.&rdquo;)
+    end
+  end</p>
+
+<p>  def incorrect_password_update_validator
+    if self.authenticate(current_password) == false and current_password.present? and new_password.present?
+      errors.add(:current_password, &ldquo; does not match.&rdquo;)
+    end
+  end</p>
+
+<p>  def reset_secure_compare(a, b)
+    return false if a.blank? || b.blank? || a.bytesize != b.bytesize
+    l = a.unpack &ldquo;C#{a.bytesize}&rdquo;</p>
+
+<pre><code>res = 0
+b.each_byte { |byte| res |= byte ^ l.shift }
+res == 0
+</code></pre>
+
+<p>  end
+{% endcodeblock %}</p>
+
+<p>Now, all use cases of the user improperly editing the form result in false and a validation error occurs.</p>
+
 ]]></content>
   </entry>
   

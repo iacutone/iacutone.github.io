@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Javascript, | Iacutone Deep Thoughts]]></title>
+  <title><![CDATA[Category: Javascript | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-10-23T20:23:37-05:00</updated>
+  <updated>2015-10-30T22:45:14-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,6 +14,186 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Refactoring Client Side Validations]]></title>
+    <link href="http://iacutone.github.io/blog/2014/01/21/refactoring-client-side-validations/"/>
+    <updated>2014-01-21T23:46:00-05:00</updated>
+    <id>http://iacutone.github.io/blog/2014/01/21/refactoring-client-side-validations</id>
+    <content type="html"><![CDATA[<p> I have been working on refactoring my client side JavaScript validations on an application.  My tech lead gave me some illuminating tips on how to refactor my non-DRY code.  Here is an example of the pre-refactored code.</p>
+
+
+<p>{% codeblock _form.html.erb lang:erb %}
+&lt;%= form_for(@order) do |f| %>
+  <div class='your_info'>
+    <h3>2. Your Information</h3>
+    <div class="clearfix">
+      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :first_name %>
+        <span id="first_name_error"></span>
+      </div>
+      <div class="input">
+        &lt;%#= f.hidden_field :customer_id, value: current_user.id unless current_user.id == nil %>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :last_name %>
+        <span id="last_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :email, &lsquo;Email*&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :email %>
+        <span id="email_error"></span>
+      </div>
+    </div>
+  </div>
+  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %>
+&lt;% end %>
+{% endcodeblock %}</p>
+
+<p>So, let's start with this basic form and sprinkle it with some JQuery and Javascript for client side validations.</p>
+
+
+<p>{% codeblock users.js lang:js %}
+// Initial State for Form
+$(&lsquo;.your_info&rsquo;).hide();</p>
+
+<p>// validations
+var first_name = $(&lsquo;input#order_first_name&rsquo;);
+var last_name = $(&lsquo;input#order_last_name&rsquo;);
+var email = $(&lsquo;input#order_email&rsquo;);</p>
+
+<p>// event listeners
+first_name.keyup(function(){
+  validateFirstName();
+});</p>
+
+<p>last_name.keyup(function(){
+  validateLastName();
+});</p>
+
+<p>email.keyup(function(){
+  validateEmail();
+});</p>
+
+<p>function validateFirstName(){
+  var first_name_val = first_name.val();
+  if(first_name_val.length == 0) {
+    first_name_error.show().text(&ldquo;First name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    first_name_error.hide();
+    return true;
+  }
+}</p>
+
+<p>function validateLastName(){
+  var last_name_val = last_name.val();
+  if(last_name_val.length == 0) {
+    last_name_error.show().text(&ldquo;Last name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    last_name_error.hide();
+    return true;
+  }
+}</p>
+
+<p>function validateEmail(){
+  var email_val = email.val();
+  if(email_val.length == 0) {
+    email_error.show().text(&ldquo;Email needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    email_error.hide();
+    return true;
+  }
+}
+{% endcodeblock %}</p>
+
+<p>Clearly, this is not DRY and will easily get out of comtrol.  However, using HTML data attributes solves this problem.  Here is a good <a href='http://ejohn.org/blog/html-5-data-attributes/'>summary</a> about data attributes by John Resig.</p>
+
+
+<p>{% codeblock _form.html.erb lang:erb %}
+&lt;%= form_for(@order) do |f| %>
+  <div class='your_info'>
+    <h3>2. Your Information</h3>
+    <div class="clearfix">
+      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :first_name, :data => {:error => &lsquo;First name&rsquo;} %>
+        <span id="first_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :last_name, :data => {:error => &lsquo;Last name&rsquo;} %>
+        <span id="last_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :email, &lsquo;Email*&rsquo; %>
+      <div class="input">
+        &lt;%= f.text_field :email, :data => {:error => &lsquo;Email&rsquo;} %>
+        <span id="email_error"></span>
+      </div>
+    </div>
+  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %>
+&lt;% end %>
+{% endcodeblock %}</p>
+
+<p>{% codeblock users.js lang:js %}
+$(&lsquo;input&rsquo;).keyup(function(){
+  blankValidation.call(this);
+});</p>
+
+<p>function blankValidation(){
+  var error_name = $(this).data(&lsquo;error&rsquo;);
+  console.log(error_name);
+  var value = $(this).val();
+  console.log(value);
+  if(error_name !== undefined){
+    var error_id = (&lsquo;#&rsquo; + error_name.toLowerCase().replace(&lsquo; &rsquo;, &lsquo;<em>&rsquo;) + (&lsquo;</em>error&rsquo;));
+    var error_message = $(error_id);
+    if(value.length === 0) {
+      error_message.show().text(error_name + &ldquo; needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+      return false;
+    }
+    else {
+      error_message.hide();
+      return true;
+    }
+  }
+}
+{% endcodeblock %}</p>
+
+<p>We can dynamically call the data attribute for each element.  For example, the error_name value the keyup event(m) will console.log (=> First name, m). The call method allows us to refactor all of our keyup event listeners into one method.  The call method as defined by the Mozilla guide "calls a function with a given this value and arguments provided individually."</p>
+
+
+<p>h/t Dan Porter</p>
+
+
+
+
+<p>Reference</p>
+
+
+<ul>
+  <li><a href='http://yehudakatz.com/2011/08/11/understanding-JavaScript-function-invocation-and-this/'>Understanding JavaScript Function Invocation and this</a></li>
+  <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call'>Function.prototype.call()</a></li>
+  <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply'>Function.prototype.apply()</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Gon Gem]]></title>
     <link href="http://iacutone.github.io/blog/2013/06/30/gon-gem/"/>
     <updated>2013-06-30T00:04:00-05:00</updated>
@@ -21,148 +201,78 @@
     <content type="html"><![CDATA[<p>I ran into difficulties trying to find a way to implement jQuery in a modal.  It is not possible to use remote: true in a form_tag with Twitter Bootstrap.  I successfully used the <a href='https://github.com/gazay/gon'>Gon Gem</a> in order to remove elements from the DOM when an instance variable reached a certain number.  If you find yourself in the position of needing to remove elements from a modal, this gem seems to be the way to go.</p>
 
 
-<p><figure class='code'><figcaption><span>user_controller.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;def create</span>
-</span><span class='line'><span class="sr">  @user = User.new(params[:user])</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">  if @user.save</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">    @day_one_counter = []</span>
-</span><span class='line'><span class="sr">    @day_one_counter = User.pluck(:time1)</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">    </span><span class="si">#@day_one_counter</span><span class="sr"> outputs an array of elements from the :time1 column. =&amp;gt; [&quot;11:00&quot;, &quot;11:00&quot;, nil, nil, nil]</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">    b = Hash.new(0)</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">    @day_one_counter.each do |v|</span>
-</span><span class='line'><span class="sr">      b[v] += 1</span>
-</span><span class='line'><span class="sr">    end</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">    #the block increments the key/</span><span class="n">value</span> <span class="n">pairs</span> <span class="k">in</span> <span class="n">the</span> <span class="n">instantiated</span> <span class="no">Hash</span><span class="o">.</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="p">{</span><span class="s2">&quot;11:00&quot;</span><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span><span class="mi">2</span><span class="p">,</span> <span class="kp">nil</span><span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span><span class="mi">3</span><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="vi">@time1</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:00&quot;</span><span class="o">]</span>
-</span><span class='line'>    <span class="n">gon</span><span class="o">.</span><span class="n">time1</span> <span class="o">=</span> <span class="vi">@time1</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">#@time1 pulls out the value of the pair =&amp;gt; 2</span>
-</span><span class='line'>    <span class="c1">#gon.time1 =&amp;gt; 2, in order to use the @time1 instance variable in users.js</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="vi">@time2</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:20&quot;</span><span class="o">]</span>
-</span><span class='line'>    <span class="n">gon</span><span class="o">.</span><span class="n">time2</span> <span class="o">=</span> <span class="vi">@time2</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="vi">@time3</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:40&quot;</span><span class="o">]</span>
-</span><span class='line'>    <span class="n">gon</span><span class="o">.</span><span class="n">time3</span> <span class="o">=</span> <span class="vi">@time3</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">render</span> <span class="ss">:time</span>
-</span><span class='line'>  <span class="k">else</span>
-</span><span class='line'>    <span class="n">render</span> <span class="ss">:new</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock user_controller.rb lang:ruby %}</p>
+
+<pre><code>def create
+  @user = User.new(params[:user])
+
+  if @user.save
+
+    @day_one_counter = []
+    @day_one_counter = User.pluck(:time1)
+
+    #@day_one_counter outputs an array of elements from the :time1 column. =&gt; ["11:00", "11:00", nil, nil, nil]
+
+    b = Hash.new(0)
+
+    @day_one_counter.each do |v|
+      b[v] += 1
+    end
+
+    #the block increments the key/value pairs in the instantiated Hash. =&gt; {"11:00"=&gt;2, nil=&gt;3}
+
+    @time1 = b["11:00"]
+    gon.time1 = @time1
+
+    #@time1 pulls out the value of the pair =&gt; 2
+    #gon.time1 =&gt; 2, in order to use the @time1 instance variable in users.js
+
+    @time2 = b["11:20"] 
+    gon.time2 = @time2
+
+    @time3 = b["11:40"]
+    gon.time3 = @time3
+
+    render :time
+  else
+    render :new
+  end
+end
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>This is a conintuation of the Pluck Method from my last blog post.  For an overview of what is happening, read the comments provided above.  With the gone.time1 variable, I can now use jQuery in my users.js file in order to remove elements from the DOM that go over a given number, in this case 5.</p>
 
 
-<p><figure class='code'><figcaption><span>users.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="k">if</span> <span class="p">(</span><span class="nx">gon</span><span class="p">.</span><span class="nx">time1</span> <span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.wrapper1&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">gon</span><span class="p">.</span><span class="nx">time2</span> <span class="o">&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.wrapper2&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock users.js lang:js %}</p>
+
+<pre><code>if (gon.time1 &gt; 4) {
+    $('.wrapper1').remove();
+}
+
+if (gon.time2 &gt; 4) {
+    $('.wrapper2').remove();
+}
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>...and the form</p>
 
 
-<p><figure class='code'><figcaption><span>_time1.html.erb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;&amp;lt;%= form_for @user do |f| %&amp;gt;</span>
-</span><span class='line'><span class="sr">    &amp;lt;div class=&#39;wrapper1&#39; id=&#39;pad&#39;&amp;gt;11:00 A.M. &amp;lt;%= f.radio_button(:time1, &#39;11:00&#39;) %&amp;gt;&amp;lt;br /</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= 5 - @time1 unless @time1 =</span><span class="o">=</span> <span class="kp">nil</span> <span class="sx">%&amp;gt; spots remaining.&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">div</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s1">&#39;wrapper2&#39;</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="mi">11</span><span class="p">:</span><span class="mi">20</span> <span class="n">A</span><span class="o">.</span><span class="n">M</span><span class="o">.</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.radio_button(:time1, &#39;11:20&#39;) %&amp;gt;&amp;lt;br /&amp;gt;&amp;lt;%=</span> <span class="mi">5</span> <span class="o">-</span> <span class="vi">@time2</span> <span class="k">unless</span> <span class="vi">@time2</span> <span class="o">==</span> <span class="kp">nil</span> <span class="sx">%&amp;gt; spots remaining.&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">div</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s1">&#39;wrapper&#39;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= f.radio_button(:time1, &#39;No time.&#39;) %&amp;gt;  Interested but not available during these times. Please inform me of future conversation opportunities.&amp;lt;br /&amp;gt;&amp;lt;/div&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">hidden_field</span> <span class="ss">:day</span><span class="p">,</span> <span class="ss">:value</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="s1">&#39;July 10&#39;</span> <span class="sx">%&amp;gt;</span>
-</span><span class='line'><span class="sx">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">button</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;btn btn-inverse&quot;</span> <span class="n">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span><span class="n">class</span><span class="o">=</span><span class="s2">&quot;actions&quot;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="no">Submit</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">/</span><span class="n">button</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">%</span> <span class="k">end</span> <span class="o">%&amp;</span><span class="n">gt</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock _time1.html.erb lang:ruby %}</p>
+
+<pre><code>&lt;%= form_for @user do |f| %&gt;
+    &lt;div class='wrapper1' id='pad'&gt;11:00 A.M. &lt;%= f.radio_button(:time1, '11:00') %&gt;&lt;br /&gt;&lt;%= 5 - @time1 unless @time1 == nil %&gt; spots remaining.&lt;/div&gt; 
+    &lt;div class='wrapper2' id='pad'&gt;11:20 A.M. &lt;%= f.radio_button(:time1, '11:20') %&gt;&lt;br /&gt;&lt;%= 5 - @time2 unless @time2 == nil %&gt; spots remaining.&lt;/div&gt;
+    &lt;div class='wrapper'&gt;&lt;%= f.radio_button(:time1, 'No time.') %&gt;  Interested but not available during these times. Please inform me of future conversation opportunities.&lt;br /&gt;&lt;/div&gt;
+&lt;%= f.hidden_field :day, :value =&gt; 'July 10' %&gt;
+&lt;button class="btn btn-inverse" type="submit"class="actions"&gt;Submit&lt;/button&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>Since the @time1 instance variable and therefore, gon.time1 are saved after my create action, the applicable time is > 4 if I want a total of 5 elements for a particular time on my :time1 column.  The next time the modal is visited, the element will be removed!</p>
 
@@ -178,6 +288,851 @@
 
 
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using Impress.js With Rails]]></title>
+    <link href="http://iacutone.github.io/blog/2013/06/21/using-impress-dot-js-with-rails/"/>
+    <updated>2013-06-21T13:13:00-05:00</updated>
+    <id>http://iacutone.github.io/blog/2013/06/21/using-impress-dot-js-with-rails</id>
+    <content type="html"><![CDATA[<p>I recently had an interview at an awesome creative agency, <a href='www.canvas.is'>Canvas</a> and wanted to show them something unique in order to make me stand out.  I decided to build a thank you card with <a href='www.github.com/bartaz/impress.js'>Impress.js.</a>  <a href='http://powerful-woodland-7328.herokuapp.com'> This</a> is the thank you card I sent to their CTO.  I enjoyed playing with Impress.js and will definitely incorporate it into many more applications in the future.  However, there is not much documentation about how to get Impress to play nicely in a Rails app.  The app was breaking in production, but working in development.  The code following the impress.js file below specifies where to load the Javascript.</p>
+
+
+<p>{% codeblock app/assets/javascripts/impress.js lang:js %}
+/<em>*
+ * impress.js
+ *
+ * impress.js is a presentation tool based on the power of CSS3 transforms and transitions
+ * in modern browsers and inspired by the idea behind prezi.com.
+ *
+ *
+ * Copyright 2011-2012 Bartek Szopka (@bartaz)
+ *
+ * Released under the MIT and GPL Licenses.
+ *
+ * &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+ *  author:  Bartek Szopka
+ *  version: 0.5.3
+ *  url:     <a href="http://bartaz.github.com/impress.js/">http://bartaz.github.com/impress.js/</a>
+ *  source:  <a href="http://github.com/bartaz/impress.js/">http://github.com/bartaz/impress.js/</a>
+ </em>/</p>
+
+<p>/<em>jshint bitwise:true, curly:true, eqeqeq:true, forin:true, latedef:true, newcap:true,
+         noarg:true, noempty:true, undef:true, strict:true, browser:true </em>/</p>
+
+<p>// You are one of those who like to know how thing work inside?
+// Let me show you the cogs that make impress.js run&hellip;
+(function ( document, window ) {
+    &lsquo;use strict&rsquo;;</p>
+
+<pre><code>// HELPER FUNCTIONS
+
+// `pfx` is a function that takes a standard CSS property name as a parameter
+// and returns it's prefixed version valid for current browser it runs in.
+// The code is heavily inspired by Modernizr http://www.modernizr.com/
+var pfx = (function () {
+
+    var style = document.createElement('dummy').style,
+        prefixes = 'Webkit Moz O ms Khtml'.split(' '),
+        memory = {};
+
+    return function ( prop ) {
+        if ( typeof memory[ prop ] === "undefined" ) {
+
+            var ucProp  = prop.charAt(0).toUpperCase() + prop.substr(1),
+                props   = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
+
+            memory[ prop ] = null;
+            for ( var i in props ) {
+                if ( style[ props[i] ] !== undefined ) {
+                    memory[ prop ] = props[i];
+                    break;
+                }
+            }
+
+        }
+
+        return memory[ prop ];
+    };
+
+})();
+
+// `arraify` takes an array-like object and turns it into real Array
+// to make all the Array.prototype goodness available.
+var arrayify = function ( a ) {
+    return [].slice.call( a );
+};
+
+// `css` function applies the styles given in `props` object to the element
+// given as `el`. It runs all property names through `pfx` function to make
+// sure proper prefixed version of the property is used.
+var css = function ( el, props ) {
+    var key, pkey;
+    for ( key in props ) {
+        if ( props.hasOwnProperty(key) ) {
+            pkey = pfx(key);
+            if ( pkey !== null ) {
+                el.style[pkey] = props[key];
+            }
+        }
+    }
+    return el;
+};
+
+// `toNumber` takes a value given as `numeric` parameter and tries to turn
+// it into a number. If it is not possible it returns 0 (or other value
+// given as `fallback`).
+var toNumber = function (numeric, fallback) {
+    return isNaN(numeric) ? (fallback || 0) : Number(numeric);
+};
+
+// `byId` returns element with given `id` - you probably have guessed that ;)
+var byId = function ( id ) {
+    return document.getElementById(id);
+};
+
+// `$` returns first element for given CSS `selector` in the `context` of
+// the given element or whole document.
+var $ = function ( selector, context ) {
+    context = context || document;
+    return context.querySelector(selector);
+};
+
+// `$$` return an array of elements for given CSS `selector` in the `context` of
+// the given element or whole document.
+var $$ = function ( selector, context ) {
+    context = context || document;
+    return arrayify( context.querySelectorAll(selector) );
+};
+
+// `triggerEvent` builds a custom DOM event with given `eventName` and `detail` data
+// and triggers it on element given as `el`.
+var triggerEvent = function (el, eventName, detail) {
+    var event = document.createEvent("CustomEvent");
+    event.initCustomEvent(eventName, true, true, detail);
+    el.dispatchEvent(event);
+};
+
+// `translate` builds a translate transform string for given data.
+var translate = function ( t ) {
+    return " translate3d(" + t.x + "px," + t.y + "px," + t.z + "px) ";
+};
+
+// `rotate` builds a rotate transform string for given data.
+// By default the rotations are in X Y Z order that can be reverted by passing `true`
+// as second parameter.
+var rotate = function ( r, revert ) {
+    var rX = " rotateX(" + r.x + "deg) ",
+        rY = " rotateY(" + r.y + "deg) ",
+        rZ = " rotateZ(" + r.z + "deg) ";
+
+    return revert ? rZ+rY+rX : rX+rY+rZ;
+};
+
+// `scale` builds a scale transform string for given data.
+var scale = function ( s ) {
+    return " scale(" + s + ") ";
+};
+
+// `perspective` builds a perspective transform string for given data.
+var perspective = function ( p ) {
+    return " perspective(" + p + "px) ";
+};
+
+// `getElementFromHash` returns an element located by id from hash part of
+// window location.
+var getElementFromHash = function () {
+    // get id from url # by removing `#` or `#/` from the beginning,
+    // so both "fallback" `#slide-id` and "enhanced" `#/slide-id` will work
+    return byId( window.location.hash.replace(/^#\/?/,"") );
+};
+
+// `computeWindowScale` counts the scale factor between window size and size
+// defined for the presentation in the config.
+var computeWindowScale = function ( config ) {
+    var hScale = window.innerHeight / config.height,
+        wScale = window.innerWidth / config.width,
+        scale = hScale &gt; wScale ? wScale : hScale;
+
+    if (config.maxScale &amp;&amp; scale &gt; config.maxScale) {
+        scale = config.maxScale;
+    }
+
+    if (config.minScale &amp;&amp; scale &lt; config.minScale) {
+        scale = config.minScale;
+    }
+
+    return scale;
+};
+
+// CHECK SUPPORT
+var body = document.body;
+
+var ua = navigator.userAgent.toLowerCase();
+var impressSupported = 
+                      // browser should support CSS 3D transtorms 
+                       ( pfx("perspective") !== null ) &amp;&amp;
+
+                      // and `classList` and `dataset` APIs
+                       ( body.classList ) &amp;&amp;
+                       ( body.dataset ) &amp;&amp;
+
+                      // but some mobile devices need to be blacklisted,
+                      // because their CSS 3D support or hardware is not
+                      // good enough to run impress.js properly, sorry...
+                       ( ua.search(/(iphone)|(ipod)|(android)/) === -1 );
+
+if (!impressSupported) {
+    // we can't be sure that `classList` is supported
+    body.className += " impress-not-supported ";
+} else {
+    body.classList.remove("impress-not-supported");
+    body.classList.add("impress-supported");
+}
+
+// GLOBALS AND DEFAULTS
+
+// This is were the root elements of all impress.js instances will be kept.
+// Yes, this means you can have more than one instance on a page, but I'm not
+// sure if it makes any sense in practice ;)
+var roots = {};
+
+// some default config values.
+var defaults = {
+    width: 1024,
+    height: 768,
+    maxScale: 1,
+    minScale: 0,
+
+    perspective: 1000,
+
+    transitionDuration: 1000
+};
+
+// it's just an empty function ... and a useless comment.
+var empty = function () { return false; };
+
+// IMPRESS.JS API
+
+// And that's where interesting things will start to happen.
+// It's the core `impress` function that returns the impress.js API
+// for a presentation based on the element with given id ('impress'
+// by default).
+var impress = window.impress = function ( rootId ) {
+
+    // If impress.js is not supported by the browser return a dummy API
+    // it may not be a perfect solution but we return early and avoid
+    // running code that may use features not implemented in the browser.
+    if (!impressSupported) {
+        return {
+            init: empty,
+            goto: empty,
+            prev: empty,
+            next: empty
+        };
+    }
+
+    rootId = rootId || "impress";
+
+    // if given root is already initialized just return the API
+    if (roots["impress-root-" + rootId]) {
+        return roots["impress-root-" + rootId];
+    }
+
+    // data of all presentation steps
+    var stepsData = {};
+
+    // element of currently active step
+    var activeStep = null;
+
+    // current state (position, rotation and scale) of the presentation
+    var currentState = null;
+
+    // array of step elements
+    var steps = null;
+
+    // configuration options
+    var config = null;
+
+    // scale factor of the browser window
+    var windowScale = null;        
+
+    // root presentation elements
+    var root = byId( rootId );
+    var canvas = document.createElement("div");
+
+    var initialized = false;
+
+    // STEP EVENTS
+    //
+    // There are currently two step events triggered by impress.js
+    // `impress:stepenter` is triggered when the step is shown on the 
+    // screen (the transition from the previous one is finished) and
+    // `impress:stepleave` is triggered when the step is left (the
+    // transition to next step just starts).
+
+    // reference to last entered step
+    var lastEntered = null;
+
+    // `onStepEnter` is called whenever the step element is entered
+    // but the event is triggered only if the step is different than
+    // last entered step.
+    var onStepEnter = function (step) {
+        if (lastEntered !== step) {
+            triggerEvent(step, "impress:stepenter");
+            lastEntered = step;
+        }
+    };
+
+    // `onStepLeave` is called whenever the step element is left
+    // but the event is triggered only if the step is the same as
+    // last entered step.
+    var onStepLeave = function (step) {
+        if (lastEntered === step) {
+            triggerEvent(step, "impress:stepleave");
+            lastEntered = null;
+        }
+    };
+
+    // `initStep` initializes given step element by reading data from its
+    // data attributes and setting correct styles.
+    var initStep = function ( el, idx ) {
+        var data = el.dataset,
+            step = {
+                translate: {
+                    x: toNumber(data.x),
+                    y: toNumber(data.y),
+                    z: toNumber(data.z)
+                },
+                rotate: {
+                    x: toNumber(data.rotateX),
+                    y: toNumber(data.rotateY),
+                    z: toNumber(data.rotateZ || data.rotate)
+                },
+                scale: toNumber(data.scale, 1),
+                el: el
+            };
+
+        if ( !el.id ) {
+            el.id = "step-" + (idx + 1);
+        }
+
+        stepsData["impress-" + el.id] = step;
+
+        css(el, {
+            position: "absolute",
+            transform: "translate(-50%,-50%)" +
+                       translate(step.translate) +
+                       rotate(step.rotate) +
+                       scale(step.scale),
+            transformStyle: "preserve-3d"
+        });
+    };
+
+    // `init` API function that initializes (and runs) the presentation.
+    var init = function () {
+        if (initialized) { return; }
+
+        // First we set up the viewport for mobile devices.
+        // For some reason iPad goes nuts when it is not done properly.
+        var meta = $("meta[name='viewport']") || document.createElement("meta");
+        meta.content = "width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no";
+        if (meta.parentNode !== document.head) {
+            meta.name = 'viewport';
+            document.head.appendChild(meta);
+        }
+
+        // initialize configuration object
+        var rootData = root.dataset;
+        config = {
+            width: toNumber( rootData.width, defaults.width ),
+            height: toNumber( rootData.height, defaults.height ),
+            maxScale: toNumber( rootData.maxScale, defaults.maxScale ),
+            minScale: toNumber( rootData.minScale, defaults.minScale ),                
+            perspective: toNumber( rootData.perspective, defaults.perspective ),
+            transitionDuration: toNumber( rootData.transitionDuration, defaults.transitionDuration )
+        };
+
+        windowScale = computeWindowScale( config );
+
+        // wrap steps with "canvas" element
+        arrayify( root.childNodes ).forEach(function ( el ) {
+            canvas.appendChild( el );
+        });
+        root.appendChild(canvas);
+
+        // set initial styles
+        document.documentElement.style.height = "100%";
+
+        css(body, {
+            height: "100%",
+            overflow: "hidden"
+        });
+
+        var rootStyles = {
+            position: "absolute",
+            transformOrigin: "top left",
+            transition: "all 0s ease-in-out",
+            transformStyle: "preserve-3d"
+        };
+
+        css(root, rootStyles);
+        css(root, {
+            top: "50%",
+            left: "50%",
+            transform: perspective( config.perspective/windowScale ) + scale( windowScale )
+        });
+        css(canvas, rootStyles);
+
+        body.classList.remove("impress-disabled");
+        body.classList.add("impress-enabled");
+
+        // get and init steps
+        steps = $$(".step", root);
+        steps.forEach( initStep );
+
+        // set a default initial state of the canvas
+        currentState = {
+            translate: { x: 0, y: 0, z: 0 },
+            rotate:    { x: 0, y: 0, z: 0 },
+            scale:     1
+        };
+
+        initialized = true;
+
+        triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ] });
+    };
+
+    // `getStep` is a helper function that returns a step element defined by parameter.
+    // If a number is given, step with index given by the number is returned, if a string
+    // is given step element with such id is returned, if DOM element is given it is returned
+    // if it is a correct step element.
+    var getStep = function ( step ) {
+        if (typeof step === "number") {
+            step = step &lt; 0 ? steps[ steps.length + step] : steps[ step ];
+        } else if (typeof step === "string") {
+            step = byId(step);
+        }
+        return (step &amp;&amp; step.id &amp;&amp; stepsData["impress-" + step.id]) ? step : null;
+    };
+
+    // used to reset timeout for `impress:stepenter` event
+    var stepEnterTimeout = null;
+
+    // `goto` API function that moves to step given with `el` parameter (by index, id or element),
+    // with a transition `duration` optionally given as second parameter.
+    var goto = function ( el, duration ) {
+
+        if ( !initialized || !(el = getStep(el)) ) {
+            // presentation not initialized or given element is not a step
+            return false;
+        }
+
+        // Sometimes it's possible to trigger focus on first link with some keyboard action.
+        // Browser in such a case tries to scroll the page to make this element visible
+        // (even that body overflow is set to hidden) and it breaks our careful positioning.
+        //
+        // So, as a lousy (and lazy) workaround we will make the page scroll back to the top
+        // whenever slide is selected
+        //
+        // If you are reading this and know any better way to handle it, I'll be glad to hear about it!
+        window.scrollTo(0, 0);
+
+        var step = stepsData["impress-" + el.id];
+
+        if ( activeStep ) {
+            activeStep.classList.remove("active");
+            body.classList.remove("impress-on-" + activeStep.id);
+        }
+        el.classList.add("active");
+
+        body.classList.add("impress-on-" + el.id);
+
+        // compute target state of the canvas based on given step
+        var target = {
+            rotate: {
+                x: -step.rotate.x,
+                y: -step.rotate.y,
+                z: -step.rotate.z
+            },
+            translate: {
+                x: -step.translate.x,
+                y: -step.translate.y,
+                z: -step.translate.z
+            },
+            scale: 1 / step.scale
+        };
+
+        // Check if the transition is zooming in or not.
+        //
+        // This information is used to alter the transition style:
+        // when we are zooming in - we start with move and rotate transition
+        // and the scaling is delayed, but when we are zooming out we start
+        // with scaling down and move and rotation are delayed.
+        var zoomin = target.scale &gt;= currentState.scale;
+
+        duration = toNumber(duration, config.transitionDuration);
+        var delay = (duration / 2);
+
+        // if the same step is re-selected, force computing window scaling,
+        // because it is likely to be caused by window resize
+        if (el === activeStep) {
+            windowScale = computeWindowScale(config);
+        }
+
+        var targetScale = target.scale * windowScale;
+
+        // trigger leave of currently active element (if it's not the same step again)
+        if (activeStep &amp;&amp; activeStep !== el) {
+            onStepLeave(activeStep);
+        }
+
+        // Now we alter transforms of `root` and `canvas` to trigger transitions.
+        //
+        // And here is why there are two elements: `root` and `canvas` - they are
+        // being animated separately:
+        // `root` is used for scaling and `canvas` for translate and rotations.
+        // Transitions on them are triggered with different delays (to make
+        // visually nice and 'natural' looking transitions), so we need to know
+        // that both of them are finished.
+        css(root, {
+            // to keep the perspective look similar for different scales
+            // we need to 'scale' the perspective, too
+            transform: perspective( config.perspective / targetScale ) + scale( targetScale ),
+            transitionDuration: duration + "ms",
+            transitionDelay: (zoomin ? delay : 0) + "ms"
+        });
+
+        css(canvas, {
+            transform: rotate(target.rotate, true) + translate(target.translate),
+            transitionDuration: duration + "ms",
+            transitionDelay: (zoomin ? 0 : delay) + "ms"
+        });
+
+        // Here is a tricky part...
+        //
+        // If there is no change in scale or no change in rotation and translation, it means there was actually
+        // no delay - because there was no transition on `root` or `canvas` elements.
+        // We want to trigger `impress:stepenter` event in the correct moment, so here we compare the current
+        // and target values to check if delay should be taken into account.
+        //
+        // I know that this `if` statement looks scary, but it's pretty simple when you know what is going on
+        // - it's simply comparing all the values.
+        if ( currentState.scale === target.scale ||
+            (currentState.rotate.x === target.rotate.x &amp;&amp; currentState.rotate.y === target.rotate.y &amp;&amp;
+             currentState.rotate.z === target.rotate.z &amp;&amp; currentState.translate.x === target.translate.x &amp;&amp;
+             currentState.translate.y === target.translate.y &amp;&amp; currentState.translate.z === target.translate.z) ) {
+            delay = 0;
+        }
+
+        // store current state
+        currentState = target;
+        activeStep = el;
+
+        // And here is where we trigger `impress:stepenter` event.
+        // We simply set up a timeout to fire it taking transition duration (and possible delay) into account.
+        //
+        // I really wanted to make it in more elegant way. The `transitionend` event seemed to be the best way
+        // to do it, but the fact that I'm using transitions on two separate elements and that the `transitionend`
+        // event is only triggered when there was a transition (change in the values) caused some bugs and 
+        // made the code really complicated, cause I had to handle all the conditions separately. And it still
+        // needed a `setTimeout` fallback for the situations when there is no transition at all.
+        // So I decided that I'd rather make the code simpler than use shiny new `transitionend`.
+        //
+        // If you want learn something interesting and see how it was done with `transitionend` go back to
+        // version 0.5.2 of impress.js: http://github.com/bartaz/impress.js/blob/0.5.2/js/impress.js
+        window.clearTimeout(stepEnterTimeout);
+        stepEnterTimeout = window.setTimeout(function() {
+            onStepEnter(activeStep);
+        }, duration + delay);
+
+        return el;
+    };
+
+    // `prev` API function goes to previous step (in document order)
+    var prev = function () {
+        var prev = steps.indexOf( activeStep ) - 1;
+        prev = prev &gt;= 0 ? steps[ prev ] : steps[ steps.length-1 ];
+
+        return goto(prev);
+    };
+
+    // `next` API function goes to next step (in document order)
+    var next = function () {
+        var next = steps.indexOf( activeStep ) + 1;
+        next = next &lt; steps.length ? steps[ next ] : steps[ 0 ];
+
+        return goto(next);
+    };
+
+    // Adding some useful classes to step elements.
+    //
+    // All the steps that have not been shown yet are given `future` class.
+    // When the step is entered the `future` class is removed and the `present`
+    // class is given. When the step is left `present` class is replaced with
+    // `past` class.
+    //
+    // So every step element is always in one of three possible states:
+    // `future`, `present` and `past`.
+    //
+    // There classes can be used in CSS to style different types of steps.
+    // For example the `present` class can be used to trigger some custom
+    // animations when step is shown.
+    root.addEventListener("impress:init", function(){
+        // STEP CLASSES
+        steps.forEach(function (step) {
+            step.classList.add("future");
+        });
+
+        root.addEventListener("impress:stepenter", function (event) {
+            event.target.classList.remove("past");
+            event.target.classList.remove("future");
+            event.target.classList.add("present");
+        }, false);
+
+        root.addEventListener("impress:stepleave", function (event) {
+            event.target.classList.remove("present");
+            event.target.classList.add("past");
+        }, false);
+
+    }, false);
+
+    // Adding hash change support.
+    root.addEventListener("impress:init", function(){
+
+        // last hash detected
+        var lastHash = "";
+
+        // `#/step-id` is used instead of `#step-id` to prevent default browser
+        // scrolling to element in hash.
+        //
+        // And it has to be set after animation finishes, because in Chrome it
+        // makes transtion laggy.
+        // BUG: http://code.google.com/p/chromium/issues/detail?id=62820
+        root.addEventListener("impress:stepenter", function (event) {
+            window.location.hash = lastHash = "#/" + event.target.id;
+        }, false);
+
+        window.addEventListener("hashchange", function () {
+            // When the step is entered hash in the location is updated
+            // (just few lines above from here), so the hash change is 
+            // triggered and we would call `goto` again on the same element.
+            //
+            // To avoid this we store last entered hash and compare.
+            if (window.location.hash !== lastHash) {
+                goto( getElementFromHash() );
+            }
+        }, false);
+
+        // START 
+        // by selecting step defined in url or first step of the presentation
+        goto(getElementFromHash() || steps[0], 0);
+    }, false);
+
+    body.classList.add("impress-disabled");
+
+    // store and return API for given impress.js root element
+    return (roots[ "impress-root-" + rootId ] = {
+        init: init,
+        goto: goto,
+        next: next,
+        prev: prev
+    });
+
+};
+
+// flag that can be used in JS to check if browser have passed the support test
+impress.supported = impressSupported;
+</code></pre>
+
+<p>})(document, window);</p>
+
+<p>// NAVIGATION EVENTS</p>
+
+<p>// As you can see this part is separate from the impress.js core code.
+// It&rsquo;s because these navigation actions only need what impress.js provides with
+// its simple API.
+//
+// In future I think about moving it to make them optional, move to separate files
+// and treat more like a &lsquo;plugins&rsquo;.
+(function ( document, window ) {
+    &lsquo;use strict&rsquo;;</p>
+
+<pre><code>// throttling function calls, by Remy Sharp
+// http://remysharp.com/2010/07/21/throttling-function-calls/
+var throttle = function (fn, delay) {
+    var timer = null;
+    return function () {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            fn.apply(context, args);
+        }, delay);
+    };
+};
+
+// wait for impress.js to be initialized
+document.addEventListener("impress:init", function (event) {
+    // Getting API from event data.
+    // So you don't event need to know what is the id of the root element
+    // or anything. `impress:init` event data gives you everything you 
+    // need to control the presentation that was just initialized.
+    var api = event.detail.api;
+
+    // KEYBOARD NAVIGATION HANDLERS
+
+    // Prevent default keydown action when one of supported key is pressed.
+    document.addEventListener("keydown", function ( event ) {
+        if ( event.keyCode === 9 || ( event.keyCode &gt;= 32 &amp;&amp; event.keyCode &lt;= 34 ) || (event.keyCode &gt;= 37 &amp;&amp; event.keyCode &lt;= 40) ) {
+            event.preventDefault();
+        }
+    }, false);
+
+    // Trigger impress action (next or prev) on keyup.
+
+    // Supported keys are:
+    // [space] - quite common in presentation software to move forward
+    // [up] [right] / [down] [left] - again common and natural addition,
+    // [pgdown] / [pgup] - often triggered by remote controllers,
+    // [tab] - this one is quite controversial, but the reason it ended up on
+    //   this list is quite an interesting story... Remember that strange part
+    //   in the impress.js code where window is scrolled to 0,0 on every presentation
+    //   step, because sometimes browser scrolls viewport because of the focused element?
+    //   Well, the [tab] key by default navigates around focusable elements, so clicking
+    //   it very often caused scrolling to focused element and breaking impress.js
+    //   positioning. I didn't want to just prevent this default action, so I used [tab]
+    //   as another way to moving to next step... And yes, I know that for the sake of
+    //   consistency I should add [shift+tab] as opposite action...
+    document.addEventListener("keyup", function ( event ) {
+        if ( event.keyCode === 9 || ( event.keyCode &gt;= 32 &amp;&amp; event.keyCode &lt;= 34 ) || (event.keyCode &gt;= 37 &amp;&amp; event.keyCode &lt;= 40) ) {
+            switch( event.keyCode ) {
+                case 33: // pg up
+                case 37: // left
+                case 38: // up
+                         api.prev();
+                         break;
+                case 9:  // tab
+                case 32: // space
+                case 34: // pg down
+                case 39: // right
+                case 40: // down
+                         api.next();
+                         break;
+            }
+
+            event.preventDefault();
+        }
+    }, false);
+
+    // delegated handler for clicking on the links to presentation steps
+    document.addEventListener("click", function ( event ) {
+        // event delegation with "bubbling"
+        // check if event target (or any of its parents is a link)
+        var target = event.target;
+        while ( (target.tagName !== "A") &amp;&amp;
+                (target !== document.documentElement) ) {
+            target = target.parentNode;
+        }
+
+        if ( target.tagName === "A" ) {
+            var href = target.getAttribute("href");
+
+            // if it's a link to presentation step, target this step
+            if ( href &amp;&amp; href[0] === '#' ) {
+                target = document.getElementById( href.slice(1) );
+            }
+        }
+
+        if ( api.goto(target) ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+        }
+    }, false);
+
+    // delegated handler for clicking on step elements
+    document.addEventListener("click", function ( event ) {
+        var target = event.target;
+        // find closest step element that is not active
+        while ( !(target.classList.contains("step") &amp;&amp; !target.classList.contains("active")) &amp;&amp;
+                (target !== document.documentElement) ) {
+            target = target.parentNode;
+        }
+
+        if ( api.goto(target) ) {
+            event.preventDefault();
+        }
+    }, false);
+
+    // touch handler to detect taps on the left and right side of the screen
+    // based on awesome work of @hakimel: https://github.com/hakimel/reveal.js
+    document.addEventListener("touchstart", function ( event ) {
+        if (event.touches.length === 1) {
+            var x = event.touches[0].clientX,
+                width = window.innerWidth * 0.3,
+                result = null;
+
+            if ( x &lt; width ) {
+                result = api.prev();
+            } else if ( x &gt; window.innerWidth - width ) {
+                result = api.next();
+            }
+
+            if (result) {
+                event.preventDefault();
+            }
+        }
+    }, false);
+
+    // rescale presentation when window is resized
+    window.addEventListener("resize", throttle(function () {
+        // force going to active step again, to trigger rescaling
+        api.goto( document.querySelector(".step.active"), 500 );
+    }, 250), false);
+
+}, false);
+</code></pre>
+
+<p>})(document, window);</p>
+
+<p>// THAT&rsquo;S ALL FOLKS!
+//
+// Thanks for reading it all.
+// Or thanks for scrolling down and reading the last part.
+//
+// I&rsquo;ve learnt a lot when building impress.js and I hope this code and comments
+// will help somebody learn at least some part of it.</p>
+
+<p>{% endcodeblock %}</p>
+
+<p>Add this to the directory listed above.  At the time of this writing, this is new newest realease of Impress.js.  In order to get Impress and Rails to cooperate, I changed my application.html.erb file to this: </p>
+
+
+<p>{% codeblock view/layouts/application.erb lang:ruby %}
+&lt;!DOCTYPE html>
+<html>
+<head>
+  <title>Thanksyou</title>
+  &lt;%= stylesheet_link_tag    &ldquo;application&rdquo;, :media => &ldquo;all&rdquo; %>
+  &lt;%= javascript_include_tag &ldquo;application&rdquo; %>
+  &lt;%= csrf_meta_tags %>
+  <link href='http://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
+</head>
+<body></p>
+
+<p>&lt;%= yield %></p>
+
+<p>&lt;%= javascript_include_tag &ldquo;application&rdquo; %>
+</body>
+</html>
+{% endcodeblock %}</p>
+
+<p>That is pretty much it, however I ran into difficulty determining where and when to load the impress.js file.  I tried moving it into several different directories including the index view with both the javascript_include_tag and  the script tag.  I also messed with the load order of the application.js asset pipeline.  After fretting for far too long, I put the file in the correct place and all was well.  I hope this post saves someone whom wants to play with Impress.js time and energy.</p>
+
+
+
+
+<p><p>Also, <a href='https://github.com/bartaz/impress.js/blob/master/index.html'> the tutorial</a> is very well written and worth reading for anyone that wants to use this library.</a></p>
 ]]></content>
   </entry>
   
