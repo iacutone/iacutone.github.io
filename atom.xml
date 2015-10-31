@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-10-23T20:23:37-05:00</updated>
+  <updated>2015-10-31T17:35:01-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Shell Function]]></title>
+    <link href="http://iacutone.github.io/blog/2015/10/30/shell-function/"/>
+    <updated>2015-10-30T22:34:34-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/10/30/shell-function</id>
+    <content type="html"><![CDATA[<p>I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video sites.&rdquo; It&rsquo;s super useful. However, it default downloads to the current terminal directory. Let&rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.</p>
+
+<figure class='code'><figcaption><span>.zshrc</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function</span> mp3 <span class="o">{</span>
+</span><span class='line'>  <span class="c"># Download all of the things to /Downloads/</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">function</span> thing <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  youtube-dl --default-search<span class="o">=</span>ytsearch: <span class="se">\</span>
+</span><span class='line'>             --output<span class="o">=</span><span class="s2">&quot;Downloads/%(title)s.%(ext)s&quot;</span> <span class="s2">&quot;$*&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The &ldquo;$<em>&rdquo; signifies the string following mp3, the example below, &ldquo;$</em>&rdquo; is the URL arument.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  mp3 https://www.youtube.com/watch<span class="se">\?</span>v<span class="se">\=</span>9fYeiGeuTFA
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I can run the above script in order to download the video from the youtube URL.!</p>
+
+<p>Helpful Links</p>
+
+<p><a href="https://github.com/rg3/youtube-dl">youtube-dl</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Setter Method in a Rails Model]]></title>
@@ -4201,51 +4242,6 @@
 
 
 <p><a href='http://www.platt101.com'>Platt101 can be found here.</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Jambox]]></title>
-    <link href="http://iacutone.github.io/blog/2013/03/01/jambox/"/>
-    <updated>2013-03-01T07:39:00-05:00</updated>
-    <id>http://iacutone.github.io/blog/2013/03/01/jambox</id>
-    <content type="html"><![CDATA[<h2>AirPlay</h2>
-
-
-
-
-<p>Learning how Airplay works: it allows wireless streaming of audio, video and photos. </p>
-
-
-<p></p>
-
-<p> My original idea was to rip the music information going onto the Flatiron AirPlay, then automatically tweet this information via Twitter.  I liked this idea because we play so much cool and unfamiliar music.  It would be great to keep track of what is playing.  Over time, I opened a myriad of tabs and discovered many interesting API's.  These include a few API's which mirror AirPlay on a laptop (<a href="http://airparrot.com/">AirParrot.</a> and <a href="http://www.airserverapp.com/">AirServer.</a>).  Also, many music API's were discovered.  These include <a href="http://echonest.com/">Echonest</a>, <a href="http://developers.soundcloud.com/">Soundcloud</a> and many others. </p>
-
-
-
-
-<p> The original idea went down in flames when I learned how difficult it is to hack the AirPlay.  <a href="http://www.aorensoftware.com/blog/2011/08/20/exploring-airplay-mirroring-internals/">This</a> blog post illustrated how this hacker tried to gain access to the AirPlay from WiFi packets via KisMAC, a derivative of WireShark.  Also, there are problems jailbreaking the DRM encryption.  The idea is possible, but a crazy task.  Idea aborted...</p>
-
-
-
-
-<p><a href="https://github.com/play/play/tree/master/app/api ">GitHub Play</a> deserves some special recognition.  It allows the GitHub offices to wirelessly create playlists synchronously in all of their offices around the globe.  The next iteration of our goal was to get the GitHub Play to work locally.  You can clone it at the link above.  However, GitHub Play relies on an old version of iTunes which includes iTunes DJ.  Also, Play ran on Ruby 1.8.7, and the dependencies were a mess.  So, our group threw this idea of out the window.  </p>
-
-
-
-
-<h2> GitHub Play </h2>
-
-
-<p><img src = "http://iacutone.github.io/images/play.png" height = "500" width = "500"></p>
-
-
-
-
-<p>Our groups next iteration is to simplify the GitHub Play.  Currently we are setting up a server where people can upload their mp3's.  Directions to create your own streaming music player in Ruby can be found <a href="http://net.tutsplus.com/tutorials/create-a-simple-music-streaming-app-with-ruby-on-rails/ ">here.</a>  The goal of this project is to eventually create a service where a group of people can all upload their songs onto a server and they will be played in sequence on a playlist.  For example, if you are at a party, everyone can put songs on a playlist, so that no one person will have complete control of the music.  We also want to implement a Reddit-esque leaderboard so people on the server can upvote/downvote songs.  If a song gets too many downvotes, it will be erased from the playlist.  </p>
-
-
-
 ]]></content>
   </entry>
   

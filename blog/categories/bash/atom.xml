@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Bash | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/bash/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-10-30T22:45:14-05:00</updated>
+  <updated>2015-10-31T17:35:01-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -20,7 +20,7 @@
     <id>http://iacutone.github.io/blog/2015/10/30/shell-function</id>
     <content type="html"><![CDATA[<p>I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video sites.&rdquo; It&rsquo;s super useful. However, it default downloads to the current terminal directory. Let&rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.</p>
 
-<pre><code class=".zshrc">function mp3 {
+<pre><code class="sh .zshrc">function mp3 {
   # Download all of the things to /Downloads/
 
   function thing {
@@ -32,7 +32,7 @@
 
 <p>The &ldquo;$<em>&rdquo; signifies the string following mp3, the example below, &ldquo;$</em>&rdquo; is the URL arument.</p>
 
-<pre><code class="bash">  mp3 https://www.youtube.com/watch\?v\=9fYeiGeuTFA
+<pre><code class="sh">  mp3 https://www.youtube.com/watch\?v\=9fYeiGeuTFA
 </code></pre>
 
 <p>Now I can run the above script in order to download the video from the youtube URL.!</p>

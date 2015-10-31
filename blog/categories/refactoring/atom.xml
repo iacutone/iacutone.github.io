@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Refactoring | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/refactoring/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-10-30T22:45:14-05:00</updated>
+  <updated>2015-10-31T17:35:01-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -21,157 +21,291 @@
     <content type="html"><![CDATA[<p> I have been working on refactoring my client side JavaScript validations on an application.  My tech lead gave me some illuminating tips on how to refactor my non-DRY code.  Here is an example of the pre-refactored code.</p>
 
 
-<p>{% codeblock _form.html.erb lang:erb %}
-&lt;%= form_for(@order) do |f| %>
-  <div class='your_info'>
-    <h3>2. Your Information</h3>
-    <div class="clearfix">
-      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %>
-      <div class="input">
-        &lt;%= f.text_field :first_name %>
-        <span id="first_name_error"></span>
-      </div>
-      <div class="input">
-        &lt;%#= f.hidden_field :customer_id, value: current_user.id unless current_user.id == nil %>
-      </div>
-    </div>
-    <div class="clearfix">
-      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %>
-      <div class="input">
-        &lt;%= f.text_field :last_name %>
-        <span id="last_name_error"></span>
-      </div>
-    </div>
-    <div class="clearfix">
-      &lt;%= f.label :email, &lsquo;Email*&rsquo; %>
-      <div class="input">
-        &lt;%= f.text_field :email %>
-        <span id="email_error"></span>
-      </div>
-    </div>
-  </div>
-  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %>
-&lt;% end %>
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>_form.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&amp;lt;%= form_for(@order) do |f| </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;div class=&#39;your_info&#39;&gt;</span>
+</span><span class='line'><span class="x">    &lt;h3&gt;2. Your Information&lt;/h3&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      &amp;lt;%= f.label :first_name, &amp;lsquo;First name&lt;em&gt;&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :first_name </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;first_name_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        &amp;lt;%#= f.hidden_field :customer_id, value: current_user.id unless current_user.id == nil </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      &amp;lt;%= f.label :last_name, &amp;lsquo;Last name&lt;/em&gt;&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :last_name </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;last_name_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      &amp;lt;%= f.label :email, &amp;lsquo;Email*&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :email </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;email_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">  &lt;/div&gt;</span>
+</span><span class='line'><span class="x">  &amp;lt;%= f.submit &amp;ldquo;Submit your Order&amp;rdquo;, class: &amp;lsquo;btn btn-primary btn-lg&amp;rsquo;, id: &amp;lsquo;button&amp;rsquo;, data: { confirm: &amp;ldquo;Place order?&amp;rdquo; } </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&amp;lt;% end </span><span class="err">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>So, let's start with this basic form and sprinkle it with some JQuery and Javascript for client side validations.</p>
 
 
-<p>{% codeblock users.js lang:js %}
-// Initial State for Form
-$(&lsquo;.your_info&rsquo;).hide();</p>
-
-<p>// validations
-var first_name = $(&lsquo;input#order_first_name&rsquo;);
-var last_name = $(&lsquo;input#order_last_name&rsquo;);
-var email = $(&lsquo;input#order_email&rsquo;);</p>
-
-<p>// event listeners
-first_name.keyup(function(){
-  validateFirstName();
-});</p>
-
-<p>last_name.keyup(function(){
-  validateLastName();
-});</p>
-
-<p>email.keyup(function(){
-  validateEmail();
-});</p>
-
-<p>function validateFirstName(){
-  var first_name_val = first_name.val();
-  if(first_name_val.length == 0) {
-    first_name_error.show().text(&ldquo;First name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
-    return false;
-  }
-  else {
-    first_name_error.hide();
-    return true;
-  }
-}</p>
-
-<p>function validateLastName(){
-  var last_name_val = last_name.val();
-  if(last_name_val.length == 0) {
-    last_name_error.show().text(&ldquo;Last name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
-    return false;
-  }
-  else {
-    last_name_error.hide();
-    return true;
-  }
-}</p>
-
-<p>function validateEmail(){
-  var email_val = email.val();
-  if(email_val.length == 0) {
-    email_error.show().text(&ldquo;Email needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
-    return false;
-  }
-  else {
-    email_error.hide();
-    return true;
-  }
-}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>users.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="c1">// Initial State for Form</span>
+</span><span class='line'><span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;.</span><span class="nx">your_info</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;).</span><span class="nx">hide</span><span class="p">();</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// validations</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">first_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">input</span><span class="err">#</span><span class="nx">order_first_name</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">last_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">input</span><span class="err">#</span><span class="nx">order_last_name</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">input</span><span class="err">#</span><span class="nx">order_email</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// event listeners</span>
+</span><span class='line'><span class="nx">first_name</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">validateFirstName</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">last_name</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">validateLastName</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">email</span><span class="p">.</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">validateEmail</span><span class="p">();</span>
+</span><span class='line'><span class="p">});</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">validateFirstName</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">first_name_val</span> <span class="o">=</span> <span class="nx">first_name</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">first_name_val</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">first_name_error</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">First</span> <span class="nx">name</span> <span class="nx">needed</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">addClass</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error_class</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">first_name_error</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">validateLastName</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">last_name_val</span> <span class="o">=</span> <span class="nx">last_name</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">last_name_val</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">last_name_error</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">Last</span> <span class="nx">name</span> <span class="nx">needed</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">addClass</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error_class</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">last_name_error</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">validateEmail</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">email_val</span> <span class="o">=</span> <span class="nx">email</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">email_val</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">email_error</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">Email</span> <span class="nx">needed</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">addClass</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error_class</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">email_error</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Clearly, this is not DRY and will easily get out of comtrol.  However, using HTML data attributes solves this problem.  Here is a good <a href='http://ejohn.org/blog/html-5-data-attributes/'>summary</a> about data attributes by John Resig.</p>
 
 
-<p>{% codeblock _form.html.erb lang:erb %}
-&lt;%= form_for(@order) do |f| %>
-  <div class='your_info'>
-    <h3>2. Your Information</h3>
-    <div class="clearfix">
-      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %>
-      <div class="input">
-        &lt;%= f.text_field :first_name, :data => {:error => &lsquo;First name&rsquo;} %>
-        <span id="first_name_error"></span>
-      </div>
-    </div>
-    <div class="clearfix">
-      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %>
-      <div class="input">
-        &lt;%= f.text_field :last_name, :data => {:error => &lsquo;Last name&rsquo;} %>
-        <span id="last_name_error"></span>
-      </div>
-    </div>
-    <div class="clearfix">
-      &lt;%= f.label :email, &lsquo;Email*&rsquo; %>
-      <div class="input">
-        &lt;%= f.text_field :email, :data => {:error => &lsquo;Email&rsquo;} %>
-        <span id="email_error"></span>
-      </div>
-    </div>
-  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %>
-&lt;% end %>
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>_form.html.erb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&amp;lt;%= form_for(@order) do |f| </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">  &lt;div class=&#39;your_info&#39;&gt;</span>
+</span><span class='line'><span class="x">    &lt;h3&gt;2. Your Information&lt;/h3&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      &amp;lt;%= f.label :first_name, &amp;lsquo;First name&lt;em&gt;&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :first_name, :data =&gt; {:error =&gt; &amp;lsquo;First name&amp;rsquo;} </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;first_name_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      &amp;lt;%= f.label :last_name, &amp;lsquo;Last name&lt;/em&gt;&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :last_name, :data =&gt; {:error =&gt; &amp;lsquo;Last name&amp;rsquo;} </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;last_name_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;div class=&quot;clearfix&quot;&gt;</span>
+</span><span class='line'><span class="x">      &amp;lt;%= f.label :email, &amp;lsquo;Email*&amp;rsquo; </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">      &lt;div class=&quot;input&quot;&gt;</span>
+</span><span class='line'><span class="x">        &amp;lt;%= f.text_field :email, :data =&gt; {:error =&gt; &amp;lsquo;Email&amp;rsquo;} </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">        &lt;span id=&quot;email_error&quot;&gt;&lt;/span&gt;</span>
+</span><span class='line'><span class="x">      &lt;/div&gt;</span>
+</span><span class='line'><span class="x">    &lt;/div&gt;</span>
+</span><span class='line'><span class="x">  &amp;lt;%= f.submit &amp;ldquo;Submit your Order&amp;rdquo;, class: &amp;lsquo;btn btn-primary btn-lg&amp;rsquo;, id: &amp;lsquo;button&amp;rsquo;, data: { confirm: &amp;ldquo;Place order?&amp;rdquo; } </span><span class="err">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="x">&amp;lt;% end </span><span class="err">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure></p>
 
-<p>{% codeblock users.js lang:js %}
-$(&lsquo;input&rsquo;).keyup(function(){
-  blankValidation.call(this);
-});</p>
-
-<p>function blankValidation(){
-  var error_name = $(this).data(&lsquo;error&rsquo;);
-  console.log(error_name);
-  var value = $(this).val();
-  console.log(value);
-  if(error_name !== undefined){
-    var error_id = (&lsquo;#&rsquo; + error_name.toLowerCase().replace(&lsquo; &rsquo;, &lsquo;<em>&rsquo;) + (&lsquo;</em>error&rsquo;));
-    var error_message = $(error_id);
-    if(value.length === 0) {
-      error_message.show().text(error_name + &ldquo; needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
-      return false;
-    }
-    else {
-      error_message.hide();
-      return true;
-    }
-  }
-}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>users.js </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">input</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;).</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">blankValidation</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="kd">function</span> <span class="nx">blankValidation</span><span class="p">(){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">error_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error_name</span><span class="p">);</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="nx">error_name</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">){</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">error_id</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="err">#</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;</span> <span class="o">+</span> <span class="nx">error_name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span> <span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="nx">em</span><span class="o">&gt;&amp;</span><span class="nx">rsquo</span><span class="p">;)</span> <span class="o">+</span> <span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="err">/em&gt;error&amp;rsquo;));</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">error_message</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">error_id</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">error_message</span><span class="p">.</span><span class="nx">show</span><span class="p">().</span><span class="nx">text</span><span class="p">(</span><span class="nx">error_name</span> <span class="o">+</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span> <span class="nx">needed</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;).</span><span class="nx">addClass</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">error_class</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">error_message</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>We can dynamically call the data attribute for each element.  For example, the error_name value the keyup event(m) will console.log (=> First name, m). The call method allows us to refactor all of our keyup event listeners into one method.  The call method as defined by the Mozilla guide "calls a function with a given this value and arguments provided individually."</p>
 
