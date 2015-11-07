@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Shell Function - Iacutone Deep Thoughts</title>
+  <title>Prototypes and Constructors in Javascript - Iacutone Deep Thoughts</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content="I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video &hellip;">
+  <meta name="description" content="I usually do not need to write code using neither constructors nor prototypes in Javascript. So, I always forget how to write them when I need to use &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://iacutone.github.io/blog/2015/10/30/shell-function">
+  <link rel="canonical" href="http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Iacutone Deep Thoughts" type="application/atom+xml">
@@ -115,7 +115,7 @@
   <header>
     
       
-        <h1 class="entry-title">Shell Function</h1>
+        <h1 class="entry-title">Prototypes and Constructors in Javascript</h1>
       
     
     
@@ -125,7 +125,7 @@
 
 
 
-<time class='entry-date' datetime='2015-10-30T22:34:34-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:34 pm</span></time>
+<time class='entry-date' datetime='2015-11-07T12:57:08-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:57 pm</span></time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -135,35 +135,61 @@
   </header>
 
 
-<div class="entry-content"><p>I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video sites.&rdquo; It&rsquo;s super useful. However, it default downloads to the current terminal directory. Let&rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.</p>
+<div class="entry-content"><p>I usually do not need to write code using neither constructors nor prototypes in Javascript. So, I always forget how to write them when I need to use them.</p>
 
-<figure class='code'><figcaption><span>.zshrc</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<h2>Constructor</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function</span> mp3 <span class="o">{</span>
-</span><span class='line'>  <span class="c"># Download all of the things to /Downloads</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="nx">Say</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="s2">&quot;Hello&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>  youtube-dl --default-search<span class="o">=</span>ytsearch: <span class="se">\</span>
-</span><span class='line'>             --output<span class="o">=</span><span class="s2">&quot;Downloads/%(title)s.%(ext)s&quot;</span> <span class="s2">&quot;$*&quot;</span>
-</span><span class='line'><span class="o">}</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">say</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Say</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">say</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// &quot;Hello&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The &ldquo;$<em>&rdquo; signifies the string following mp3, the example below, &ldquo;$</em>&rdquo; is the URL arument.</p>
+<h2>Prototype</h2>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>  mp3 https://www.youtube.com/watch<span class="se">\?</span>v<span class="se">\=</span>9fYeiGeuTFA
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="kd">function</span> <span class="nx">Say</span><span class="p">()</span> <span class="p">{}</span>
+</span><span class='line'>   <span class="nx">Say</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;Hello&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">say</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Say</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">say</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// &quot;Hello&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Now I can run the above script in order to download the video from the youtube URL.!</p>
 
 <p>Helpful Links</p>
 
-<p><a href="https://github.com/rg3/youtube-dl">youtube-dl</a></p>
+<p><a href="http://stackoverflow.com/questions/310870/use-of-prototype-vs-this-in-javascript">Use of &lsquo;prototype&rsquo; vs. &lsquo;this&rsquo; in JavaScript?</a></p>
+
+<p><a href="http://stackoverflow.com/questions/4508313/advantages-of-using-prototype-vs-defining-methods-straight-in-the-constructor">Advantages of using prototype, vs defining methods straight in the constructor?</a></p>
 </div>
 
 
@@ -180,13 +206,13 @@
 
 
 
-<time class='entry-date' datetime='2015-10-30T22:34:34-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:34 pm</span></time>
+<time class='entry-date' datetime='2015-11-07T12:57:08-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:57 pm</span></time>
       
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/bash/'>bash</a>
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>
   
 </span>
 
@@ -195,7 +221,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2015/10/30/shell-function/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2015/10/30/shell-function/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript/" >Tweet</a>
   
   
   
@@ -204,10 +230,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/10/23/the-setter-method-in-a-rails-model/" title="Previous Post: The Setter Method in a Rails Model">&laquo; The Setter Method in a Rails Model</a>
+        <a class="basic-alignment left" href="/blog/2015/10/30/shell-function/" title="Previous Post: Shell Function">&laquo; Shell Function</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/11/07/prototypes-and-constructors-in-javascript/" title="Next Post: Prototypes and Constructors in Javascript">Prototypes and Constructors in Javascript &raquo;</a>
       
     </p>
   </footer>
@@ -237,8 +261,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://iacutone.github.io/blog/2015/10/30/shell-function/';
-        var disqus_url = 'http://iacutone.github.io/blog/2015/10/30/shell-function/';
+        var disqus_identifier = 'http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript/';
+        var disqus_url = 'http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript/';
         var disqus_script = 'embed.js';
       
     (function () {

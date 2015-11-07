@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | Iacutone Deep Thoughts]]></title>
   <link href="http://iacutone.github.io/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-11-02T09:42:56-05:00</updated>
+  <updated>2015-11-07T13:50:41-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,48 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Prototypes and Constructors in Javascript]]></title>
+    <link href="http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript/"/>
+    <updated>2015-11-07T12:57:08-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript</id>
+    <content type="html"><![CDATA[<p>I usually do not need to write code using neither constructors nor prototypes in Javascript. So, I always forget how to write them when I need to use them.</p>
+
+<h2>Constructor</h2>
+
+<pre><code class="javascript">  Say = function(){
+    this.hello = function() {
+      return "Hello";
+    }
+  }
+
+  var say = new Say();
+  say.hello()
+
+  // "Hello"
+</code></pre>
+
+<h2>Prototype</h2>
+
+<pre><code class="javascript">  function Say() {}
+   Say.prototype.hello = function() {
+    return "Hello";
+  }
+
+  var say = new Say();
+  say.hello()
+
+  // "Hello"
+</code></pre>
+
+<p>Helpful Links</p>
+
+<p><a href="http://stackoverflow.com/questions/310870/use-of-prototype-vs-this-in-javascript">Use of &lsquo;prototype&rsquo; vs. &lsquo;this&rsquo; in JavaScript?</a></p>
+
+<p><a href="http://stackoverflow.com/questions/4508313/advantages-of-using-prototype-vs-defining-methods-straight-in-the-constructor">Advantages of using prototype, vs defining methods straight in the constructor?</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Refactoring Client Side Validations]]></title>
