@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Xcode | Iacutone Deep Thoughts]]></title>
+  <link href="http://iacutone.github.io/blog/categories/xcode/atom.xml" rel="self"/>
+  <link href="http://iacutone.github.io/"/>
+  <updated>2015-11-14T01:00:20-05:00</updated>
+  <id>http://iacutone.github.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Auto Layout Xcode for Navigation Bar]]></title>
+    <link href="http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar/"/>
+    <updated>2015-11-13T19:03:02-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar</id>
+    <content type="html"><![CDATA[<p>Finding auto layout information is difficult. The steps below pin a navigation bar to the top of the screen for all iOS devices.</p>
+
+<p><img class="center" src="/images/constraints.gif" title="" ></p>
+
+<h3>Steps</h3>
+
+<ul>
+<li>Make sure &ldquo;Navigation Bar&rdquo; is selected on the left menu</li>
+<li>Click the &ldquo;Pin&rdquo; button on the bottom right corner</li>
+<li>Click the top, left and right constraints</li>
+<li>Click the Height constraint</li>
+<li>Add the 4 contraints</li>
+</ul>
+
+
+<p>The above steps &ldquo;pin&rdquo; the navigation bar object to the top of the view and stretch the navigation bar to the sides of the view. The height constraint keeps a static height for the navigation bar.</p>
+
+<p>Helpful Links</p>
+
+<p><a href="https://github.com/codepath/ios_guides/wiki/Auto-Layout-Basics">Auto Layout Basics</a></p>
+]]></content>
+  </entry>
+  
+</feed>
