@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-11-14T13:05:45-05:00</updated>
+  <updated>2015-11-20T18:45:41-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,77 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Shared Contexts With RSpec]]></title>
+    <link href="http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec/"/>
+    <updated>2015-11-20T16:45:46-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec</id>
+    <content type="html"><![CDATA[<p>In the past, I used traits with my factories. Below is a simple example of defining a trait:</p>
+
+<h3>Using traits</h3>
+
+<pre><code class="ruby donations_factories.rb">  FactoryGirl.define do
+    factory :donation do
+      trait :with_amount do
+        amount 10
+      end
+
+      trait :no_amount do
+        amount 0
+      end
+    end
+  end
+</code></pre>
+
+<p>An example spec:</p>
+
+<pre><code class="ruby donation_spec.rb">  RSpec.describe 'Donation Matching', :type =&gt; :model do
+
+    context 'with an amount' do
+      let(:donation) { create(:donation, :with_amount) }
+    end
+
+    context 'with no amount' do
+      let(:donation) { create(:donation, :no_amount) }
+    end
+  end
+</code></pre>
+
+<p>However, I believe that using a shared context is a clearer approach. Defining the amount in a shared context and overriding the amount allows more control over testing use cases.</p>
+
+<h3>Using a shared context</h3>
+
+<pre><code class="ruby donation_spec.rb">  require 'support/shared_contexts/donor_with_donation_context'
+
+  RSpec.describe 'Donation Matching', :type =&gt; :model do
+    include_context 'a donor with a donation'
+
+    context 'with an amount' do
+      // donation.amount == 10 (defined in the shared context)
+    end
+
+    context 'with no amount' do
+      let(:amount) { 0 }
+      // donation.amount == 0
+    end
+
+    context 'with a gnarly' do
+      let(:amount) { 09709780 }
+    end
+  end
+</code></pre>
+
+<pre><code class="ruby spec/support/shared_contexts/donor_with_donation_context.rb">  RSpec.shared_context 'a donor with a donation' do
+    let(:amount) { 10 }
+
+    let(:donation) { create(:donation, amount: amount) }
+  end
+</code></pre>
+
+<p>I especially like the shared context approach because you can have shared context and redefine attributes as needed in specs.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Setter Method in a Rails Model]]></title>
@@ -504,93 +575,6 @@ end
   <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply'>Function.prototype.apply()</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Grep and Scan Methods With Regular Expressions in Ruby]]></title>
-    <link href="http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/"/>
-    <updated>2013-08-22T18:56:00-05:00</updated>
-    <id>http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby</id>
-    <content type="html"><![CDATA[<p>I am creating an app to provide food cart locations in Manhattan.  <a href='https://github.com/iacutone/food-truck'>Here</a> is the code.  Food carts generally post their locations on Twitter; in order to create latitude and longitude coordinates, I needed to parse tweets.  This is where scan and grep play their role, to match elements in a tweet string.  Let's say this is our tweet: "53rd and park. Ready by 11!"  This string is database column in my locations model.</p>
-
-
-
-
-<p>Code for scan method.</p>
-
-
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;tweet = &quot;53rd and park. Ready by 11!&quot;</span>
-</span><span class='line'><span class="sr">tweet.scan(/</span><span class="mi">53</span><span class="o">/</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># =&amp;gt; [&quot;53&quot;] </span>
-</span><span class='line'><span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># =&amp;gt; [&quot;park&quot;]</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>The scan method takes a string as an input.  Also, the i is used in the regular expression in order to make it case insensitive.</p>
-
-
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;tweet.scan(/</span><span class="no">Park</span><span class="o">/</span><span class="p">)</span>
-</span><span class='line'><span class="c1">#  =&amp;gt; [] </span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>Code for grep method.</p>
-
-
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;tweet = &quot;53rd and park. Ready by 11!&quot;</span>
-</span><span class='line'><span class="sr">tweet_array = tweet.split</span>
-</span><span class='line'><span class="sr"># =&amp;gt; [&quot;53rd&quot;, &quot;and&quot;, &quot;park.&quot;, &quot;Ready&quot;, &quot;by&quot;, &quot;11!&quot;] </span>
-</span><span class='line'><span class="sr">tweet_array.grep(/</span><span class="mi">53</span><span class="o">/</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># =&amp;gt; [&quot;53rd&quot;]</span>
-</span><span class='line'><span class="n">tweet_array</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># =&amp;gt; [&quot;park.&quot;]</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><p>The grep method takes an array as an input, so use the string split method to turn it into an array seperated by commas.  Also, the regular expression matches the entire string.  The grep method seems to be more suited as an alternative for the select and map methods.  <a href='http://zigzag.github.io/2010/03/31/grep-in-ruby----a-powerful-enumerable-method.html'>This</a> blog post goes into further detail explaining more cases to use the grep method over more familiar methods.<p></p>
 ]]></content>
   </entry>
   

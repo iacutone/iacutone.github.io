@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-11-14T13:05:45-05:00</updated>
+  <updated>2015-11-20T18:45:41-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,77 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Shared Contexts With RSpec]]></title>
+    <link href="http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec/"/>
+    <updated>2015-11-20T16:45:46-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec</id>
+    <content type="html"><![CDATA[<p>In the past, I used traits with my factories. Below is a simple example of defining a trait:</p>
+
+<h3>Using traits</h3>
+
+<pre><code class="ruby donations_factories.rb">  FactoryGirl.define do
+    factory :donation do
+      trait :with_amount do
+        amount 10
+      end
+
+      trait :no_amount do
+        amount 0
+      end
+    end
+  end
+</code></pre>
+
+<p>An example spec:</p>
+
+<pre><code class="ruby donation_spec.rb">  RSpec.describe 'Donation Matching', :type =&gt; :model do
+
+    context 'with an amount' do
+      let(:donation) { create(:donation, :with_amount) }
+    end
+
+    context 'with no amount' do
+      let(:donation) { create(:donation, :no_amount) }
+    end
+  end
+</code></pre>
+
+<p>However, I believe that using a shared context is a clearer approach. Defining the amount in a shared context and overriding the amount allows more control over testing use cases.</p>
+
+<h3>Using a shared context</h3>
+
+<pre><code class="ruby donation_spec.rb">  require 'support/shared_contexts/donor_with_donation_context'
+
+  RSpec.describe 'Donation Matching', :type =&gt; :model do
+    include_context 'a donor with a donation'
+
+    context 'with an amount' do
+      // donation.amount == 10 (defined in the shared context)
+    end
+
+    context 'with no amount' do
+      let(:amount) { 0 }
+      // donation.amount == 0
+    end
+
+    context 'with a gnarly' do
+      let(:amount) { 09709780 }
+    end
+  end
+</code></pre>
+
+<pre><code class="ruby spec/support/shared_contexts/donor_with_donation_context.rb">  RSpec.shared_context 'a donor with a donation' do
+    let(:amount) { 10 }
+
+    let(:donation) { create(:donation, amount: amount) }
+  end
+</code></pre>
+
+<p>I especially like the shared context approach because you can have shared context and redefine attributes as needed in specs.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Setter Method in a Rails Model]]></title>
@@ -567,198 +638,6 @@ end
 
 <p><h3>Other Resources</h3>
 <p>I found this book invaluable in learning best practices in testing: <a href='https://leanpub.com/everydayrailsrspec'>Everday RSpec</a></br>h/t Victoria Friedman</p></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Changing Your Password From Scratch]]></title>
-    <link href="http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch/"/>
-    <updated>2013-09-07T01:08:00-05:00</updated>
-    <id>http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch</id>
-    <content type="html"><![CDATA[<p> So say you are using devise and have none of the has_secure_password medthod available to you.  One should learn the bcrypt gem... and needs to abstract some methods in order to parse an encrypted password.  Cool, Bcrypt can do that, as located <a href ='  https://github.com/rails/rails/blob/b965ce361b89ad33a4a4b422f8e564233926c723/activemodel/lib/active_model/secure_password.rb#L42
-'>here.</a> Here is my modified code in order to confirm if a new password in order to apply a boolean value to an inputed password.</p>
-
-
-<p><figure class='code'><figcaption><span>edit.html.haml lang: ruby </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'> <span class="nt">%li</span>
-</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:current_password</span>
-</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">password_field</span> <span class="ss">:current_password</span>
-</span><span class='line'>      # =&gt; &amp;lsquo;password&amp;rsquo;
-</span><span class='line'>    <span class="nt">%li</span>
-</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:new_password</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="no">New</span> <span class="no">Password</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">password_field</span> <span class="ss">:new_password</span>
-</span><span class='line'>      # =&gt; &amp;lsquo;new_password&amp;rsquo;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;  .buttons
-</span><span class='line'>    <span class="nt">%button</span> Save
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><figure class='code'><figcaption><span>user.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="n">unencrypted_password</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">if</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span> <span class="o">==</span> <span class="n">unencrypted_password</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="nb">self</span>
-</span><span class='line'>      <span class="n">bcrypt</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span>
-</span><span class='line'>      <span class="c1"># creates a bcrypt variable if the encrypted passwors result is true</span>
-</span><span class='line'>      <span class="c1"># =&gt; &amp;ldquo;$2a$10$wgOzLhy84peHUD9wr9UkgOKRpwfls/0h48NYVvKIOdUdbz3XOEpSK&amp;rdquo;</span>
-</span><span class='line'>      <span class="n">password</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">hash_secret</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">bcrypt</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span>
-</span><span class='line'>      <span class="c1"># then salts the new password</span>
-</span><span class='line'>      <span class="c1"># =&gt; &amp;ldquo;$2a$10$VUNoD3xdAp7ytTIsTyH5feY.DNUKA4efIdkcI6ViBQ532o8lyNV/e&amp;rdquo;</span>
-</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="kp">nil</span> <span class="k">unless</span> <span class="n">reset_secure_compare</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">encrypted_password</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kp">true</span>
-</span><span class='line'>    <span class="k">else</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span> <span class="o">!=</span> <span class="n">unencrypted_password</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="nb">self</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kp">false</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p> <p>You might be wondering what the reset_secure_password method is doing.  Well, it is pulled from the Devise docs and is preventing <a href='http://en.wikipedia.org/wiki/Timing_attack'>timing attacks,</a> when an attacker attempts to compromise an encryption by analyzing the time taken in order to execute the password and salting algorithms.</p></p>
-
-<p>Cool, now I can pass my current_password attribute to make sure it is true.  I need to make a custom <a href='http://edgeguides.rubyonrails.org/active_record_validations.html'>Active Record Validations.</a></p>
-
-
-<p><figure class='code'><figcaption><span>user.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="k">def</span> <span class="nf">correct_password_update_validator</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">true</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>        <span class="nb">self</span><span class="o">.</span><span class="n">encrypted_password</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">new_password</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>     <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>If this validates, encrypted_password on the database returns true.  Now I need validations for events with blank fields (I want nothing to happen), and also, if current_password is blank and new_password and present, visa versa.</p>
-
-
-<p><figure class='code'><figcaption><span>user.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;validate :incorrect_password_update_validator, on: :update</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  validate :correct_password_update_validator, on: :update</span>
-</span><span class='line'><span class="sr">  validate :current_password_present, on: :update</span>
-</span><span class='line'><span class="sr">  validate :new_password_present, on: :update</span>
-</span><span class='line'><span class="sr">  validate :current_password_true_present, on: :update&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="kp">private</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;def current_password_true_present</span>
-</span><span class='line'><span class="sr">if self.authenticate(current_password) == true and new_password.blank? and current_password.present?</span>
-</span><span class='line'><span class="sr">  errors.add(:new_password, &quot; needs to be filled out.&quot;)</span>
-</span><span class='line'><span class="sr">end</span>
-</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">current_password_present</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">blank?</span>
-</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:current_password</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span> <span class="n">needs</span> <span class="n">to</span> <span class="n">be</span> <span class="n">filled</span> <span class="n">out</span><span class="o">.</span><span class="n">&amp;rdquo</span><span class="p">;)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  def new_password_present</span>
-</span><span class='line'><span class="sr">    if self.authenticate(current_password) == false and new_password.blank? and current_password.present?</span>
-</span><span class='line'><span class="sr">      errors.add(:new_password, &amp;ldquo; needs to be filled out.&amp;rdquo;)</span>
-</span><span class='line'><span class="sr">    end</span>
-</span><span class='line'><span class="sr">  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">incorrect_password_update_validator</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:current_password</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">match</span><span class="o">.</span><span class="n">&amp;rdquo</span><span class="p">;)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;  def reset_secure_compare(a, b)</span>
-</span><span class='line'><span class="sr">    return false if a.blank? || b.blank? || a.bytesize != b.bytesize</span>
-</span><span class='line'><span class="sr">    l = a.unpack &amp;ldquo;C</span><span class="si">#{</span><span class="n">a</span><span class="o">.</span><span class="n">bytesize</span><span class="si">}</span><span class="sr">&amp;rdquo;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span class='line'><span class="n">b</span><span class="o">.</span><span class="n">each_byte</span> <span class="p">{</span> <span class="o">|</span><span class="n">byte</span><span class="o">|</span> <span class="n">res</span> <span class="o">|=</span> <span class="n">byte</span> <span class="o">^</span> <span class="n">l</span><span class="o">.</span><span class="n">shift</span> <span class="p">}</span>
-</span><span class='line'><span class="n">res</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>Now, all use cases of the user improperly editing the form result in false and a validation error occurs.</p>
-
 ]]></content>
   </entry>
   
