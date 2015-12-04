@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode/</loc>
+    <lastmod>2015-12-03T18:02:14-05:00</lastmod>
+  </url>
+  <url>
     <loc>http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec/</loc>
     <lastmod>2015-11-20T16:45:46-05:00</lastmod>
   </url>
@@ -160,5 +164,11 @@
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/categories/xcode/</loc>
+  </url>
+  <url>
+    <loc>http://iacutone.github.io/posts/2/</loc>
+  </url>
+  <url>
+    <loc>http://iacutone.github.io/posts/3/</loc>
   </url>
 </urlset>

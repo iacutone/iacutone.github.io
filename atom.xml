@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-11-20T18:50:36-05:00</updated>
+  <updated>2015-12-03T21:15:08-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ENV Variables in XCode]]></title>
+    <link href="http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode/"/>
+    <updated>2015-12-03T18:02:14-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode</id>
+    <content type="html"><![CDATA[<p><img class="center" src="http://iacutone.github.io/images/env1.mov"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Shared Contexts With RSpec]]></title>
@@ -3873,203 +3882,6 @@
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Amazon S3, Part 2]]></title>
-    <link href="http://iacutone.github.io/blog/2013/06/10/amazon-s3/"/>
-    <updated>2013-06-10T15:45:00-05:00</updated>
-    <id>http://iacutone.github.io/blog/2013/06/10/amazon-s3</id>
-    <content type="html"><![CDATA[<p>So we have Carrierwave uploading pictures to our local server.  Perhaps we want the pictures stored on a third party cloud provider.  Amazon S3 and Carrierwave work very well together.  This blog post describes how to upload your pictures to the Amazon S3 cloud.  Again, thanks to Ryan Bates and Railscasts for the great information.</p>
-
-
-
-
-<p>In order to upload files to Amazon S3, we will be using the <a href='https://github.com/fog/fog'>Fog Gem.</a>  The Carrierwave gem handles the Fog interaction with Amazon S3 behind the scenes.</p>
-
-
-
-
-<ul>
-    <li>Sign up for an Amazon AWS account.</li>
-    <li>Create a S3 bucket to store your files (photos)</li>
-    <li>Input your credentials in:</li>
-</ul>
-
-
-
-
-<figure class='code'><figcaption><span>initializers/carrierwave.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">CarrierWave</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">fog_credentials</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="ss">:provider</span>               <span class="o">=&gt;</span> <span class="s1">&#39;AWS&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="ss">:aws_access_key_id</span>      <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;AWS_ACCESS_KEY_ID&#39;</span><span class="o">]</span><span class="p">,</span>
-</span><span class='line'>    <span class="ss">:aws_secret_access_key</span>  <span class="o">=&gt;</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;AWS_SECRET_ACCESS_KEY&#39;</span><span class="o">]</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">fog_directory</span>  <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;AWS_S3_BUCKET&#39;</span><span class="o">]</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>I put my ENV variables in the <a href='https://github.com/laserlemon/figaro'>Figaro Gem.</a></p>
-
-
-
-
-<p>You also need to modify your code in the avatar_uploader we created in the last blog post to :</p>
-
-
-
-
-<figure class='code'><figcaption><span>avatar_uploader.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># encoding: utf-8</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">AvatarUploader</span> <span class="o">&lt;</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">Uploader</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="c1"># include CarrierWaveDirect::Uploader</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Include RMagick or MiniMagick support:</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">RMagick</span>
-</span><span class='line'>  <span class="c1"># include CarrierWave::MiniMagick</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Sprockets</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">RailsHelper</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Sprockets</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">IsolatedHelper</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Choose what kind of storage to use for this uploader:</span>
-</span><span class='line'>  <span class="c1"># storage :file</span>
-</span><span class='line'>  <span class="n">storage</span> <span class="ss">:fog</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">MimeTypes</span>
-</span><span class='line'>  <span class="n">process</span> <span class="ss">:set_content_type</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Override the directory where uploaded files will be stored.</span>
-</span><span class='line'>  <span class="c1"># This is a sensible default for uploaders that are meant to be mounted:</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">store_dir</span>
-</span><span class='line'>    <span class="s2">&quot;uploads/</span><span class="si">#{</span><span class="n">model</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">to_s</span><span class="o">.</span><span class="n">underscore</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">mounted_as</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Provide a default URL as a default if there hasn&#39;t been a file uploaded:</span>
-</span><span class='line'>  <span class="c1"># def default_url</span>
-</span><span class='line'>  <span class="c1">#   # For Rails 3.1+ asset pipeline compatibility:</span>
-</span><span class='line'>  <span class="c1">#   # asset_path(&quot;fallback/&quot; + [version_name, &quot;default.png&quot;].compact.join(&#39;_&#39;))</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1">#   &quot;/images/fallback/&quot; + [version_name, &quot;default.png&quot;].compact.join(&#39;_&#39;)</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Process files as they are uploaded:</span>
-</span><span class='line'>  <span class="c1"># process :scale =&gt; [200, 300]</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># def scale(width, height)</span>
-</span><span class='line'>  <span class="c1">#   # do something</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Create different versions of your uploaded files:</span>
-</span><span class='line'>  <span class="n">version</span> <span class="ss">:thumb</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">process</span> <span class="ss">:resize_to_limit</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">version</span> <span class="ss">:profile</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">process</span> <span class="ss">:resize_to_limit</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">350</span><span class="p">,</span> <span class="mi">350</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Add a white list of extensions which are allowed to be uploaded.</span>
-</span><span class='line'>  <span class="c1"># For images you might use something like this:</span>
-</span><span class='line'>  <span class="c1"># def extension_white_list</span>
-</span><span class='line'>  <span class="c1">#   %w(jpg jpeg gif png)</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Override the filename of the uploaded files:</span>
-</span><span class='line'>  <span class="c1"># Avoid using model.id or version_name here, see uploader/store.rb for details.</span>
-</span><span class='line'>  <span class="c1"># def filename</span>
-</span><span class='line'>  <span class="c1">#   &quot;something.jpg&quot; if original_filename</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>That is it.  Your photos are now added to your Amazon S3 bucket!  Just be careful, you only get so much space on the cloud for free.  In the next blog post, I will explain how to increase efficiency with a background task via Sidekiq.</p>
-
-
-<p><a href='http://railscasts.com/episodes/253-carrierwave-file-uploads'>Carrierwave Railscast</a><br />
-<a href='http://railscasts.com/episodes/383-uploading-to-amazon-s3'>Uploading to Amazon S3 Railscast</a><br />
-<a href='http://railscasts.com/episodes/366-sidekiq'>Sidekiq Railscast</a></p>
 ]]></content>
   </entry>
   

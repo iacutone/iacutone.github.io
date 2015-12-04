@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Swift | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/swift/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-11-20T18:50:36-05:00</updated>
+  <updated>2015-12-03T21:15:08-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ENV Variables in XCode]]></title>
+    <link href="http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode/"/>
+    <updated>2015-12-03T18:02:14-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode</id>
+    <content type="html"><![CDATA[<p><img class="center" src="/images/env1.mov"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Auto Layout Xcode for Navigation Bar]]></title>
