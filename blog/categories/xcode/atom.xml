@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Xcode | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/xcode/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-12-04T11:27:45-05:00</updated>
+  <updated>2015-12-04T11:34:30-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -18,7 +18,7 @@
     <link href="http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode/"/>
     <updated>2015-12-03T18:02:14-05:00</updated>
     <id>http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode</id>
-    <content type="html"><![CDATA[<p>Setting ENV variables in XCode in not straighforward. I have broken down how to accomplish setting up an ENV variable in the next to videos and how to call your variable in swift in the code example.</p>
+    <content type="html"><![CDATA[<p>Setting ENV variables in XCode in not straighforward. I have broken down how to accomplish setting up an ENV variable in the following videos and code example.</p>
 
 <p><div class="embed-video-container"><iframe src="//www.youtube.com/embed/r5HZwbkA52I" allowfullscreen></iframe></div>
 Make a new conifuration file and set any ENV variables you need.</p>
