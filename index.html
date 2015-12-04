@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content=" ">
+  <meta name="description" content="Setting ENV variables in XCode in not straighforward. I have broken down how to accomplish setting up an ENV variable in the next to videos and how &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -136,8 +136,30 @@
   </header>
 
 
-  <div class="entry-content"><div class="embed-video-container"><iframe src="//www.youtube.com/embed/r5HZwbkA52I" allowfullscreen></iframe></div>
+  <div class="entry-content"><p>Setting ENV variables in XCode in not straighforward. I have broken down how to accomplish setting up an ENV variable in the next to videos and how to call your variable in swift in the code example.</p>
 
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/r5HZwbkA52I" allowfullscreen></iframe></div>
+
+
+<p>Make a new conifuration file and set any ENV variables you need.</p>
+
+<div class="embed-video-container"><iframe src="//www.youtube.com/embed/jwuQgWb58Xs" allowfullscreen></iframe></div>
+
+
+<p>In the debug environment, use the debug.xcconfig file. Then, assign the value to something, in this case, SignUpUrl corresponds with the SIGN_UP_URL, which is set to localhost:4567/sign_up.</p>
+
+<figure class='code'><figcaption><span>SignUpController.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='swift'><span class='line'>  <span class="k">var</span> <span class="nl">info</span><span class="p">:[</span><span class="nl">NSObject</span><span class="p">:</span><span class="n">AnyObject</span><span class="p">]</span> <span class="o">=</span> <span class="bp">NSBundle</span><span class="p">.</span><span class="n">mainBundle</span><span class="p">().</span><span class="n">infoDictionary</span><span class="o">!</span>
+</span><span class='line'>  <span class="k">var</span> <span class="n">sign_up_url</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s">&quot;SignUpUrl&quot;</span><span class="p">]</span> <span class="kt">as</span><span class="o">!</span> <span class="n">String</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The sign_up_url variable is set to localhost:4567/signup.</p>
+
+<p>Helpful Links</p>
+
+<p><a href="http://bogardon.github.io/xcode/environment-variables/2013/05/20/configuring-env-variables-in-xcode.html">Configuring ENV Variables in XCode</a></p>
 </div>
   
   
