@@ -1,0 +1,81 @@
+---
+layout: post
+title: "Gon Gem"
+date: 2013-06-30 00:04
+comments: true
+categories: Rails Ruby Javascript jQuery
+---
+
+<p>I ran into difficulties trying to find a way to implement jQuery in a modal.  It is not possible to use remote: true in a form_tag with Twitter Bootstrap.  I successfully used the <a href='https://github.com/gazay/gon'>Gon Gem</a> in order to remove elements from the DOM when an instance variable reached a certain number.  If you find yourself in the position of needing to remove elements from a modal, this gem seems to be the way to go.</p>
+
+{% codeblock user_controller.rb lang:ruby %} 
+
+    def create
+      @user = User.new(params[:user])
+
+      if @user.save
+
+        @day_one_counter = []
+        @day_one_counter = User.pluck(:time1)
+
+        #@day_one_counter outputs an array of elements from the :time1 column. => ["11:00", "11:00", nil, nil, nil]
+
+        b = Hash.new(0)
+
+        @day_one_counter.each do |v|
+          b[v] += 1
+        end
+
+        #the block increments the key/value pairs in the instantiated Hash. => {"11:00"=>2, nil=>3}
+
+        @time1 = b["11:00"]
+        gon.time1 = @time1
+
+        #@time1 pulls out the value of the pair => 2
+        #gon.time1 => 2, in order to use the @time1 instance variable in users.js
+
+        @time2 = b["11:20"] 
+        gon.time2 = @time2
+
+        @time3 = b["11:40"]
+        gon.time3 = @time3
+
+        render :time
+      else
+        render :new
+      end
+    end
+{% endcodeblock %}
+
+<p>This is a conintuation of the Pluck Method from my last blog post.  For an overview of what is happening, read the comments provided above.  With the gone.time1 variable, I can now use jQuery in my users.js file in order to remove elements from the DOM that go over a given number, in this case 5.</p>
+
+{% codeblock users.js lang:js %}
+
+	if (gon.time1 > 4) {
+		$('.wrapper1').remove();
+	}
+
+	if (gon.time2 > 4) {
+		$('.wrapper2').remove();
+	}
+{% endcodeblock %}
+
+<p>...and the form</p>
+
+{% codeblock _time1.html.erb lang:ruby %}
+
+	<%= form_for @user do |f| %>
+		<div class='wrapper1' id='pad'>11:00 A.M. <%= f.radio_button(:time1, '11:00') %><br /><%= 5 - @time1 unless @time1 == nil %> spots remaining.</div> 
+		<div class='wrapper2' id='pad'>11:20 A.M. <%= f.radio_button(:time1, '11:20') %><br /><%= 5 - @time2 unless @time2 == nil %> spots remaining.</div>
+		<div class='wrapper'><%= f.radio_button(:time1, 'No time.') %>  Interested but not available during these times. Please inform me of future conversation opportunities.<br /></div>
+	<%= f.hidden_field :day, :value => 'July 10' %>
+	<button class="btn btn-inverse" type="submit"class="actions">Submit</button>
+	<% end %>
+{% endcodeblock %}
+
+<p>Since the @time1 instance variable and therefore, gon.time1 are saved after my create action, the applicable time is > 4 if I want a total of 5 elements for a particular time on my :time1 column.  The next time the modal is visited, the element will be removed!</p>
+
+<p>I am so excited I found this gem and got my modal to work correctly! Also, a thanks for Railscast for the tutorial on the gem.</p>
+
+<p><a href='http://railscasts.com/episodes/324-passing-data-to-javascript'>Passing Data to Javascript</a></p>
+

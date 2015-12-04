@@ -1,0 +1,107 @@
+---
+layout: post
+title: "Amazon S3, Part 2"
+date: 2013-06-10 15:45
+comments: true
+categories: 
+---
+
+<p>So we have Carrierwave uploading pictures to our local server.  Perhaps we want the pictures stored on a third party cloud provider.  Amazon S3 and Carrierwave work very well together.  This blog post describes how to upload your pictures to the Amazon S3 cloud.  Again, thanks to Ryan Bates and Railscasts for the great information.</p>
+
+<p>In order to upload files to Amazon S3, we will be using the <a href='https://github.com/fog/fog'>Fog Gem.</a>  The Carrierwave gem handles the Fog interaction with Amazon S3 behind the scenes.</p>
+
+<ul>
+	<li>Sign up for an Amazon AWS account.</li>
+	<li>Create a S3 bucket to store your files (photos)</li>
+	<li>Input your credentials in:</li>
+</ul>
+
+{% codeblock initializers/carrierwave.rb lang:ruby %}
+CarrierWave.configure do |config|
+  config.fog_credentials = {
+    :provider               => 'AWS',
+    :aws_access_key_id      => ENV['AWS_ACCESS_KEY_ID'],
+    :aws_secret_access_key  => ENV['AWS_SECRET_ACCESS_KEY']
+  }
+  config.fog_directory  = ENV['AWS_S3_BUCKET']
+end
+
+{% endcodeblock %}
+
+<p>I put my ENV variables in the <a href='https://github.com/laserlemon/figaro'>Figaro Gem.</a></p>
+
+<p>You also need to modify your code in the avatar_uploader we created in the last blog post to :</p>
+
+{% codeblock avatar_uploader.rb lang:ruby %}
+
+# encoding: utf-8
+
+class AvatarUploader < CarrierWave::Uploader::Base
+  # include CarrierWaveDirect::Uploader
+
+  # Include RMagick or MiniMagick support:
+  include CarrierWave::RMagick
+  # include CarrierWave::MiniMagick
+
+  # Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
+  include Sprockets::Helpers::RailsHelper
+  include Sprockets::Helpers::IsolatedHelper
+
+  # Choose what kind of storage to use for this uploader:
+  # storage :file
+  storage :fog
+
+  include CarrierWave::MimeTypes
+  process :set_content_type
+
+  # Override the directory where uploaded files will be stored.
+  # This is a sensible default for uploaders that are meant to be mounted:
+  def store_dir
+    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+  end
+
+  # Provide a default URL as a default if there hasn't been a file uploaded:
+  # def default_url
+  #   # For Rails 3.1+ asset pipeline compatibility:
+  #   # asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
+  #
+  #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
+  # end
+
+  # Process files as they are uploaded:
+  # process :scale => [200, 300]
+  #
+  # def scale(width, height)
+  #   # do something
+  # end
+
+  # Create different versions of your uploaded files:
+  version :thumb do
+    process :resize_to_limit => [150, 150]
+  end
+
+  version :profile do
+    process :resize_to_limit => [350, 350]
+  end
+
+  # Add a white list of extensions which are allowed to be uploaded.
+  # For images you might use something like this:
+  # def extension_white_list
+  #   %w(jpg jpeg gif png)
+  # end
+
+  # Override the filename of the uploaded files:
+  # Avoid using model.id or version_name here, see uploader/store.rb for details.
+  # def filename
+  #   "something.jpg" if original_filename
+  # end
+
+end
+
+{% endcodeblock %}
+
+<p>That is it.  Your photos are now added to your Amazon S3 bucket!  Just be careful, you only get so much space on the cloud for free.  In the next blog post, I will explain how to increase efficiency with a background task via Sidekiq.</p>
+
+<a href='http://railscasts.com/episodes/253-carrierwave-file-uploads'>Carrierwave Railscast</a><br />
+<a href='http://railscasts.com/episodes/383-uploading-to-amazon-s3'>Uploading to Amazon S3 Railscast</a><br />
+<a href='http://railscasts.com/episodes/366-sidekiq'>Sidekiq Railscast</a>

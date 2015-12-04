@@ -1,0 +1,127 @@
+---
+layout: post
+title: "Carrierwave Gem, Part 1"
+date: 2013-06-05 18:59
+comments: true
+categories: 
+---
+
+<p>I have been developing a CMS for students at the Flatiron School.  Some gems I used for the first time include Sidekiq, Amazon S3, Carrierwave and Fog. This blog post is a walkthrough of how to implement these gems in your own Rails app.  Furthermore, h/t to Ryan Bates of Railscasts for the invaluable information in his videos.  This blog post will be broken down into different parts, implementing Carrierwave is the objective of this post.</p> 
+
+<p>The first step is to initiate the <a href='https://github.com/carrierwaveuploader/carrierwave'>Carrierwave Gem</a> in order to upload pictures to the app.  So, the typical steps:</p>
+
+<p>Add 'carrierwave' to your Gemfile</p>
+	
+	{% codeblock %}
+	$ rails g uploader avatar
+	{% endcodeblock %}
+<br />
+	{% codeblock %}
+	$ rails g migration add_avatar_to_profiles avatar:string
+	{% endcodeblock %}
+<br />
+	{% codeblock %}
+	$ rake db:migrate
+	{% endcodeblock %}
+<p>Now, our Profile table has an avatar attribute.  An uploader folder was also added to your app route directory named after your attribute name, in this case avatar_uploader.rb.  Here is the code in the file.</p>
+
+{% codeblock avatar_uploader.rb lang:ruby %}
+# encoding: utf-8
+
+class AvatarUploader < CarrierWave::Uploader::Base
+  # include CarrierWaveDirect::Uploader
+
+  # Include RMagick or MiniMagick support:
+  include CarrierWave::RMagick
+  # include CarrierWave::MiniMagick
+
+  # Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
+  # include Sprockets::Helpers::RailsHelper
+  # include Sprockets::Helpers::IsolatedHelper
+
+  # Choose what kind of storage to use for this uploader:
+  storage :file
+  # storage :fog
+
+  # include CarrierWave::MimeTypes
+  # process :set_content_type
+
+  # Override the directory where uploaded files will be stored.
+  # This is a sensible default for uploaders that are meant to be mounted:
+  def store_dir
+    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+  end
+
+  # Provide a default URL as a default if there hasn't been a file uploaded:
+  # def default_url
+  #   # For Rails 3.1+ asset pipeline compatibility:
+  #   # asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
+  #
+  #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
+  # end
+
+  # Process files as they are uploaded:
+  # process :scale => [200, 300]
+  #
+  # def scale(width, height)
+  #   # do something
+  # end
+
+  # Create different versions of your uploaded files:
+  version :thumb do
+    process :resize_to_limit => [150, 150]
+  end
+
+  version :profile do
+    process :resize_to_limit => [350, 350]
+  end
+
+  # Add a white list of extensions which are allowed to be uploaded.
+  # For images you might use something like this:
+  # def extension_white_list
+  #   %w(jpg jpeg gif png)
+  # end
+
+  # Override the filename of the uploaded files:
+  # Avoid using model.id or version_name here, see uploader/store.rb for details.
+  # def filename
+  #   "something.jpg" if original_filename
+  # end
+
+end
+{% endcodeblock %}
+
+<p>There is a lot of code in here commented out which will be used in later posts for using both Fog and Amazon S3.  I like being able to create different sizes under the version sections, for example</p>
+	{% codeblock lang:ruby %}
+	version :thumb do
+    process :resize_to_limit => [150, 150]
+  end
+  {% endcodeblock %}
+<br /> 
+<p>to add elegant versatility to the sizes of your images.</p>
+
+
+<p>In your Profile model add:</p>
+		{% codeblock profile.rb lang:ruby %}
+		mount_uploader :avatar, AvatarUploader
+		{% endcodeblock %}
+		
+<p>To display the avatar in your View:</p>
+		{% codeblock show.html.erb lang:ruby %}
+		<%= image_tag image_url(:thumb) %>
+		{% endcodeblock %}
+
+<p>In your form:</p>
+		{% codeblock new.html.erb lang:ruby %}
+		<%= f.file_field :avatar %>
+		{% endcodeblock %}
+	
+
+<p> That is all, you can now add images of specific sizes to your Rails app!</p>
+
+
+
+
+<a href='http://railscasts.com/episodes/253-carrierwave-file-uploads'>Carrierwave Railscast</a><br />
+<a href='http://railscasts.com/episodes/383-uploading-to-amazon-s3'>Uploading to Amazon S3 Railscast</a><br />
+<a href='http://railscasts.com/episodes/366-sidekiq'>Sidekiq Railscast</a>

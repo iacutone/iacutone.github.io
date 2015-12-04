@@ -1,0 +1,23 @@
+---
+layout: post
+title: "Jambox"
+date: 2013-03-01 07:39
+comments: true
+categories: 
+---
+
+<h2>AirPlay</h2>
+
+<p>Learning how Airplay works: it allows wireless streaming of audio, video and photos. </p> 
+
+<p> My original idea was to rip the music information going onto the Flatiron AirPlay, then automatically tweet this information via Twitter.  I liked this idea because we play so much cool and unfamiliar music.  It would be great to keep track of what is playing.  Over time, I opened a myriad of tabs and discovered many interesting API's.  These include a few API's which mirror AirPlay on a laptop (<a href="http://airparrot.com/">AirParrot.</a> and <a href="http://www.airserverapp.com/">AirServer.</a>).  Also, many music API's were discovered.  These include <a href="http://echonest.com/">Echonest</a>, <a href="http://developers.soundcloud.com/">Soundcloud</a> and many others. </p>
+
+<p> The original idea went down in flames when I learned how difficult it is to hack the AirPlay.  <a href="http://www.aorensoftware.com/blog/2011/08/20/exploring-airplay-mirroring-internals/">This</a> blog post illustrated how this hacker tried to gain access to the AirPlay from WiFi packets via KisMAC, a derivative of WireShark.  Also, there are problems jailbreaking the DRM encryption.  The idea is possible, but a crazy task.  Idea aborted...</p>
+
+<p><a href="https://github.com/play/play/tree/master/app/api ">GitHub Play</a> deserves some special recognition.  It allows the GitHub offices to wirelessly create playlists synchronously in all of their offices around the globe.  The next iteration of our goal was to get the GitHub Play to work locally.  You can clone it at the link above.  However, GitHub Play relies on an old version of iTunes which includes iTunes DJ.  Also, Play ran on Ruby 1.8.7, and the dependencies were a mess.  So, our group threw this idea of out the window.  </p>
+
+<h2> GitHub Play </h2>
+<p><img src = "/images/play.png" height = "500" width = "500"></p>
+
+<p>Our groups next iteration is to simplify the GitHub Play.  Currently we are setting up a server where people can upload their mp3's.  Directions to create your own streaming music player in Ruby can be found <a href="http://net.tutsplus.com/tutorials/create-a-simple-music-streaming-app-with-ruby-on-rails/ ">here.</a>  The goal of this project is to eventually create a service where a group of people can all upload their songs onto a server and they will be played in sequence on a playlist.  For example, if you are at a party, everyone can put songs on a playlist, so that no one person will have complete control of the music.  We also want to implement a Reddit-esque leaderboard so people on the server can upvote/downvote songs.  If a song gets too many downvotes, it will be erased from the playlist.  </p>
+
