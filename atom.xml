@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-12-03T21:15:08-05:00</updated>
+  <updated>2015-12-03T21:29:04-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -18,7 +18,8 @@
     <link href="http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode/"/>
     <updated>2015-12-03T18:02:14-05:00</updated>
     <id>http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode</id>
-    <content type="html"><![CDATA[<p><img class="center" src="http://iacutone.github.io/images/env1.mov"></p>
+    <content type="html"><![CDATA[<div class="embed-video-container"><iframe src="//www.youtube.com/embed/r5HZwbkA52I" allowfullscreen></iframe></div>
+
 ]]></content>
   </entry>
   
