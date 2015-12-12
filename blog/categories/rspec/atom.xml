@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rspec | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-12-12T15:13:39-05:00</updated>
+  <updated>2015-12-12T15:15:16-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -36,28 +36,28 @@
 end
 </code></pre>
 
-<p>  before do
+<pre><code class="ruby donation_funding_spec.rb">
+  before do
     donation.amount = campaign.goal_amount + 1
     donation.save!
-  end</p>
+  end
 
-<p>  // Make the donation that exceeds the funding goal</p>
+  // Make the donation that exceeds the funding goal
 
-<p>  let!(:funder) {
+  let!(:funder) {
     funder = DonationFunding.new donation
     funder
-  }</p>
+  }
 
-<p>  // set up the donation for funding</p>
+  // set up the donation for funding
 
-<p>  it &lsquo;sends email goal amount reached email to the curator&rsquo; do
+  it 'sends email goal amount reached email to the curator' do
     expect(CampaignMailer).to receive(:notify_curator_campaign_goal_reached).and_call_original
     funder.fund
-  end</p>
+  end
 
-<p>  // Expect a CampaignMailer.notify_curator_campaign_goal_reached email to be sent</p>
-
-<p>```</p>
+  // Expect a CampaignMailer.notify_curator_campaign_goal_reached email to be sent
+</code></pre>
 
 <p>The definition for the method and_call_original is, &ldquo;You can use and_call_original on the fluent interface to "pass through&rdquo; the received message to the original method.&ldquo; What exactly does this mean? It means that when I call funder.fund, I expect CampaignMailer.notify_curator_campaign_goal_reached to be called.</p>
 
