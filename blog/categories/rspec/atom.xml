@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rspec | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-12-04T11:34:30-05:00</updated>
+  <updated>2015-12-12T15:12:45-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using Mocks to Test Mailers in RSpec]]></title>
+    <link href="http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/"/>
+    <updated>2015-12-12T13:37:18-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec</id>
+    <content type="html"><![CDATA[<p>I was in the situation where I needed to test the delivery of emails based on specific sets of events. I began testing by inspecting sent emails in ActionMailer::Base.deliveries. However, this method of testing felt verbose and sloppy.</p>
+
+<p>RSpec mocks is a great solution when you need to test that a specific method was called. In my case, I want a fundraiser to receive an email after a campaign goal is reached.</p>
+
+<pre><code class="ruby donation_funding.rb">
+  attr_reader :donation
+
+  def initialize(donation)
+    @donation = donation
+  end
+
+  def fund
+    # do some work
+    CampaignMailer.notify_curator_campaign_goal_reached(donation)
+  end
+end
+</code></pre>
+
+<p>  before do
+    donation.amount = campaign.goal_amount + 1
+    donation.save!
+  end</p>
+
+<p>  // Make the donation that exceeds the funding goal</p>
+
+<p>  let!(:funder) {
+    funder = DonationFunding.new donation
+    funder
+  }</p>
+
+<p>  // set up the donation for funding</p>
+
+<p>  it &lsquo;sends email goal amount reached email to the curator&rsquo; do
+    expect(CampaignMailer).to receive(:notify_curator_campaign_goal_reached).and_call_original
+    funder.fund
+  end</p>
+
+<p>  // Expect a CampaignMailer.notify_curator_campaign_goal_reached email to be sent</p>
+
+<p>```</p>
+
+<p>The definition for the method and_call_original is, &ldquo;You can use and_call_original on the fluent interface to "pass through&rdquo; the received message to the original method.&ldquo; What exactly does this mean? It means that when I call funder.fund, I expect CampaignMailer.notify_curator_campaign_goal_reached to be called.</p>
+
+<p>Helpful Links</p>
+
+<p><a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-14/docs/message-expectations/calling-the-original-method">Calling the original method</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Shared Contexts With RSpec]]></title>

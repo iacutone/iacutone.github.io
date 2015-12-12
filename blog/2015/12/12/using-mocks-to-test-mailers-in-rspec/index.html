@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Rails - Iacutone.rb</title>
+  <title>Using Mocks to Test Mailers in RSpec - Iacutone.rb</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content="Category: rails">
+  <meta name="description" content="I was in the situation where I needed to test the delivery of emails based on specific sets of events. I began testing by inspecting sent emails in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://iacutone.github.io/blog/categories/rails">
+  <link rel="canonical" href="http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Iacutone.rb" type="application/atom+xml">
@@ -110,206 +110,147 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Rails</h1>
+    
+      
+        <h1 class="entry-title">Using Mocks to Test Mailers in RSpec</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-12T13:37:18-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:37 pm</span></time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>I was in the situation where I needed to test the delivery of emails based on specific sets of events. I began testing by inspecting sent emails in ActionMailer::Base.deliveries. However, this method of testing felt verbose and sloppy.</p>
 
-  
-  <h2>2015</h2>
+<p>RSpec mocks is a great solution when you need to test that a specific method was called. In my case, I want a fundraiser to receive an email after a campaign goal is reached.</p>
 
-<article>
-  
-<h1><a href="/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/">Using Mocks to Test Mailers in RSpec</a></h1>
-<time datetime="2015-12-12T13:37:18-05:00" pubdate><span class='month'>Dec</span> <span class='day'>12</span> <span class='year'>2015</span></time>
+<figure class='code'><figcaption><span>donation_funding.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:donation</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">donation</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@donation</span> <span class="o">=</span> <span class="n">donation</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">fund</span>
+</span><span class='line'>    <span class="c1"># do some work</span>
+</span><span class='line'>    <span class="no">CampaignMailer</span><span class="o">.</span><span class="n">notify_curator_campaign_goal_reached</span><span class="p">(</span><span class="n">donation</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
 
+<p> ruby donation_funding_spec.rb</p>
 
-</article>
+<p>  before do
+    donation.amount = campaign.goal_amount + 1
+    donation.save!
+  end</p>
 
+<p>  // Make the donation that exceeds the funding goal</p>
 
+<p>  let!(:funder) {
+    funder = DonationFunding.new donation
+    funder
+  }</p>
 
-<article>
-  
-<h1><a href="/blog/2015/11/20/shared-contexts-with-rspec/">Shared Contexts With RSpec</a></h1>
-<time datetime="2015-11-20T16:45:46-05:00" pubdate><span class='month'>Nov</span> <span class='day'>20</span> <span class='year'>2015</span></time>
+<p>  // set up the donation for funding</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
+<p>  it &lsquo;sends email goal amount reached email to the curator&rsquo; do
+    expect(CampaignMailer).to receive(:notify_curator_campaign_goal_reached).and_call_original
+    funder.fund
+  end</p>
 
+<p>  // Expect a CampaignMailer.notify_curator_campaign_goal_reached email to be sent</p>
 
-</article>
+<p>```</p>
 
+<p>The definition for the method and_call_original is, &ldquo;You can use and_call_original on the fluent interface to "pass through&rdquo; the received message to the original method.&ldquo; What exactly does this mean? It means that when I call funder.fund, I expect CampaignMailer.notify_curator_campaign_goal_reached to be called.</p>
 
+<p>Helpful Links</p>
 
-<article>
-  
-<h1><a href="/blog/2015/10/23/the-setter-method-in-a-rails-model/">The Setter Method in a Rails Model</a></h1>
-<time datetime="2015-10-23T15:30:53-05:00" pubdate><span class='month'>Oct</span> <span class='day'>23</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2015/09/18/rubys-fetch-method/">Ruby's Fetch Method</a></h1>
-<time datetime="2015-09-18T18:15:29-05:00" pubdate><span class='month'>Sep</span> <span class='day'>18</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2014</h2>
-
-<article>
-  
-<h1><a href="/blog/2014/01/21/refactoring-client-side-validations/">Refactoring Client Side Validations</a></h1>
-<time datetime="2014-01-21T23:46:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>21</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/jquery/'>jquery</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/refactoring/'>refactoring</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/10/22/testing-your-way-to-success/">Testing Your Way to Success</a></h1>
-<time datetime="2013-10-22T21:36:00-05:00" pubdate><span class='month'>Oct</span> <span class='day'>22</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/testing/'>testing</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/09/07/changing-your-password-from-scratch/">Changing Your Password From Scratch</a></h1>
-<time datetime="2013-09-07T01:08:00-05:00" pubdate><span class='month'>Sep</span> <span class='day'>07</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/devise/'>devise</a>, <a class='category' href='/blog/categories/password/'>password</a>, <a class='category' href='/blog/categories/rails/'>rails</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/08/15/adventures-in-jquery/">Hiding Multiple Checkboxes With JQuery</a></h1>
-<time datetime="2013-08-15T21:09:00-05:00" pubdate><span class='month'>Aug</span> <span class='day'>15</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/coffeescript/'>coffeescript</a>, <a class='category' href='/blog/categories/jquery/'>jquery</a>, <a class='category' href='/blog/categories/rails/'>rails</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/07/15/sidekiq-and-carrierwave/">Sidekiq and Carrierwave, Part 3</a></h1>
-<time datetime="2013-07-15T20:44:00-05:00" pubdate><span class='month'>Jul</span> <span class='day'>15</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/sidekiq/'>sidekiq</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/06/30/gon-gem/">Gon Gem</a></h1>
-<time datetime="2013-06-30T00:04:00-05:00" pubdate><span class='month'>Jun</span> <span class='day'>30</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/jquery/'>jquery</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/06/23/pluck-method-in-active-record/">Pluck Method in Active Record</a></h1>
-<time datetime="2013-06-23T01:59:00-05:00" pubdate><span class='month'>Jun</span> <span class='day'>23</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/06/21/using-impress-dot-js-with-rails/">Using Impress.js With Rails</a></h1>
-<time datetime="2013-06-21T13:13:00-05:00" pubdate><span class='month'>Jun</span> <span class='day'>21</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/impress-dot-js/'>impress.js</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/rails/'>rails</a></span>
-</footer>
-
-
-</article>
-
+<p><a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-14/docs/message-expectations/calling-the-original-method">Calling the original method</a></p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
-</article>
 
 
-</div>
 
-<aside class="sidebar">
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-12-12T13:37:18-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:37 pm</span></time>
+      
+      
+
+<span class="categories">
   
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
     
+      <div class="sharing">
   
-</aside>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/" >Tweet</a>
+  
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/03/env-variables-in-xcode/" title="Previous Post: ENV Variables in XCode">&laquo; ENV Variables in XCode</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+</div>
 
     </div>
   </div>
@@ -325,7 +266,10 @@
       var disqus_shortname = 'iacutone';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/';
+        var disqus_url = 'http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
