@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rspec | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2015-12-12T15:16:26-05:00</updated>
+  <updated>2015-12-12T15:17:42-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -43,21 +43,21 @@ end
     donation.save!
   end
 
-  // Make the donation that exceeds the funding goal
+  # Make the donation that exceeds the funding goal
 
   let!(:funder) {
     funder = DonationFunding.new donation
     funder
   }
 
-  // set up the donation for funding
+  # set up the donation for funding
 
   it 'sends email goal amount reached email to the curator' do
     expect(CampaignMailer).to receive(:notify_curator_campaign_goal_reached).and_call_original
     funder.fund
   end
 
-  // Expect a CampaignMailer.notify_curator_campaign_goal_reached email to be sent
+  # Expect a CampaignMailer.notify_curator_campaign_goal_reached email to be sent
 </code></pre>
 
 <p>The definition for the method and_call_original is, &ldquo;You can use and_call_original on the fluent interface to "pass through&rdquo; the received message to the original method.&ldquo; What exactly does this mean? It means that when I call funder.fund, I expect CampaignMailer.notify_curator_campaign_goal_reached to be called.</p>
