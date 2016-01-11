@@ -9,7 +9,9 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I was in the situation where I needed to test the delivery of emails based on specific sets of events. I began testing by inspecting sent emails in &hellip;">
+  <meta name="description" content="I recently discovered an interesting test pattern; defining variables in before and after hooks in the rails helper. rails_helper.rb1
+2
+3 config. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,6 +113,99 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/11/rspec-example-blocks/">RSpec Example Blocks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-11T15:57:05-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:57 pm</span></time>
+        
+         | <a href="/blog/2016/01/11/rspec-example-blocks/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently discovered an interesting test pattern; defining variables in before and after hooks in the rails helper.</p>
+
+<figure class='code'><figcaption><span>rails_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">before</span><span class="p">(</span><span class="ss">:example</span><span class="p">,</span> <span class="ss">hook</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="vi">@hook</span> <span class="o">=</span> <span class="s1">&#39;before hook&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>some_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="s2">&quot;some variable I need&quot;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">describe</span> <span class="s1">&#39;my hook&#39;</span><span class="p">,</span> <span class="ss">hook</span><span class="p">:</span> <span class="kp">true</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s1">&#39;runs the hook&#39;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">expect</span><span class="p">(</span><span class="vi">@hook</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="s1">&#39;before hook&#39;</span> <span class="c1"># returns true</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>A Real Example</h3>
+
+<p>Let&rsquo;s say we are testing a controller and want to make sure only an admin has access to specific views.</p>
+
+<figure class='code'><figcaption><span>rails_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">before</span><span class="p">(</span><span class="ss">:example</span><span class="p">,</span> <span class="ss">admin_signed_in</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">current_user_double</span> <span class="o">=</span> <span class="no">Test</span><span class="o">::</span><span class="no">User</span><span class="o">.</span><span class="n">new</span> <span class="ss">:admin</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="n">allow_any_instance_of</span><span class="p">(</span><span class="no">ApplicationController</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:current_user</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">current_user_double</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">before</span><span class="p">(</span><span class="ss">:example</span><span class="p">,</span> <span class="ss">user_signed_in</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">current_user_double</span> <span class="o">=</span> <span class="no">Test</span><span class="o">::</span><span class="no">User</span><span class="o">.</span><span class="n">new</span> <span class="ss">:admin</span> <span class="o">=&gt;</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="n">allow_any_instance_of</span><span class="p">(</span><span class="no">ApplicationController</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:current_user</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">current_user_double</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When setting admin_signed_in to true in a describe block, we have access to an admin user. I think it is cleaner to set up these users in a hook instead of a shared context or explicitly in the spec.</p>
+
+<p>Helpful Links</p>
+
+<p><a href="https://www.relishapp.com/rspec/rspec-core/docs/hooks/filters">Hooks</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1110,36 +1205,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/09/04/my-return-to-blogging/">My Return to Blogging</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-09-04T19:45:08-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:45 pm</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The goal of this blog is to refine my writing skills. In order to fulfill this goal I will write about something interesting I learned on a weekly basis. I find that if I do not get into a routine, I will not fulfill my goal. So, every Friday after work I will post on this blog. I have no goals about the legth of posts, but to write something with clarity and thoughfulness.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1157,7 +1222,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 -  -
+  Copyright &copy; 2016 -  -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> | Themed with <a href="https://github.com/lucaslew/whitespace">Whitespace</a></span>
 </p>
 

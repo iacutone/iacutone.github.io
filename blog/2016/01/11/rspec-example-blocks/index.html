@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Rspec - Iacutone.rb</title>
+  <title>RSpec Example Blocks - Iacutone.rb</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content="Category: rspec">
+  <meta name="description" content="I recently discovered an interesting test pattern; defining variables in before and after hooks in the rails helper. rails_helper.rb1
+2
+3 config. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://iacutone.github.io/blog/categories/rspec">
+  <link rel="canonical" href="http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Iacutone.rb" type="application/atom+xml">
@@ -110,94 +112,148 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Rspec</h1>
+    
+      
+        <h1 class="entry-title">RSpec Example Blocks</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-11T15:57:05-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:57 pm</span></time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
+
+
+<div class="entry-content"><p>I recently discovered an interesting test pattern; defining variables in before and after hooks in the rails helper.</p>
+
+<figure class='code'><figcaption><span>rails_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">before</span><span class="p">(</span><span class="ss">:example</span><span class="p">,</span> <span class="ss">hook</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="vi">@hook</span> <span class="o">=</span> <span class="s1">&#39;before hook&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 
-  
-  <h2>2016</h2>
 
-<article>
-  
-<h1><a href="/blog/2016/01/11/rspec-example-blocks/">RSpec Example Blocks</a></h1>
-<time datetime="2016-01-11T15:57:05-05:00" pubdate><span class='month'>Jan</span> <span class='day'>11</span> <span class='year'>2016</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2015</h2>
-
-<article>
-  
-<h1><a href="/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/">Using Mocks to Test Mailers in RSpec</a></h1>
-<time datetime="2015-12-12T13:37:18-05:00" pubdate><span class='month'>Dec</span> <span class='day'>12</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
+<figure class='code'><figcaption><span>some_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="s2">&quot;some variable I need&quot;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">describe</span> <span class="s1">&#39;my hook&#39;</span><span class="p">,</span> <span class="ss">hook</span><span class="p">:</span> <span class="kp">true</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">it</span> <span class="s1">&#39;runs the hook&#39;</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">expect</span><span class="p">(</span><span class="vi">@hook</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="s1">&#39;before hook&#39;</span> <span class="c1"># returns true</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<h3>A Real Example</h3>
+
+<p>Let&rsquo;s say we are testing a controller and want to make sure only an admin has access to specific views.</p>
+
+<figure class='code'><figcaption><span>rails_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">before</span><span class="p">(</span><span class="ss">:example</span><span class="p">,</span> <span class="ss">admin_signed_in</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">current_user_double</span> <span class="o">=</span> <span class="no">Test</span><span class="o">::</span><span class="no">User</span><span class="o">.</span><span class="n">new</span> <span class="ss">:admin</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="n">allow_any_instance_of</span><span class="p">(</span><span class="no">ApplicationController</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:current_user</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">current_user_double</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">before</span><span class="p">(</span><span class="ss">:example</span><span class="p">,</span> <span class="ss">user_signed_in</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">current_user_double</span> <span class="o">=</span> <span class="no">Test</span><span class="o">::</span><span class="no">User</span><span class="o">.</span><span class="n">new</span> <span class="ss">:admin</span> <span class="o">=&gt;</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="n">allow_any_instance_of</span><span class="p">(</span><span class="no">ApplicationController</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:current_user</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">current_user_double</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>When setting admin_signed_in to true in a describe block, we have access to an admin user. I think it is cleaner to set up these users in a hook instead of a shared context or explicitly in the spec.</p>
 
-<article>
-  
-<h1><a href="/blog/2015/11/20/shared-contexts-with-rspec/">Shared Contexts With RSpec</a></h1>
-<time datetime="2015-11-20T16:45:46-05:00" pubdate><span class='month'>Nov</span> <span class='day'>20</span> <span class='year'>2015</span></time>
+<p>Helpful Links</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/10/22/testing-your-way-to-success/">Testing Your Way to Success</a></h1>
-<time datetime="2013-10-22T21:36:00-05:00" pubdate><span class='month'>Oct</span> <span class='day'>22</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/testing/'>testing</a></span>
-</footer>
-
-
-</article>
-
+<p><a href="https://www.relishapp.com/rspec/rspec-core/docs/hooks/filters">Hooks</a></p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
-</article>
 
 
-</div>
 
-<aside class="sidebar">
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-01-11T15:57:05-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:57 pm</span></time>
+      
+      
+
+<span class="categories">
   
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
     
+      <div class="sharing">
   
-</aside>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/" >Tweet</a>
+  
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/" title="Previous Post: Using Mocks to Test Mailers in RSpec">&laquo; Using Mocks to Test Mailers in RSpec</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+</div>
 
     </div>
   </div>
@@ -213,7 +269,10 @@
       var disqus_shortname = 'iacutone';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/';
+        var disqus_url = 'http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

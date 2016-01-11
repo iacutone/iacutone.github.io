@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/</loc>
+    <lastmod>2016-01-11T15:57:05-05:00</lastmod>
+  </url>
+  <url>
     <loc>http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/</loc>
     <lastmod>2015-12-12T13:37:18-05:00</lastmod>
   </url>
