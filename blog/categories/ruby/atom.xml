@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-01-24T15:42:13-05:00</updated>
+  <updated>2016-02-03T00:57:37-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,44 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Virtual Attributes in Rails 4]]></title>
-    <link href="http://iacutone.github.io/blog/2016/01/24/virtual-attributes-in-rails-4/"/>
-    <updated>2016-01-24T15:30:47-05:00</updated>
-    <id>http://iacutone.github.io/blog/2016/01/24/virtual-attributes-in-rails-4</id>
-    <content type="html"><![CDATA[<p>Setting up virtual attributes is different in Rails 4 because there is no attr_accessible. I needed to create a virtual attribute for a Rails 4 application. The process is of creating a virtual attribute in Rails 4 is straightforward. In the example below, a password is needed only if a user is creating a new account.</p>
-
-<h5>Create getter and setter methods for the virtual attribute.</h5>
-
-<pre><code class="ruby user.rb">validates :email, presence: true, if: new_account?
-
-def new_account=(value)
-  @value = value
-end
-
-def new_account
-  @value
-end
-
-def new_account?
-  self.new_account == true ? true : false
-end
-</code></pre>
-
-<pre><code class="ruby users_controller.rb">def create
-  @user = User.new(user_params)
-  @user.new_account = true # this is our virtual attribute in action
-
-  if @user.save
-    # do things
-  end 
-end
-</code></pre>
-
-<p>The user model knows about the new_account virtual attribute with the getter and setter methods.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[RSpec Example Blocks]]></title>
@@ -288,6 +250,56 @@ end
 <p><a href="http://stackoverflow.com/questions/10464793/what-is-the-right-way-to-override-a-setter-method-in-ruby-on-rails">What is the right way to override a setter method in Ruby on Rails?</a></p>
 
 <p><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#class-ActiveRecord%3a%3aBase-label-Overwriting+default+accessors">Overwriting default accessors</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby's Fetch Method]]></title>
+    <link href="http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/"/>
+    <updated>2015-09-18T18:15:29-05:00</updated>
+    <id>http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method</id>
+    <content type="html"><![CDATA[<p>Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash.</p>
+
+<pre><code class="ruby searches_helper.rb">  if params[:search][:organization_id].present?
+    # do things
+  end
+</code></pre>
+
+<p>The code above will call #present? on nil if params[:search][:organization_id] does not exist.</p>
+
+<p>A better way to write the conditional:</p>
+
+<pre><code class="ruby searches_helper.rb">  if params[:search].present and params[:search][:organization_id].present?
+    # do things
+  end
+</code></pre>
+
+<p>Writing a similar conditional with #fetch:</p>
+
+<pre><code class="ruby searches_helper.rb">  if params.fetch(:search, {}).fetch(:organization_id, nil).present?
+    # do things
+  end
+</code></pre>
+
+<p>Let&rsquo;s break this method down into simpler components:</p>
+
+<pre><code class="ruby">  params = {}
+  puts params.fetch(:search, {})
+  // {}
+
+  params[:search] = "searched!"
+  puts params.fetch(:search, {})
+  // "searched!"
+
+  puts fetch(:organization_id, nil)
+  // nil
+
+  params[:organization_id] = 1
+  puts params.fetch(:organization_id, nil)
+  // 1
+</code></pre>
+
+<p>I like the ability to call #fetch with a default return value if one does not exist. This leads to better ways to handle nil or catch errors.</p>
 ]]></content>
   </entry>
   

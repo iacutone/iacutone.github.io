@@ -9,18 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="String Interpolation 1
-2
-3
-4
-5
-var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, Eric&quot; Dictionaries 1
-2
-3
-4
-5
-6
-7 &hellip;">
+  <meta name="description" content="The goal of this blog is to refine my writing skills. In order to fulfill this goal I will write about something interesting I learned on a weekly &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -122,272 +111,6 @@ var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, 
     <div id="content">
       <div class="blog-index">
   
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/09/09/swift-basics/">Swift Basics</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-09-09T18:48:12-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:48 pm</span></time>
-        
-         | <a href="/blog/2015/09/09/swift-basics/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>String Interpolation</h1>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Eric&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;Hello, \(name)&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;Hello, Eric&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Dictionaries</h1>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">response</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;id&quot;</span><span class="o">:</span><span class="mi">14</span><span class="p">,</span><span class="s">&quot;email&quot;</span><span class="o">:</span><span class="s">&quot;test@email.com&quot;</span><span class="p">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">let</span> <span class="kt">id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s">&quot;id&quot;</span><span class="p">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 14</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s">&quot;email&quot;</span><span class="p">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;test@email.com&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Tuples</h1>
-
-<h3>Unnamed Tuples</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">coordinates</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">999</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">let</span> <span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span> <span class="o">=</span> <span class="n">coordinates</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;Latitude is \(lat)&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;Latitude is 100&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;Longtitude is \(lon)&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Longitude is 999</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Named Tuples</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">response</span> <span class="o">=</span> <span class="p">(</span><span class="nl">code</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="nl">message</span><span class="p">:</span> <span class="s">&quot;All good&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">response</span><span class="mf">.0</span>
-</span><span class='line'><span class="c1">// 200</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">response</span><span class="mf">.1</span>
-</span><span class='line'><span class="c1">// &quot;All good&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">response</span><span class="p">.</span><span class="n">code</span>
-</span><span class='line'><span class="c1">// 200</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">respsonse</span><span class="p">.</span><span class="n">message</span>
-</span><span class='line'><span class="c1">// &quot;All good&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Swift Classes</h1>
-
-<h3>Creating a class</h3>
-
-<figure class='code'><figcaption><span>Person.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nl">Person</span><span class="p">:</span> <span class="bp">NSObject</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">var</span> <span class="nl">name</span><span class="p">:</span> <span class="n">String</span>
-</span><span class='line'>  <span class="k">var</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span>
-</span><span class='line'>  <span class="k">var</span> <span class="nl">zip</span><span class="p">:</span> <span class="n">Int</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">init</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">zip</span><span class="p">:</span> <span class="n">Int</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">zip</span> <span class="o">=</span> <span class="n">zip</span>
-</span><span class='line'>    <span class="nb">super</span><span class="p">.</span><span class="k">init</span><span class="p">()</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Create data for Person Class</h3>
-
-<figure class='code'><figcaption><span>SampleData.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">let</span> <span class="n">personData</span> <span class="o">=</span> <span class="p">[</span>
-</span><span class='line'>  <span class="n">Person</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="s">&quot;Eric&quot;</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="s">&quot;eric.iacutone@gmail.com&quot;</span><span class="p">,</span> <span class="nl">zip</span><span class="p">:</span> <span class="mi">12345</span><span class="p">)</span>
-</span><span class='line'><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Instantiating Person Class</h3>
-
-<figure class='code'><figcaption><span>PersonViewController.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="nl">person</span><span class="p">:</span><span class="n">Array</span> <span class="o">=</span> <span class="n">personData</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, if you copy and paste the the files into a XCode Playground, you can call methods on your person object.</p>
-
-<figure class='code'><figcaption><span>Playground.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">count</span>
-</span><span class='line'><span class="c1">// 1</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">first</span><span class="o">?</span><span class="p">.</span><span class="n">zip</span>
-</span><span class='line'><span class="c1">// 12345</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Enums</h1>
-
-<p>An enumeration defines a common type for a group of related values and enables you to work with those values in a type-safe way within your code. - <a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Enumerations.html">Swift docs</a></p>
-
-<p>Use an enum when you need a consistent data value.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">enum</span> <span class="nl">CountryType</span><span class="p">:</span><span class="n">String</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">case</span> <span class="n">UnitedStates</span> <span class="o">=</span> <span class="s">&quot;United States&quot;</span>
-</span><span class='line'>    <span class="k">case</span> <span class="n">Spain</span> <span class="o">=</span> <span class="s">&quot;Spain&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">init</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nb">self</span> <span class="o">=</span> <span class="p">.</span><span class="n">UnitedStates</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">var</span> <span class="n">type</span> <span class="o">=</span> <span class="n">CountryType</span><span class="p">.</span><span class="n">UnitedStates</span><span class="p">.</span><span class="n">rawValue</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;United States&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Structs</h1>
-
-<p>A struct allows you to create a structured data type which provides storage of data using properties and extending its functionality via methods. -<a href="http://blog.teamtreehouse.com/enums-structs-swift">Tree House</a></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">struct</span> <span class="n">Person</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">var</span> <span class="nl">name</span><span class="p">:</span> <span class="n">String</span>
-</span><span class='line'>    <span class="k">var</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span>
-</span><span class='line'>    <span class="k">var</span> <span class="nl">country</span><span class="p">:</span> <span class="n">CountryType</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">var</span> <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="s">&quot;Eric&quot;</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="s">&quot;eric.iacutone@gmail.com&quot;</span><span class="p">,</span> <span class="nl">country</span><span class="p">:</span> <span class="n">CountryType</span><span class="p">.</span><span class="n">UnitedStates</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">name</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;Eric&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">country</span><span class="p">.</span><span class="n">rawValue</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;United States&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-</div>
-  
-  
-
-
-    </article>
   
   
     <article>
@@ -1801,6 +1524,200 @@ var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, 
 
 
 
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/23/pluck-method-in-active-record/">Pluck Method in Active Record</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-06-23T01:59:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>1:59 am</span></time>
+        
+         | <a href="/blog/2013/06/23/pluck-method-in-active-record/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The past few days, I have been building a database to store some information for my friend Shari, a Peace Corps recruiter.  The database includes, a name, email and phone number.  Things got tricky building a date/time models and validations.  Every given time has six time slots for a user to sign up.  My conclusion to this problem was to create a different database column for every given time slot.  Then, I used the <a href='http://apidock.com/rails/ActiveRecord/Calculations/pluck'>pluck method</a> on my Active Record database in order to turn all of my time columns into strings in an array.  However, in Rails 3, pluck only excepts one column to turn into an array.  This feature is being changed in Rails 4 according to <a href ='http://meltingice.net/2013/06/11/pluck-multiple-columns-rails/'>this</a> blog post where he describes how to tamper with the the Active Record library or create a module to provide a pluck_all method for a Rails 3 application.  I implemented this code, and was returned an array of hashes which did not help my cause.  But this is an interesting concept and it was fun and insightful reading the source code.</p>
+
+
+
+
+<figure class='code'><figcaption><span>users_controller.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="vi">@day_one_counter</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>      <span class="vi">@day_one_counter</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:time1</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="vi">@day_two_counter</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>      <span class="vi">@day_two_counter</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:time2</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">b</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">c</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="vi">@day_one_counter</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">v</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">b</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="vi">@day_two_counter</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">v</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">c</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="vi">@time1</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time2</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time3</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;12:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time4</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;12:15&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time5</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;12:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time6</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;12:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time7</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;1:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time8</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;1:15&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time9</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;1:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time10</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;1:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time11</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;5:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time12</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;5:15&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time13</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;5:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time14</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;5:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time15</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;6:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time16</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;6:15&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time17</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;6:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time18</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;6:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time19</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;7:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time20</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;7:15&quot;</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="vi">@time21</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;11:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time22</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;11:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time23</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;12:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time24</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;12:15&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time25</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;12:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time26</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;12:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time27</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;1:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time28</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;1:15&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time29</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;1:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time30</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;1:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time31</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;5:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time32</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;5:15&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time33</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;5:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time34</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;5:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time35</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;6:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time36</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;6:15&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time37</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;6:30&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time38</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;6:45&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time39</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;7:00&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="vi">@time40</span> <span class="o">=</span> <span class="n">c</span><span class="o">[</span><span class="s2">&quot;7:15&quot;</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1"># respond_to do |format|</span>
+</span><span class='line'>      <span class="c1">#   format.html</span>
+</span><span class='line'>      <span class="c1">#   format.js</span>
+</span><span class='line'>      <span class="c1"># end   </span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">render</span> <span class="ss">:time</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="n">render</span> <span class="ss">:new</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>This code gets really cumbersome the more time columns I add, so my next step is to DRY this shit up.  But hell, it works and is going to make my friend's life easier, yay! for technology.</p>
+
+
+<p></p>
 </div>
   
   
