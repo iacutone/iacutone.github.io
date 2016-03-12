@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-03-04T19:22:45-05:00</updated>
+  <updated>2016-03-12T15:43:09-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[JQuery beforeSend Function]]></title>
+    <link href="http://iacutone.github.io/blog/2016/03/12/jquery-beforesend/"/>
+    <updated>2016-03-12T15:32:09-05:00</updated>
+    <id>http://iacutone.github.io/blog/2016/03/12/jquery-beforesend</id>
+    <content type="html"><![CDATA[<p>I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial solution was to disable the submit button if the comment is blank. However, using the <code>beforeSend</code> function provides a cleaner solution.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'>  <span class="nv">comment = </span><span class="p">(</span><span class="s">&#39;.form-field-comment&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span>
+</span><span class='line'>    <span class="nv">type: </span><span class="s">&#39;POST&#39;</span>
+</span><span class='line'>    <span class="nv">dataType: </span><span class="s">&#39;script&#39;</span>
+</span><span class='line'>    <span class="nv">url: </span><span class="nx">comment_form</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s">&#39;action&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nv">data:</span>
+</span><span class='line'>      <span class="nv">comment:</span>
+</span><span class='line'>        <span class="nv">body: </span><span class="nx">comment</span>
+</span><span class='line'>    <span class="nv">beforeSend: </span><span class="nf">() -&gt;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nx">comment</span> <span class="o">is</span> <span class="s">&#39;&#39;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1"># do this instead of disabling the submit button </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With the above code, the comment form is never posted if the comment is blank.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ActiveRecord None]]></title>
@@ -1777,209 +1815,6 @@
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sidekiq and Carrierwave, Part 3]]></title>
-    <link href="http://iacutone.github.io/blog/2013/07/15/sidekiq-and-carrierwave/"/>
-    <updated>2013-07-15T20:44:00-05:00</updated>
-    <id>http://iacutone.github.io/blog/2013/07/15/sidekiq-and-carrierwave</id>
-    <content type="html"><![CDATA[<p>I decided to use the <a href='https://github.com/lardawge/carrierwave_backgrounder'>Carrierwave Backgrounder Gem</a> in order to asynchronously upload photos to Amazon S3.  This is a different gem than the one Ryan Bates uses in his Railscast.  I was having difficulty implimenting the <a href='https://github.com/dwilkie/carrierwave_direct'>Carrierwave Direct Gem</a>  However, the Backgrounder Gem works great! This is the last installment of the three part series on uploading photos.</p>
-
-
-
-
-<p>This is the final version of the avatar_uploader.rb file.  Just add line 3, which is in the Backgrounder documentaion.</p>
-
-
-
-
-<figure class='code'><figcaption><span>avatar_uploader.rb lang: ruby </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="k">class</span> <span class="nc">AvatarUploader</span> <span class="o">&lt;</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">Uploader</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="c1"># include CarrierWaveDirect::Uploader</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="o">::</span><span class="no">CarrierWave</span><span class="o">::</span><span class="no">Backgrounder</span><span class="o">::</span><span class="no">Delay</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Include RMagick or MiniMagick support:</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">RMagick</span>
-</span><span class='line'>  <span class="c1"># include CarrierWave::MiniMagick</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Sprockets</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">RailsHelper</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Sprockets</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">IsolatedHelper</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Choose what kind of storage to use for this uploader:</span>
-</span><span class='line'>  <span class="c1"># storage :file</span>
-</span><span class='line'>  <span class="n">storage</span> <span class="ss">:fog</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">MimeTypes</span>
-</span><span class='line'>  <span class="n">process</span> <span class="ss">:set_content_type</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Override the directory where uploaded files will be stored.</span>
-</span><span class='line'>  <span class="c1"># This is a sensible default for uploaders that are meant to be mounted:</span>
-</span><span class='line'>  <span class="c1"># def store_dir</span>
-</span><span class='line'>  <span class="c1">#   &quot;uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}&quot;</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Provide a default URL as a default if there hasn&#39;t been a file uploaded:</span>
-</span><span class='line'>  <span class="c1"># def default_url</span>
-</span><span class='line'>  <span class="c1">#   # For Rails 3.1+ asset pipeline compatibility:</span>
-</span><span class='line'>  <span class="c1">#   # asset_path(&quot;fallback/&quot; + [version_name, &quot;default.png&quot;].compact.join(&#39;_&#39;))</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1">#   &quot;/images/fallback/&quot; + [version_name, &quot;default.png&quot;].compact.join(&#39;_&#39;)</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Process files as they are uploaded:</span>
-</span><span class='line'>  <span class="c1"># process :scale =&gt; [200, 300]</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># def scale(width, height)</span>
-</span><span class='line'>  <span class="c1">#   # do something</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Create different versions of your uploaded files:</span>
-</span><span class='line'>  <span class="n">version</span> <span class="ss">:thumb</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">process</span> <span class="ss">:resize_to_limit</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">version</span> <span class="ss">:profile</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">process</span> <span class="ss">:resize_to_limit</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Add a white list of extensions which are allowed to be uploaded.</span>
-</span><span class='line'>  <span class="c1"># For images you might use something like this:</span>
-</span><span class='line'>  <span class="c1"># def extension_white_list</span>
-</span><span class='line'>  <span class="c1">#   %w(jpg jpeg gif png)</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Override the filename of the uploaded files:</span>
-</span><span class='line'>  <span class="c1"># Avoid using model.id or version_name here, see uploader/store.rb for details.</span>
-</span><span class='line'>  <span class="c1"># def filename</span>
-</span><span class='line'>  <span class="c1">#   &quot;something.jpg&quot; if original_filename</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p><p>Also, add this code to your model.<p></p>
-
-<p><figure class='code'><figcaption><span>profile.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">mount_uploader</span> <span class="ss">:avatar</span><span class="p">,</span> <span class="no">AvatarUploader</span>
-</span><span class='line'>  <span class="n">process_in_background</span> <span class="ss">:avatar</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><p>Following the install instructions, this file is created in the initializers directory.<p></p>
-
-<p><figure class='code'><figcaption><span>initializers/carrierwave_backgrounder.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">Backgrounder</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>
-</span><span class='line'>    <span class="c1"># c.backend :delayed_job, queue: :carrierwave</span>
-</span><span class='line'>    <span class="c1"># c.backend :resque, queue: :carrierwave</span>
-</span><span class='line'>    <span class="n">c</span><span class="o">.</span><span class="n">backend</span> <span class="ss">:sidekiq</span><span class="p">,</span> <span class="ss">queue</span><span class="p">:</span> <span class="ss">:carrierwave</span>
-</span><span class='line'>    <span class="c1"># c.backend :girl_friday, queue: :carrierwave</span>
-</span><span class='line'>    <span class="c1"># c.backend :qu, queue: :carrierwave</span>
-</span><span class='line'>    <span class="c1"># c.backend :qc</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><p>Then boot up Sidekiq to listen for jobs with sidekiq -q carrierwave command in your terminal.  You might need to start your Redis server with the command redis-server.  Your background worker should now asynchronously process background jobs!</p></p>
-
-<p><p>Sidekiq also has a cool interface to show what workers are up, how many successes and failures there have been and some other neat features.  It is real easy to set up.  First add the following code to your Gemfile.</p></p>
-
-<p><figure class='code'><figcaption><span>Gemfile </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">gem</span> <span class="s1">&#39;slim&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;= 1.1.0&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;= 1.3.0&#39;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="kp">nil</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><p>Then create this route with the require line before the beginning of the block.</p></p>
-
-<p><figure class='code'><figcaption><span>routes.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="nb">require</span> <span class="s1">&#39;sidekiq/web&#39;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">mount</span> <span class="no">Sidekiq</span><span class="o">::</span><span class="no">Web</span> <span class="o">=&gt;</span> <span class="s1">&#39;/sidekiq&#39;</span>
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><p>I really like this gem and recommend it to anyone trying to run background processes to upload pictures via Carrierwave.</p></p>
-
-<p><p>h/t Blake Johnson</p></p>
 ]]></content>
   </entry>
   

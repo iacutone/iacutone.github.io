@@ -9,12 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="The .none class method was introduced in Rails 4.0.2 and is helpful when returning a blank array will break. 1
-2
-3
-4
-5
-Organization.none.paginate( &hellip;">
+  <meta name="description" content="I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -116,6 +111,67 @@ Organization.none.paginate( &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/12/jquery-beforesend/">JQuery beforeSend Function</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-12T15:32:09-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:32 pm</span></time>
+        
+         | <a href="/blog/2016/03/12/jquery-beforesend/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial solution was to disable the submit button if the comment is blank. However, using the <code>beforeSend</code> function provides a cleaner solution.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'>  <span class="nv">comment = </span><span class="p">(</span><span class="s">&#39;.form-field-comment&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span>
+</span><span class='line'>    <span class="nv">type: </span><span class="s">&#39;POST&#39;</span>
+</span><span class='line'>    <span class="nv">dataType: </span><span class="s">&#39;script&#39;</span>
+</span><span class='line'>    <span class="nv">url: </span><span class="nx">comment_form</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s">&#39;action&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nv">data:</span>
+</span><span class='line'>      <span class="nv">comment:</span>
+</span><span class='line'>        <span class="nv">body: </span><span class="nx">comment</span>
+</span><span class='line'>    <span class="nv">beforeSend: </span><span class="nf">() -&gt;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nx">comment</span> <span class="o">is</span> <span class="s">&#39;&#39;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1"># do this instead of disabling the submit button </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With the above code, the comment form is never posted if the comment is blank.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -809,130 +865,6 @@ Organization.none.paginate( &hellip;">
 <p>Helpful Links</p>
 
 <p><a href="https://github.com/rg3/youtube-dl">youtube-dl</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/10/23/the-setter-method-in-a-rails-model/">The Setter Method in a Rails Model</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-10-23T15:30:53-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>3:30 pm</span></time>
-        
-         | <a href="/blog/2015/10/23/the-setter-method-in-a-rails-model/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&rsquo;s say we need to do something in a before_save callback such as lowercase a user&rsquo;s email.</p>
-
-<figure class='code'><figcaption><span>user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">before_save</span><span class="p">:</span> <span class="n">lowercase_email</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">lowercase_email</span>
-</span><span class='line'>  <span class="nb">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">downcase</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>How is this code implemented without using before_save? One method would be overriding the setter accessor.</p>
-
-<figure class='code'><figcaption><span>user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">email</span><span class="o">=</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-</span><span class='line'> <span class="n">email</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">downcase</span>
-</span><span class='line'> <span class="k">super</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, when the email attribute is updated, my email setter method is called.</p>
-
-<p>Currently, both implementations for downcasing an email are straightforward. However, as the application grows, the before_save callback is more difficult to test and maintain. The before_save is implicit and might have unexpected side effects. Here is a basic spec.</p>
-
-<figure class='code'><figcaption><span>user_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">User</span> <span class="k">do</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#lowercase_email&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="s1">&#39;GNARLY@email.com&#39;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;lowercases the email&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">lowercase_email</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="s1">&#39;gnarly@email.com&#39;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Instead, let&rsquo;s test the <em>behavior</em> of what we expect.</p>
-
-<figure class='code'><figcaption><span>user_creation_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="s1">&#39;User Creation&#39;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;:email&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="s1">&#39;GNARLY@email.com&#39;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="s1">&#39;it returns a standardized email&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="s1">&#39;gnarly@email.com&#39;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The first spec is directly testing the callback, whereas the latter spec is testing the <em>behavior</em> of the expected outcome. The latter spec is easier to reason about and change. This is an easy example, but as callbacks grow changing their behavior becomes more difficult. This is especially true if the callbacks are coupled with other models.</p>
-
-<p><em>Helpful Links</em></p>
-
-<p><a href="http://stackoverflow.com/questions/10464793/what-is-the-right-way-to-override-a-setter-method-in-ruby-on-rails">What is the right way to override a setter method in Ruby on Rails?</a></p>
-
-<p><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#class-ActiveRecord%3a%3aBase-label-Overwriting+default+accessors">Overwriting default accessors</a></p>
 </div>
   
   

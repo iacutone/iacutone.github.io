@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Javascript - Iacutone.rb</title>
+  <title>JQuery beforeSend Function - Iacutone.rb</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content="Category: javascript">
+  <meta name="description" content="I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://iacutone.github.io/blog/categories/javascript">
+  <link rel="canonical" href="http://iacutone.github.io/blog/2016/03/12/jquery-beforesend">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Iacutone.rb" type="application/atom+xml">
@@ -110,111 +110,116 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Javascript</h1>
+    
+      
+        <h1 class="entry-title">JQuery beforeSend Function</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-12T15:32:09-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:32 pm</span></time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial solution was to disable the submit button if the comment is blank. However, using the <code>beforeSend</code> function provides a cleaner solution.</p>
 
-  
-  <h2>2016</h2>
-
-<article>
-  
-<h1><a href="/blog/2016/03/12/jquery-beforesend/">JQuery beforeSend Function</a></h1>
-<time datetime="2016-03-12T15:32:09-05:00" pubdate><span class='month'>Mar</span> <span class='day'>12</span> <span class='year'>2016</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ajax/'>ajax</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/jquery/'>jquery</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2015</h2>
-
-<article>
-  
-<h1><a href="/blog/2015/11/07/prototypes-and-constructors-in-javascript/">Prototypes and Constructors in Javascript</a></h1>
-<time datetime="2015-11-07T12:57:08-05:00" pubdate><span class='month'>Nov</span> <span class='day'>07</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'>  <span class="nv">comment = </span><span class="p">(</span><span class="s">&#39;.form-field-comment&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span>
+</span><span class='line'>    <span class="nv">type: </span><span class="s">&#39;POST&#39;</span>
+</span><span class='line'>    <span class="nv">dataType: </span><span class="s">&#39;script&#39;</span>
+</span><span class='line'>    <span class="nv">url: </span><span class="nx">comment_form</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s">&#39;action&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nv">data:</span>
+</span><span class='line'>      <span class="nv">comment:</span>
+</span><span class='line'>        <span class="nv">body: </span><span class="nx">comment</span>
+</span><span class='line'>    <span class="nv">beforeSend: </span><span class="nf">() -&gt;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nx">comment</span> <span class="o">is</span> <span class="s">&#39;&#39;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1"># do this instead of disabling the submit button </span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
-
-
-
-  
-  <h2>2014</h2>
-
-<article>
-  
-<h1><a href="/blog/2014/01/21/refactoring-client-side-validations/">Refactoring Client Side Validations</a></h1>
-<time datetime="2014-01-21T23:46:00-05:00" pubdate><span class='month'>Jan</span> <span class='day'>21</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/jquery/'>jquery</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/refactoring/'>refactoring</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/06/30/gon-gem/">Gon Gem</a></h1>
-<time datetime="2013-06-30T00:04:00-05:00" pubdate><span class='month'>Jun</span> <span class='day'>30</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/jquery/'>jquery</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/06/21/using-impress-dot-js-with-rails/">Using Impress.js With Rails</a></h1>
-<time datetime="2013-06-21T13:13:00-05:00" pubdate><span class='month'>Jun</span> <span class='day'>21</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/impress-dot-js/'>impress.js</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/rails/'>rails</a></span>
-</footer>
-
-
-</article>
-
+<p>With the above code, the comment form is never posted if the comment is blank.</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
-</article>
 
 
-</div>
 
-<aside class="sidebar">
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-03-12T15:32:09-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:32 pm</span></time>
+      
+      
+
+<span class="categories">
   
+    <a class='category' href='/blog/categories/ajax/'>ajax</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/jquery/'>jquery</a>
+  
+</span>
+
+
+    </p>
     
+      <div class="sharing">
   
-</aside>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2016/03/12/jquery-beforesend/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2016/03/12/jquery-beforesend/" >Tweet</a>
+  
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/03/04/activerecord-none/" title="Previous Post: ActiveRecord none">&laquo; ActiveRecord none</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+</div>
 
     </div>
   </div>
@@ -230,7 +235,10 @@
       var disqus_shortname = 'iacutone';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://iacutone.github.io/blog/2016/03/12/jquery-beforesend/';
+        var disqus_url = 'http://iacutone.github.io/blog/2016/03/12/jquery-beforesend/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

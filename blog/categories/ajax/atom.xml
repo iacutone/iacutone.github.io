@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ajax | Iacutone.rb]]></title>
+  <link href="http://iacutone.github.io/blog/categories/ajax/atom.xml" rel="self"/>
+  <link href="http://iacutone.github.io/"/>
+  <updated>2016-03-12T15:43:09-05:00</updated>
+  <id>http://iacutone.github.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JQuery beforeSend Function]]></title>
+    <link href="http://iacutone.github.io/blog/2016/03/12/jquery-beforesend/"/>
+    <updated>2016-03-12T15:32:09-05:00</updated>
+    <id>http://iacutone.github.io/blog/2016/03/12/jquery-beforesend</id>
+    <content type="html"><![CDATA[<p>I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial solution was to disable the submit button if the comment is blank. However, using the <code>beforeSend</code> function provides a cleaner solution.</p>
+
+<pre><code class="coffeescript">  comment = ('.form-field-comment').val()
+
+  $.ajax
+    type: 'POST'
+    dataType: 'script'
+    url: comment_form.attr('action')
+    data:
+      comment:
+        body: comment
+    beforeSend: () -&gt;
+      if comment is ''
+        return false; # do this instead of disabling the submit button 
+</code></pre>
+
+<p>With the above code, the comment form is never posted if the comment is blank.</p>
+]]></content>
+  </entry>
+  
+</feed>

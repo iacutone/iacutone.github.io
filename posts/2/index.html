@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash. &hellip;">
+  <meta name="description" content="At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&rsquo;s say we need to do &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,6 +111,130 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/10/23/the-setter-method-in-a-rails-model/">The Setter Method in a Rails Model</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-10-23T15:30:53-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>3:30 pm</span></time>
+        
+         | <a href="/blog/2015/10/23/the-setter-method-in-a-rails-model/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&rsquo;s say we need to do something in a before_save callback such as lowercase a user&rsquo;s email.</p>
+
+<figure class='code'><figcaption><span>user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">before_save</span><span class="p">:</span> <span class="n">lowercase_email</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">lowercase_email</span>
+</span><span class='line'>  <span class="nb">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">downcase</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How is this code implemented without using before_save? One method would be overriding the setter accessor.</p>
+
+<figure class='code'><figcaption><span>user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">email</span><span class="o">=</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span><span class='line'> <span class="n">email</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">downcase</span>
+</span><span class='line'> <span class="k">super</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, when the email attribute is updated, my email setter method is called.</p>
+
+<p>Currently, both implementations for downcasing an email are straightforward. However, as the application grows, the before_save callback is more difficult to test and maintain. The before_save is implicit and might have unexpected side effects. Here is a basic spec.</p>
+
+<figure class='code'><figcaption><span>user_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">User</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#lowercase_email&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="s1">&#39;GNARLY@email.com&#39;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;lowercases the email&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">lowercase_email</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="s1">&#39;gnarly@email.com&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Instead, let&rsquo;s test the <em>behavior</em> of what we expect.</p>
+
+<figure class='code'><figcaption><span>user_creation_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="s1">&#39;User Creation&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;:email&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="s1">&#39;GNARLY@email.com&#39;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="s1">&#39;it returns a standardized email&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="s1">&#39;gnarly@email.com&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first spec is directly testing the callback, whereas the latter spec is testing the <em>behavior</em> of the expected outcome. The latter spec is easier to reason about and change. This is an easy example, but as callbacks grow changing their behavior becomes more difficult. This is especially true if the callbacks are coupled with other models.</p>
+
+<p><em>Helpful Links</em></p>
+
+<p><a href="http://stackoverflow.com/questions/10464793/what-is-the-right-way-to-override-a-setter-method-in-ruby-on-rails">What is the right way to override a setter method in Ruby on Rails?</a></p>
+
+<p><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#class-ActiveRecord%3a%3aBase-label-Overwriting+default+accessors">Overwriting default accessors</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1484,232 +1608,6 @@
 
 
 
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/15/sidekiq-and-carrierwave/">Sidekiq and Carrierwave, Part 3</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-07-15T20:44:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:44 pm</span></time>
-        
-         | <a href="/blog/2013/07/15/sidekiq-and-carrierwave/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I decided to use the <a href='https://github.com/lardawge/carrierwave_backgrounder'>Carrierwave Backgrounder Gem</a> in order to asynchronously upload photos to Amazon S3.  This is a different gem than the one Ryan Bates uses in his Railscast.  I was having difficulty implimenting the <a href='https://github.com/dwilkie/carrierwave_direct'>Carrierwave Direct Gem</a>  However, the Backgrounder Gem works great! This is the last installment of the three part series on uploading photos.</p>
-
-
-
-
-<p>This is the final version of the avatar_uploader.rb file.  Just add line 3, which is in the Backgrounder documentaion.</p>
-
-
-
-
-<figure class='code'><figcaption><span>avatar_uploader.rb lang: ruby </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="k">class</span> <span class="nc">AvatarUploader</span> <span class="o">&lt;</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">Uploader</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="c1"># include CarrierWaveDirect::Uploader</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="o">::</span><span class="no">CarrierWave</span><span class="o">::</span><span class="no">Backgrounder</span><span class="o">::</span><span class="no">Delay</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Include RMagick or MiniMagick support:</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">RMagick</span>
-</span><span class='line'>  <span class="c1"># include CarrierWave::MiniMagick</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Sprockets</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">RailsHelper</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Sprockets</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">IsolatedHelper</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Choose what kind of storage to use for this uploader:</span>
-</span><span class='line'>  <span class="c1"># storage :file</span>
-</span><span class='line'>  <span class="n">storage</span> <span class="ss">:fog</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">MimeTypes</span>
-</span><span class='line'>  <span class="n">process</span> <span class="ss">:set_content_type</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Override the directory where uploaded files will be stored.</span>
-</span><span class='line'>  <span class="c1"># This is a sensible default for uploaders that are meant to be mounted:</span>
-</span><span class='line'>  <span class="c1"># def store_dir</span>
-</span><span class='line'>  <span class="c1">#   &quot;uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}&quot;</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Provide a default URL as a default if there hasn&#39;t been a file uploaded:</span>
-</span><span class='line'>  <span class="c1"># def default_url</span>
-</span><span class='line'>  <span class="c1">#   # For Rails 3.1+ asset pipeline compatibility:</span>
-</span><span class='line'>  <span class="c1">#   # asset_path(&quot;fallback/&quot; + [version_name, &quot;default.png&quot;].compact.join(&#39;_&#39;))</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1">#   &quot;/images/fallback/&quot; + [version_name, &quot;default.png&quot;].compact.join(&#39;_&#39;)</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Process files as they are uploaded:</span>
-</span><span class='line'>  <span class="c1"># process :scale =&gt; [200, 300]</span>
-</span><span class='line'>  <span class="c1">#</span>
-</span><span class='line'>  <span class="c1"># def scale(width, height)</span>
-</span><span class='line'>  <span class="c1">#   # do something</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Create different versions of your uploaded files:</span>
-</span><span class='line'>  <span class="n">version</span> <span class="ss">:thumb</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">process</span> <span class="ss">:resize_to_limit</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">version</span> <span class="ss">:profile</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">process</span> <span class="ss">:resize_to_limit</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Add a white list of extensions which are allowed to be uploaded.</span>
-</span><span class='line'>  <span class="c1"># For images you might use something like this:</span>
-</span><span class='line'>  <span class="c1"># def extension_white_list</span>
-</span><span class='line'>  <span class="c1">#   %w(jpg jpeg gif png)</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Override the filename of the uploaded files:</span>
-</span><span class='line'>  <span class="c1"># Avoid using model.id or version_name here, see uploader/store.rb for details.</span>
-</span><span class='line'>  <span class="c1"># def filename</span>
-</span><span class='line'>  <span class="c1">#   &quot;something.jpg&quot; if original_filename</span>
-</span><span class='line'>  <span class="c1"># end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p><p>Also, add this code to your model.<p></p>
-
-<p><figure class='code'><figcaption><span>profile.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">mount_uploader</span> <span class="ss">:avatar</span><span class="p">,</span> <span class="no">AvatarUploader</span>
-</span><span class='line'>  <span class="n">process_in_background</span> <span class="ss">:avatar</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><p>Following the install instructions, this file is created in the initializers directory.<p></p>
-
-<p><figure class='code'><figcaption><span>initializers/carrierwave_backgrounder.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="no">CarrierWave</span><span class="o">::</span><span class="no">Backgrounder</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">c</span><span class="o">|</span>
-</span><span class='line'>    <span class="c1"># c.backend :delayed_job, queue: :carrierwave</span>
-</span><span class='line'>    <span class="c1"># c.backend :resque, queue: :carrierwave</span>
-</span><span class='line'>    <span class="n">c</span><span class="o">.</span><span class="n">backend</span> <span class="ss">:sidekiq</span><span class="p">,</span> <span class="ss">queue</span><span class="p">:</span> <span class="ss">:carrierwave</span>
-</span><span class='line'>    <span class="c1"># c.backend :girl_friday, queue: :carrierwave</span>
-</span><span class='line'>    <span class="c1"># c.backend :qu, queue: :carrierwave</span>
-</span><span class='line'>    <span class="c1"># c.backend :qc</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><p>Then boot up Sidekiq to listen for jobs with sidekiq -q carrierwave command in your terminal.  You might need to start your Redis server with the command redis-server.  Your background worker should now asynchronously process background jobs!</p></p>
-
-<p><p>Sidekiq also has a cool interface to show what workers are up, how many successes and failures there have been and some other neat features.  It is real easy to set up.  First add the following code to your Gemfile.</p></p>
-
-<p><figure class='code'><figcaption><span>Gemfile </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">gem</span> <span class="s1">&#39;slim&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;= 1.1.0&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;sinatra&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;= 1.3.0&#39;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="kp">nil</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><p>Then create this route with the require line before the beginning of the block.</p></p>
-
-<p><figure class='code'><figcaption><span>routes.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="nb">require</span> <span class="s1">&#39;sidekiq/web&#39;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">mount</span> <span class="no">Sidekiq</span><span class="o">::</span><span class="no">Web</span> <span class="o">=&gt;</span> <span class="s1">&#39;/sidekiq&#39;</span>
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p><p>I really like this gem and recommend it to anyone trying to run background processes to upload pictures via Carrierwave.</p></p>
-
-<p><p>h/t Blake Johnson</p></p>
 </div>
   
   
