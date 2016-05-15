@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial &hellip;">
+  <meta name="description" content="If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,6 +117,80 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2016/05/15/find-and-replace-text/">Find and Replace Text</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-05-15T12:28:24-03:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>12:28 pm</span></time>
+        
+         | <a href="/blog/2016/05/15/find-and-replace-text/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
+
+<p><code>ack pivotal_commentor -l | xargs sed -i '' 's/pivotal_commentor/commentor/g'</code></p>
+
+<p>Let&rsquo;s break this command down with a simple example.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir test
+</span><span class='line'>cd test
+</span><span class='line'>touch file1.txt
+</span><span class='line'>touch file2.txt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And lets add the text &lsquo;hello&rsquo; to both text files.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l
+</span><span class='line'>file1.txt
+</span><span class='line'>file2.txt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ack is like grep and found the files containing the string hello. The -l flag &ldquo;Only print filenames containing matches&rdquo;</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l | xargs
+</span><span class='line'>file1.txt file2.txt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>xargs is a Unix utility that constructs argument lists.</p>
+
+<p>Finally, we pipe the arguments from xargs to sed.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l | xargs sed -i '' 's/hello/bye/g'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The -i flag allows for in place editing on the file. in the regex, the s replaces hello with bye and the g indicates globally, in case hello is found more than once in the file. The &lsquo;&rsquo; is sending the change into the correct output file.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2016/03/12/jquery-beforesend/">JQuery beforeSend Function</a></h1>
     
     
@@ -126,7 +200,7 @@
 
 
 
-<time class='entry-date' datetime='2016-03-12T15:32:09-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:32 pm</span></time>
+<time class='entry-date' datetime='2016-03-12T17:32:09-03:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:32 pm</span></time>
         
          | <a href="/blog/2016/03/12/jquery-beforesend/#disqus_thread">Comments</a>
         
@@ -187,7 +261,7 @@
 
 
 
-<time class='entry-date' datetime='2016-03-04T19:15:38-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>7:15 pm</span></time>
+<time class='entry-date' datetime='2016-03-04T21:15:38-03:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:15 pm</span></time>
         
          | <a href="/blog/2016/03/04/activerecord-none/#disqus_thread">Comments</a>
         
@@ -236,7 +310,7 @@
 
 
 
-<time class='entry-date' datetime='2016-02-05T15:04:18-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:04 pm</span></time>
+<time class='entry-date' datetime='2016-02-05T17:04:18-03:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:04 pm</span></time>
         
          | <a href="/blog/2016/02/05/submitting-a-get-request-in-rails/#disqus_thread">Comments</a>
         
@@ -285,7 +359,7 @@
 
 
 
-<time class='entry-date' datetime='2016-01-11T15:57:05-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:57 pm</span></time>
+<time class='entry-date' datetime='2016-01-11T17:57:05-03:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:57 pm</span></time>
         
          | <a href="/blog/2016/01/11/rspec-example-blocks/#disqus_thread">Comments</a>
         
@@ -378,7 +452,7 @@
 
 
 
-<time class='entry-date' datetime='2015-12-12T13:37:18-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:37 pm</span></time>
+<time class='entry-date' datetime='2015-12-12T15:37:18-03:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>3:37 pm</span></time>
         
          | <a href="/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/#disqus_thread">Comments</a>
         
@@ -490,7 +564,7 @@
 
 
 
-<time class='entry-date' datetime='2015-12-03T18:02:14-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>6:02 pm</span></time>
+<time class='entry-date' datetime='2015-12-03T20:02:14-03:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>8:02 pm</span></time>
         
          | <a href="/blog/2015/12/03/env-variables-in-xcode/#disqus_thread">Comments</a>
         
@@ -545,7 +619,7 @@
 
 
 
-<time class='entry-date' datetime='2015-11-20T16:45:46-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:45 pm</span></time>
+<time class='entry-date' datetime='2015-11-20T18:45:46-03:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:45 pm</span></time>
         
          | <a href="/blog/2015/11/20/shared-contexts-with-rspec/#disqus_thread">Comments</a>
         
@@ -689,7 +763,7 @@
 
 
 
-<time class='entry-date' datetime='2015-11-13T19:03:02-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:03 pm</span></time>
+<time class='entry-date' datetime='2015-11-13T21:03:02-03:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:03 pm</span></time>
         
          | <a href="/blog/2015/11/13/auto-layout-xcode-for-navigation-bar/#disqus_thread">Comments</a>
         
@@ -740,7 +814,7 @@
 
 
 
-<time class='entry-date' datetime='2015-11-07T12:57:08-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:57 pm</span></time>
+<time class='entry-date' datetime='2015-11-07T14:57:08-03:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>2:57 pm</span></time>
         
          | <a href="/blog/2015/11/07/prototypes-and-constructors-in-javascript/#disqus_thread">Comments</a>
         
@@ -805,66 +879,6 @@
 <p><a href="http://stackoverflow.com/questions/310870/use-of-prototype-vs-this-in-javascript">Use of &lsquo;prototype&rsquo; vs. &lsquo;this&rsquo; in JavaScript?</a></p>
 
 <p><a href="http://stackoverflow.com/questions/4508313/advantages-of-using-prototype-vs-defining-methods-straight-in-the-constructor">Advantages of using prototype, vs defining methods straight in the constructor?</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/10/30/shell-function/">Shell Function</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-10-30T22:34:34-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:34 pm</span></time>
-        
-         | <a href="/blog/2015/10/30/shell-function/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video sites.&rdquo; It&rsquo;s super useful. However, it default downloads to the current terminal directory. Let&rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.</p>
-
-<figure class='code'><figcaption><span>.zshrc</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function</span> mp3 <span class="o">{</span>
-</span><span class='line'>  <span class="c"># Download all of the things to /Downloads</span>
-</span><span class='line'>
-</span><span class='line'>  youtube-dl --default-search<span class="o">=</span>ytsearch: <span class="se">\</span>
-</span><span class='line'>             --output<span class="o">=</span><span class="s2">&quot;Downloads/%(title)s.%(ext)s&quot;</span> <span class="s2">&quot;$*&quot;</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The &ldquo;$<em>&rdquo; signifies the string following mp3, the example below, &ldquo;$</em>&rdquo; is the URL arument.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>  mp3 https://www.youtube.com/watch<span class="se">\?</span>v<span class="se">\=</span>9fYeiGeuTFA
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I can run the above script in order to download the video from the youtube URL.!</p>
-
-<p>Helpful Links</p>
-
-<p><a href="https://github.com/rg3/youtube-dl">youtube-dl</a></p>
 </div>
   
   

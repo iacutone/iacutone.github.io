@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Swift | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/swift/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-03-12T15:43:09-05:00</updated>
+  <updated>2016-05-15T13:00:09-03:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[ENV Variables in XCode]]></title>
     <link href="http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode/"/>
-    <updated>2015-12-03T18:02:14-05:00</updated>
+    <updated>2015-12-03T20:02:14-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode</id>
     <content type="html"><![CDATA[<p>Setting ENV variables in XCode in not straighforward. I have broken down how to accomplish setting up an ENV variable in the following videos and code example.</p>
 
@@ -41,7 +41,7 @@ In the debug environment, use the debug.xcconfig file. Then, assign the value to
   <entry>
     <title type="html"><![CDATA[Auto Layout Xcode for Navigation Bar]]></title>
     <link href="http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar/"/>
-    <updated>2015-11-13T19:03:02-05:00</updated>
+    <updated>2015-11-13T21:03:02-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar</id>
     <content type="html"><![CDATA[<p>Finding auto layout information is difficult. The steps below pin a navigation bar to the top of the screen for all iOS devices.</p>
 
@@ -69,7 +69,7 @@ In the debug environment, use the debug.xcconfig file. Then, assign the value to
   <entry>
     <title type="html"><![CDATA[Swift Basics]]></title>
     <link href="http://iacutone.github.io/blog/2015/09/09/swift-basics/"/>
-    <updated>2015-09-09T18:48:12-05:00</updated>
+    <updated>2015-09-09T20:48:12-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/09/09/swift-basics</id>
     <content type="html"><![CDATA[<h1>String Interpolation</h1>
 

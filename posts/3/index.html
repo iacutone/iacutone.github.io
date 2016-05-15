@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I decided to use the Carrierwave Backgrounder Gem in order to asynchronously upload photos to Amazon S3. This is a different gem than the one Ryan &hellip;">
+  <meta name="description" content="I have been developing a quiz app for practice with a more complex schema interface. I wanted to dive deeper into CoffeScript and found the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,6 +117,112 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/08/15/adventures-in-jquery/">Hiding Multiple Checkboxes With JQuery</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-08-15T21:09:00-03:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:09 pm</span></time>
+        
+         | <a href="/blog/2013/08/15/adventures-in-jquery/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been developing a <a href='https://github.com/iacutone/new-quiz'>quiz app</a> for practice with a more complex schema interface.  I wanted to dive deeper into CoffeScript and found the opportunity while trying to figure out how a student can add an answer to a given quiz.  If a checkbox for a given answer is checked, I wanted the remaining checkboxes to disappear.  Also, if the student checked the incorrect box, the browser should render all checkboxes again.  Here is my <a href='https://gist.github.com/iacutone/c28e8fa1324f82b508e0'>code.</a></p>
+
+
+
+
+<figure class='code'><figcaption><span>questions.js.coffee </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'>   <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;.checker&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>      <span class="nx">boxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:checked&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="nx">nboxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:not(:checked)&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
+</span><span class='line'>          <span class="nx">nboxes</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
+</span><span class='line'>          <span class="nx">nboxes</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>... and the view</p>
+
+
+
+
+<figure class='code'><figcaption><span>_form.html.haml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Quiz</span><span class="p">:</span>
+</span><span class='line'><span class="o">=</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">name</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">=</span> <span class="n">form_for</span> <span class="vi">@question</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">hidden_field</span> <span class="ss">:quiz_id</span><span class="p">,</span> <span class="ss">value</span><span class="p">:</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">id</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="s2">&quot;What is your question?&quot;</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
+</span><span class='line'>  <span class="o">%</span><span class="n">br</span>
+</span><span class='line'>  <span class="o">%</span><span class="n">fieldset</span>
+</span><span class='line'>      <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">fields_for</span> <span class="ss">:answers</span> <span class="k">do</span> <span class="o">|</span><span class="n">builder</span><span class="o">|</span>
+</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="ss">:content</span><span class="p">,</span> <span class="s2">&quot;Answer&quot;</span>
+</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
+</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="s2">&quot;Correct answer?&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span><span class="s1">&#39;checker_label&#39;</span>
+</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">check_box</span> <span class="ss">:is_correct</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s1">&#39;checker&#39;</span>
+</span><span class='line'>      <span class="o">%</span><span class="n">br</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">link_to_add_fields</span> <span class="s2">&quot;Add an answer choice&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="ss">:answers</span>
+</span><span class='line'>  <span class="o">%</span><span class="n">br</span>
+</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/07/15/sidekiq-and-carrierwave/">Sidekiq and Carrierwave, Part 3</a></h1>
     
     
@@ -126,7 +232,7 @@
 
 
 
-<time class='entry-date' datetime='2013-07-15T20:44:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:44 pm</span></time>
+<time class='entry-date' datetime='2013-07-15T20:44:00-03:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:44 pm</span></time>
         
          | <a href="/blog/2013/07/15/sidekiq-and-carrierwave/#disqus_thread">Comments</a>
         
@@ -352,7 +458,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-30T00:04:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>12:04 am</span></time>
+<time class='entry-date' datetime='2013-06-30T00:04:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>12:04 am</span></time>
         
          | <a href="/blog/2013/06/30/gon-gem/#disqus_thread">Comments</a>
         
@@ -532,7 +638,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-23T01:59:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>1:59 am</span></time>
+<time class='entry-date' datetime='2013-06-23T01:59:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>1:59 am</span></time>
         
          | <a href="/blog/2013/06/23/pluck-method-in-active-record/#disqus_thread">Comments</a>
         
@@ -726,7 +832,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-21T13:13:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2013</span></span> <span class='time'>1:13 pm</span></time>
+<time class='entry-date' datetime='2013-06-21T13:13:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2013</span></span> <span class='time'>1:13 pm</span></time>
         
          | <a href="/blog/2013/06/21/using-impress-dot-js-with-rails/#disqus_thread">Comments</a>
         
@@ -2417,7 +2523,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-18T01:29:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:29 am</span></time>
+<time class='entry-date' datetime='2013-06-18T01:29:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:29 am</span></time>
         
          | <a href="/blog/2013/06/18/client-side-validations/#disqus_thread">Comments</a>
         
@@ -2580,7 +2686,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-10T15:45:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>3:45 pm</span></time>
+<time class='entry-date' datetime='2013-06-10T15:45:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>3:45 pm</span></time>
         
          | <a href="/blog/2013/06/10/amazon-s3/#disqus_thread">Comments</a>
         
@@ -2800,7 +2906,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-05T18:59:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>6:59 pm</span></time>
+<time class='entry-date' datetime='2013-06-05T18:59:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>6:59 pm</span></time>
         
          | <a href="/blog/2013/06/05/amazon-s3/#disqus_thread">Comments</a>
         
@@ -3064,7 +3170,7 @@
 
 
 
-<time class='entry-date' datetime='2013-04-22T14:13:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>2:13 pm</span></time>
+<time class='entry-date' datetime='2013-04-22T14:13:00-03:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>2:13 pm</span></time>
         
          | <a href="/blog/2013/04/22/binary-search-trees/#disqus_thread">Comments</a>
         
@@ -3184,7 +3290,7 @@
 
 
 
-<time class='entry-date' datetime='2013-04-16T17:05:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>5:05 pm</span></time>
+<time class='entry-date' datetime='2013-04-16T17:05:00-03:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>5:05 pm</span></time>
         
          | <a href="/blog/2013/04/16/the-yipit-api-and-whenever-gem/#disqus_thread">Comments</a>
         
@@ -3228,74 +3334,6 @@
 
 
 <p><a href='http://www.platt101.com'>Platt101 can be found here.</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/01/jambox/">Jambox</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-03-01T07:39:00-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2013</span></span> <span class='time'>7:39 am</span></time>
-        
-         | <a href="/blog/2013/03/01/jambox/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>AirPlay</h2>
-
-
-
-
-<p>Learning how Airplay works: it allows wireless streaming of audio, video and photos. </p>
-
-
-<p></p>
-
-<p> My original idea was to rip the music information going onto the Flatiron AirPlay, then automatically tweet this information via Twitter.  I liked this idea because we play so much cool and unfamiliar music.  It would be great to keep track of what is playing.  Over time, I opened a myriad of tabs and discovered many interesting API's.  These include a few API's which mirror AirPlay on a laptop (<a href="http://airparrot.com/">AirParrot.</a> and <a href="http://www.airserverapp.com/">AirServer.</a>).  Also, many music API's were discovered.  These include <a href="http://echonest.com/">Echonest</a>, <a href="http://developers.soundcloud.com/">Soundcloud</a> and many others. </p>
-
-
-
-
-<p> The original idea went down in flames when I learned how difficult it is to hack the AirPlay.  <a href="http://www.aorensoftware.com/blog/2011/08/20/exploring-airplay-mirroring-internals/">This</a> blog post illustrated how this hacker tried to gain access to the AirPlay from WiFi packets via KisMAC, a derivative of WireShark.  Also, there are problems jailbreaking the DRM encryption.  The idea is possible, but a crazy task.  Idea aborted...</p>
-
-
-
-
-<p><a href="https://github.com/play/play/tree/master/app/api ">GitHub Play</a> deserves some special recognition.  It allows the GitHub offices to wirelessly create playlists synchronously in all of their offices around the globe.  The next iteration of our goal was to get the GitHub Play to work locally.  You can clone it at the link above.  However, GitHub Play relies on an old version of iTunes which includes iTunes DJ.  Also, Play ran on Ruby 1.8.7, and the dependencies were a mess.  So, our group threw this idea of out the window.  </p>
-
-
-
-
-<h2> GitHub Play </h2>
-
-
-<p><img src = "/images/play.png" height = "500" width = "500"></p>
-
-
-
-
-<p>Our groups next iteration is to simplify the GitHub Play.  Currently we are setting up a server where people can upload their mp3's.  Directions to create your own streaming music player in Ruby can be found <a href="http://net.tutsplus.com/tutorials/create-a-simple-music-streaming-app-with-ruby-on-rails/ ">here.</a>  The goal of this project is to eventually create a service where a group of people can all upload their songs onto a server and they will be played in sequence on a playlist.  For example, if you are at a party, everyone can put songs on a playlist, so that no one person will have complete control of the music.  We also want to implement a Reddit-esque leaderboard so people on the server can upvote/downvote songs.  If a song gets too many downvotes, it will be erased from the playlist.  </p>
-
-
-
 </div>
   
   

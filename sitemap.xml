@@ -1,132 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/</loc>
+    <lastmod>2016-05-15T12:28:24-03:00</lastmod>
+  </url>
+  <url>
     <loc>http://iacutone.github.io/blog/2016/03/12/jquery-beforesend/</loc>
-    <lastmod>2016-03-12T15:32:09-05:00</lastmod>
+    <lastmod>2016-03-12T17:32:09-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/03/04/activerecord-none/</loc>
-    <lastmod>2016-03-04T19:15:38-05:00</lastmod>
+    <lastmod>2016-03-04T21:15:38-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/02/05/submitting-a-get-request-in-rails/</loc>
-    <lastmod>2016-02-05T15:04:18-05:00</lastmod>
+    <lastmod>2016-02-05T17:04:18-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/</loc>
-    <lastmod>2016-01-11T15:57:05-05:00</lastmod>
+    <lastmod>2016-01-11T17:57:05-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/</loc>
-    <lastmod>2015-12-12T13:37:18-05:00</lastmod>
+    <lastmod>2015-12-12T15:37:18-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode/</loc>
-    <lastmod>2015-12-03T18:02:14-05:00</lastmod>
+    <lastmod>2015-12-03T20:02:14-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec/</loc>
-    <lastmod>2015-11-20T16:45:46-05:00</lastmod>
+    <lastmod>2015-11-20T18:45:46-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar/</loc>
-    <lastmod>2015-11-13T19:03:02-05:00</lastmod>
+    <lastmod>2015-11-13T21:03:02-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript/</loc>
-    <lastmod>2015-11-07T12:57:08-05:00</lastmod>
+    <lastmod>2015-11-07T14:57:08-03:00</lastmod>
   </url>
   <url>
-    <loc>http://iacutone.github.io/blog/2015/10/30/shell-function/</loc>
-    <lastmod>2015-10-30T22:34:34-05:00</lastmod>
+    <loc>http://iacutone.github.io/blog/2015/10/31/shell-function/</loc>
+    <lastmod>2015-10-31T00:34:34-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model/</loc>
-    <lastmod>2015-10-23T15:30:53-05:00</lastmod>
+    <lastmod>2015-10-23T17:30:53-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/</loc>
-    <lastmod>2015-09-18T18:15:29-05:00</lastmod>
+    <lastmod>2015-09-18T20:15:29-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/09/09/swift-basics/</loc>
-    <lastmod>2015-09-09T18:48:12-05:00</lastmod>
+    <lastmod>2015-09-09T20:48:12-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/09/04/my-return-to-blogging/</loc>
-    <lastmod>2015-09-04T19:45:08-05:00</lastmod>
+    <lastmod>2015-09-04T21:45:08-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2014/02/16/exceptions-in-ruby/</loc>
-    <lastmod>2014-02-16T18:40:00-05:00</lastmod>
+    <lastmod>2014-02-16T18:40:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2014/01/21/refactoring-client-side-validations/</loc>
-    <lastmod>2014-01-21T23:46:00-05:00</lastmod>
+    <lastmod>2014-01-21T23:46:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success/</loc>
-    <lastmod>2013-10-22T21:36:00-05:00</lastmod>
+    <lastmod>2013-10-22T21:36:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch/</loc>
-    <lastmod>2013-09-07T01:08:00-05:00</lastmod>
+    <lastmod>2013-09-07T01:08:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/</loc>
-    <lastmod>2013-08-22T18:56:00-05:00</lastmod>
+    <lastmod>2013-08-22T18:56:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/08/15/adventures-in-jquery/</loc>
-    <lastmod>2013-08-15T21:09:00-05:00</lastmod>
+    <lastmod>2013-08-15T21:09:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/07/15/sidekiq-and-carrierwave/</loc>
-    <lastmod>2013-07-15T20:44:00-05:00</lastmod>
+    <lastmod>2013-07-15T20:44:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/30/gon-gem/</loc>
-    <lastmod>2013-06-30T00:04:00-05:00</lastmod>
+    <lastmod>2013-06-30T00:04:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/23/pluck-method-in-active-record/</loc>
-    <lastmod>2013-06-23T01:59:00-05:00</lastmod>
+    <lastmod>2013-06-23T01:59:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/21/using-impress-dot-js-with-rails/</loc>
-    <lastmod>2013-06-21T13:13:00-05:00</lastmod>
+    <lastmod>2013-06-21T13:13:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/18/client-side-validations/</loc>
-    <lastmod>2013-06-18T01:29:00-05:00</lastmod>
+    <lastmod>2013-06-18T01:29:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/10/amazon-s3/</loc>
-    <lastmod>2013-06-10T15:45:00-05:00</lastmod>
+    <lastmod>2013-06-10T15:45:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/05/amazon-s3/</loc>
-    <lastmod>2013-06-05T18:59:00-05:00</lastmod>
+    <lastmod>2013-06-05T18:59:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/04/22/binary-search-trees/</loc>
-    <lastmod>2013-04-22T14:13:00-05:00</lastmod>
+    <lastmod>2013-04-22T14:13:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/04/16/the-yipit-api-and-whenever-gem/</loc>
-    <lastmod>2013-04-16T17:05:00-05:00</lastmod>
+    <lastmod>2013-04-16T17:05:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/03/01/jambox/</loc>
-    <lastmod>2013-03-01T07:39:00-05:00</lastmod>
+    <lastmod>2013-03-01T07:39:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/02/20/adventures-in-code/</loc>
-    <lastmod>2013-02-20T14:43:00-05:00</lastmod>
+    <lastmod>2013-02-20T14:43:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/02/13/git-commandments/</loc>
-    <lastmod>2013-02-13T09:17:00-05:00</lastmod>
+    <lastmod>2013-02-13T09:17:00-03:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/archives/</loc>
@@ -187,5 +191,8 @@
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/categories/ajax/</loc>
+  </url>
+  <url>
+    <loc>http://iacutone.github.io/blog/categories/ack/</loc>
   </url>
 </urlset>

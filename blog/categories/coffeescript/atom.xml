@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Coffeescript | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/coffeescript/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-03-12T15:43:09-05:00</updated>
+  <updated>2016-05-15T13:00:09-03:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Hiding Multiple Checkboxes With JQuery]]></title>
     <link href="http://iacutone.github.io/blog/2013/08/15/adventures-in-jquery/"/>
-    <updated>2013-08-15T21:09:00-05:00</updated>
+    <updated>2013-08-15T21:09:00-03:00</updated>
     <id>http://iacutone.github.io/blog/2013/08/15/adventures-in-jquery</id>
     <content type="html"><![CDATA[<p>I have been developing a <a href='https://github.com/iacutone/new-quiz'>quiz app</a> for practice with a more complex schema interface.  I wanted to dive deeper into CoffeScript and found the opportunity while trying to figure out how a student can add an answer to a given quiz.  If a checkbox for a given answer is checked, I wanted the remaining checkboxes to disappear.  Also, if the student checked the incorrect box, the browser should render all checkboxes again.  Here is my <a href='https://gist.github.com/iacutone/c28e8fa1324f82b508e0'>code.</a></p>
 

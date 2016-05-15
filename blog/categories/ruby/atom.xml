@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-03-12T15:43:09-05:00</updated>
+  <updated>2016-05-15T13:00:09-03:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[ActiveRecord None]]></title>
     <link href="http://iacutone.github.io/blog/2016/03/04/activerecord-none/"/>
-    <updated>2016-03-04T19:15:38-05:00</updated>
+    <updated>2016-03-04T21:15:38-03:00</updated>
     <id>http://iacutone.github.io/blog/2016/03/04/activerecord-none</id>
     <content type="html"><![CDATA[<p>The .none class method was introduced in Rails 4.0.2 and is helpful when returning a blank array will break.</p>
 
@@ -36,7 +36,7 @@
   <entry>
     <title type="html"><![CDATA[RSpec Example Blocks]]></title>
     <link href="http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/"/>
-    <updated>2016-01-11T15:57:05-05:00</updated>
+    <updated>2016-01-11T17:57:05-03:00</updated>
     <id>http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks</id>
     <content type="html"><![CDATA[<p>I recently discovered an interesting test pattern; defining variables in before and after hooks in the rails helper.</p>
 
@@ -81,7 +81,7 @@
   <entry>
     <title type="html"><![CDATA[Using Mocks to Test Mailers in RSpec]]></title>
     <link href="http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/"/>
-    <updated>2015-12-12T13:37:18-05:00</updated>
+    <updated>2015-12-12T15:37:18-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec</id>
     <content type="html"><![CDATA[<p>I was in the situation where I needed to test the delivery of emails based on specific sets of events. I began testing by inspecting sent emails in ActionMailer::Base.deliveries. However, this method of testing felt verbose and sloppy.</p>
 
@@ -136,7 +136,7 @@ end
   <entry>
     <title type="html"><![CDATA[Shared Contexts With RSpec]]></title>
     <link href="http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec/"/>
-    <updated>2015-11-20T16:45:46-05:00</updated>
+    <updated>2015-11-20T18:45:46-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec</id>
     <content type="html"><![CDATA[<p>In the past, I used traits with my factories. Below is a simple example of defining a trait:</p>
 
@@ -207,7 +207,7 @@ end
   <entry>
     <title type="html"><![CDATA[The Setter Method in a Rails Model]]></title>
     <link href="http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model/"/>
-    <updated>2015-10-23T15:30:53-05:00</updated>
+    <updated>2015-10-23T17:30:53-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model</id>
     <content type="html"><![CDATA[<p>At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&rsquo;s say we need to do something in a before_save callback such as lowercase a user&rsquo;s email.</p>
 

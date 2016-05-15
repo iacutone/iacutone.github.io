@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-03-12T15:43:09-05:00</updated>
+  <updated>2016-05-15T13:00:09-03:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,9 +14,60 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Find and Replace Text]]></title>
+    <link href="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/"/>
+    <updated>2016-05-15T12:28:24-03:00</updated>
+    <id>http://iacutone.github.io/blog/2016/05/15/find-and-replace-text</id>
+    <content type="html"><![CDATA[<p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
+
+<p><code>ack pivotal_commentor -l | xargs sed -i '' 's/pivotal_commentor/commentor/g'</code></p>
+
+<p>Let&rsquo;s break this command down with a simple example.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir test
+</span><span class='line'>cd test
+</span><span class='line'>touch file1.txt
+</span><span class='line'>touch file2.txt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And lets add the text &lsquo;hello&rsquo; to both text files.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l
+</span><span class='line'>file1.txt
+</span><span class='line'>file2.txt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ack is like grep and found the files containing the string hello. The -l flag &ldquo;Only print filenames containing matches&rdquo;</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l | xargs
+</span><span class='line'>file1.txt file2.txt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>xargs is a Unix utility that constructs argument lists.</p>
+
+<p>Finally, we pipe the arguments from xargs to sed.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l | xargs sed -i '' 's/hello/bye/g'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The -i flag allows for in place editing on the file. in the regex, the s replaces hello with bye and the g indicates globally, in case hello is found more than once in the file. The &lsquo;&rsquo; is sending the change into the correct output file.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[JQuery beforeSend Function]]></title>
     <link href="http://iacutone.github.io/blog/2016/03/12/jquery-beforesend/"/>
-    <updated>2016-03-12T15:32:09-05:00</updated>
+    <updated>2016-03-12T17:32:09-03:00</updated>
     <id>http://iacutone.github.io/blog/2016/03/12/jquery-beforesend</id>
     <content type="html"><![CDATA[<p>I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial solution was to disable the submit button if the comment is blank. However, using the <code>beforeSend</code> function provides a cleaner solution.</p>
 
@@ -54,7 +105,7 @@
   <entry>
     <title type="html"><![CDATA[ActiveRecord None]]></title>
     <link href="http://iacutone.github.io/blog/2016/03/04/activerecord-none/"/>
-    <updated>2016-03-04T19:15:38-05:00</updated>
+    <updated>2016-03-04T21:15:38-03:00</updated>
     <id>http://iacutone.github.io/blog/2016/03/04/activerecord-none</id>
     <content type="html"><![CDATA[<p>The .none class method was introduced in Rails 4.0.2 and is helpful when returning a blank array will break.</p>
 
@@ -80,7 +131,7 @@
   <entry>
     <title type="html"><![CDATA[Submitting a Get Request in Rails]]></title>
     <link href="http://iacutone.github.io/blog/2016/02/05/submitting-a-get-request-in-rails/"/>
-    <updated>2016-02-05T15:04:18-05:00</updated>
+    <updated>2016-02-05T17:04:18-03:00</updated>
     <id>http://iacutone.github.io/blog/2016/02/05/submitting-a-get-request-in-rails</id>
     <content type="html"><![CDATA[<p>For the error &ldquo;WARNING: Can&rsquo;t verify CSRF token authenticity&rdquo;, add a CSRF token.</p>
 
@@ -106,7 +157,7 @@
   <entry>
     <title type="html"><![CDATA[RSpec Example Blocks]]></title>
     <link href="http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/"/>
-    <updated>2016-01-11T15:57:05-05:00</updated>
+    <updated>2016-01-11T17:57:05-03:00</updated>
     <id>http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks</id>
     <content type="html"><![CDATA[<p>I recently discovered an interesting test pattern; defining variables in before and after hooks in the rails helper.</p>
 
@@ -176,7 +227,7 @@
   <entry>
     <title type="html"><![CDATA[Using Mocks to Test Mailers in RSpec]]></title>
     <link href="http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/"/>
-    <updated>2015-12-12T13:37:18-05:00</updated>
+    <updated>2015-12-12T15:37:18-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec</id>
     <content type="html"><![CDATA[<p>I was in the situation where I needed to test the delivery of emails based on specific sets of events. I began testing by inspecting sent emails in ActionMailer::Base.deliveries. However, this method of testing felt verbose and sloppy.</p>
 
@@ -265,7 +316,7 @@
   <entry>
     <title type="html"><![CDATA[ENV Variables in XCode]]></title>
     <link href="http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode/"/>
-    <updated>2015-12-03T18:02:14-05:00</updated>
+    <updated>2015-12-03T20:02:14-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode</id>
     <content type="html"><![CDATA[<p>Setting ENV variables in XCode in not straighforward. I have broken down how to accomplish setting up an ENV variable in the following videos and code example.</p>
 
@@ -297,7 +348,7 @@
   <entry>
     <title type="html"><![CDATA[Shared Contexts With RSpec]]></title>
     <link href="http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec/"/>
-    <updated>2015-11-20T16:45:46-05:00</updated>
+    <updated>2015-11-20T18:45:46-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec</id>
     <content type="html"><![CDATA[<p>In the past, I used traits with my factories. Below is a simple example of defining a trait:</p>
 
@@ -418,7 +469,7 @@
   <entry>
     <title type="html"><![CDATA[Auto Layout Xcode for Navigation Bar]]></title>
     <link href="http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar/"/>
-    <updated>2015-11-13T19:03:02-05:00</updated>
+    <updated>2015-11-13T21:03:02-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar</id>
     <content type="html"><![CDATA[<p>Finding auto layout information is difficult. The steps below pin a navigation bar to the top of the screen for all iOS devices.</p>
 
@@ -446,7 +497,7 @@
   <entry>
     <title type="html"><![CDATA[Prototypes and Constructors in Javascript]]></title>
     <link href="http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript/"/>
-    <updated>2015-11-07T12:57:08-05:00</updated>
+    <updated>2015-11-07T14:57:08-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript</id>
     <content type="html"><![CDATA[<p>I usually do not need to write code using neither constructors nor prototypes in Javascript. So, I always forget how to write them when I need to use them.</p>
 
@@ -508,9 +559,9 @@
   
   <entry>
     <title type="html"><![CDATA[Shell Function]]></title>
-    <link href="http://iacutone.github.io/blog/2015/10/30/shell-function/"/>
-    <updated>2015-10-30T22:34:34-05:00</updated>
-    <id>http://iacutone.github.io/blog/2015/10/30/shell-function</id>
+    <link href="http://iacutone.github.io/blog/2015/10/31/shell-function/"/>
+    <updated>2015-10-31T00:34:34-03:00</updated>
+    <id>http://iacutone.github.io/blog/2015/10/31/shell-function</id>
     <content type="html"><![CDATA[<p>I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video sites.&rdquo; It&rsquo;s super useful. However, it default downloads to the current terminal directory. Let&rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.</p>
 
 <figure class='code'><figcaption><span>.zshrc</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -546,7 +597,7 @@
   <entry>
     <title type="html"><![CDATA[The Setter Method in a Rails Model]]></title>
     <link href="http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model/"/>
-    <updated>2015-10-23T15:30:53-05:00</updated>
+    <updated>2015-10-23T17:30:53-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model</id>
     <content type="html"><![CDATA[<p>At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&rsquo;s say we need to do something in a before_save callback such as lowercase a user&rsquo;s email.</p>
 
@@ -647,7 +698,7 @@
   <entry>
     <title type="html"><![CDATA[Ruby's Fetch Method]]></title>
     <link href="http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/"/>
-    <updated>2015-09-18T18:15:29-05:00</updated>
+    <updated>2015-09-18T20:15:29-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method</id>
     <content type="html"><![CDATA[<p>Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash.</p>
 
@@ -724,7 +775,7 @@
   <entry>
     <title type="html"><![CDATA[Swift Basics]]></title>
     <link href="http://iacutone.github.io/blog/2015/09/09/swift-basics/"/>
-    <updated>2015-09-09T18:48:12-05:00</updated>
+    <updated>2015-09-09T20:48:12-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/09/09/swift-basics</id>
     <content type="html"><![CDATA[<h1>String Interpolation</h1>
 
@@ -967,7 +1018,7 @@
   <entry>
     <title type="html"><![CDATA[My Return to Blogging]]></title>
     <link href="http://iacutone.github.io/blog/2015/09/04/my-return-to-blogging/"/>
-    <updated>2015-09-04T19:45:08-05:00</updated>
+    <updated>2015-09-04T21:45:08-03:00</updated>
     <id>http://iacutone.github.io/blog/2015/09/04/my-return-to-blogging</id>
     <content type="html"><![CDATA[<p>The goal of this blog is to refine my writing skills. In order to fulfill this goal I will write about something interesting I learned on a weekly basis. I find that if I do not get into a routine, I will not fulfill my goal. So, every Friday after work I will post on this blog. I have no goals about the legth of posts, but to write something with clarity and thoughfulness.</p>
 ]]></content>
@@ -976,7 +1027,7 @@
   <entry>
     <title type="html"><![CDATA[Exceptions in Ruby]]></title>
     <link href="http://iacutone.github.io/blog/2014/02/16/exceptions-in-ruby/"/>
-    <updated>2014-02-16T18:40:00-05:00</updated>
+    <updated>2014-02-16T18:40:00-03:00</updated>
     <id>http://iacutone.github.io/blog/2014/02/16/exceptions-in-ruby</id>
     <content type="html"><![CDATA[<p>I inherited some interesting code last week.  A user has the ability to sign into the website with omniauth.</p>
 
@@ -1038,7 +1089,7 @@
   <entry>
     <title type="html"><![CDATA[Refactoring Client Side Validations]]></title>
     <link href="http://iacutone.github.io/blog/2014/01/21/refactoring-client-side-validations/"/>
-    <updated>2014-01-21T23:46:00-05:00</updated>
+    <updated>2014-01-21T23:46:00-03:00</updated>
     <id>http://iacutone.github.io/blog/2014/01/21/refactoring-client-side-validations</id>
     <content type="html"><![CDATA[<p> I have been working on refactoring my client side JavaScript validations on an application.  My tech lead gave me some illuminating tips on how to refactor my non-DRY code.  Here is an example of the pre-refactored code.</p>
 
@@ -1370,7 +1421,7 @@
   <entry>
     <title type="html"><![CDATA[Testing Your Way to Success]]></title>
     <link href="http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success/"/>
-    <updated>2013-10-22T21:36:00-05:00</updated>
+    <updated>2013-10-22T21:36:00-03:00</updated>
     <id>http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success</id>
     <content type="html"><![CDATA[<p>I have been immersed in production codebases for my <a href='fohrcard.com'>Fohr Card</a> and <a href='http://www.fracturedatlas.org/'>Fractured Atlas</a> projects.  At first, it feel initimidating trying to figure out all of the models and related associations.  I have found that a great way to wrap your head around the code base is to create a new branch and test the code.</p>
 
@@ -1480,7 +1531,7 @@
   <entry>
     <title type="html"><![CDATA[Changing Your Password From Scratch]]></title>
     <link href="http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch/"/>
-    <updated>2013-09-07T01:08:00-05:00</updated>
+    <updated>2013-09-07T01:08:00-03:00</updated>
     <id>http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch</id>
     <content type="html"><![CDATA[<p> So say you are using devise and have none of the has_secure_password medthod available to you.  One should learn the bcrypt gem... and needs to abstract some methods in order to parse an encrypted password.  Cool, Bcrypt can do that, as located <a href ='  https://github.com/rails/rails/blob/b965ce361b89ad33a4a4b422f8e564233926c723/activemodel/lib/active_model/secure_password.rb#L42
 '>here.</a> Here is my modified code in order to confirm if a new password in order to apply a boolean value to an inputed password.</p>
@@ -1672,7 +1723,7 @@
   <entry>
     <title type="html"><![CDATA[Grep and Scan Methods With Regular Expressions in Ruby]]></title>
     <link href="http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/"/>
-    <updated>2013-08-22T18:56:00-05:00</updated>
+    <updated>2013-08-22T18:56:00-03:00</updated>
     <id>http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby</id>
     <content type="html"><![CDATA[<p>I am creating an app to provide food cart locations in Manhattan.  <a href='https://github.com/iacutone/food-truck'>Here</a> is the code.  Food carts generally post their locations on Twitter; in order to create latitude and longitude coordinates, I needed to parse tweets.  This is where scan and grep play their role, to match elements in a tweet string.  Let's say this is our tweet: "53rd and park. Ready by 11!"  This string is database column in my locations model.</p>
 
@@ -1732,89 +1783,6 @@
 
 
 <p><p>The grep method takes an array as an input, so use the string split method to turn it into an array seperated by commas.  Also, the regular expression matches the entire string.  The grep method seems to be more suited as an alternative for the select and map methods.  <a href='http://zigzag.github.io/2010/03/31/grep-in-ruby----a-powerful-enumerable-method.html'>This</a> blog post goes into further detail explaining more cases to use the grep method over more familiar methods.<p></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hiding Multiple Checkboxes With JQuery]]></title>
-    <link href="http://iacutone.github.io/blog/2013/08/15/adventures-in-jquery/"/>
-    <updated>2013-08-15T21:09:00-05:00</updated>
-    <id>http://iacutone.github.io/blog/2013/08/15/adventures-in-jquery</id>
-    <content type="html"><![CDATA[<p>I have been developing a <a href='https://github.com/iacutone/new-quiz'>quiz app</a> for practice with a more complex schema interface.  I wanted to dive deeper into CoffeScript and found the opportunity while trying to figure out how a student can add an answer to a given quiz.  If a checkbox for a given answer is checked, I wanted the remaining checkboxes to disappear.  Also, if the student checked the incorrect box, the browser should render all checkboxes again.  Here is my <a href='https://gist.github.com/iacutone/c28e8fa1324f82b508e0'>code.</a></p>
-
-
-
-
-<figure class='code'><figcaption><span>questions.js.coffee </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'>   <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;.checker&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>      <span class="nx">boxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:checked&quot;</span><span class="p">)</span>
-</span><span class='line'>      <span class="nx">nboxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:not(:checked)&quot;</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span>
-</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
-</span><span class='line'>          <span class="nx">nboxes</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
-</span><span class='line'>          <span class="nx">nboxes</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>... and the view</p>
-
-
-
-
-<figure class='code'><figcaption><span>_form.html.haml </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Quiz</span><span class="p">:</span>
-</span><span class='line'><span class="o">=</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">name</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">=</span> <span class="n">form_for</span> <span class="vi">@question</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">hidden_field</span> <span class="ss">:quiz_id</span><span class="p">,</span> <span class="ss">value</span><span class="p">:</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">id</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="s2">&quot;What is your question?&quot;</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
-</span><span class='line'>  <span class="o">%</span><span class="n">br</span>
-</span><span class='line'>  <span class="o">%</span><span class="n">fieldset</span>
-</span><span class='line'>      <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">fields_for</span> <span class="ss">:answers</span> <span class="k">do</span> <span class="o">|</span><span class="n">builder</span><span class="o">|</span>
-</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="ss">:content</span><span class="p">,</span> <span class="s2">&quot;Answer&quot;</span>
-</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
-</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="s2">&quot;Correct answer?&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span><span class="s1">&#39;checker_label&#39;</span>
-</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">check_box</span> <span class="ss">:is_correct</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s1">&#39;checker&#39;</span>
-</span><span class='line'>      <span class="o">%</span><span class="n">br</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">link_to_add_fields</span> <span class="s2">&quot;Add an answer choice&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="ss">:answers</span>
-</span><span class='line'>  <span class="o">%</span><span class="n">br</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
 ]]></content>
   </entry>
   
