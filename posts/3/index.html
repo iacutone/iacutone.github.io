@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I have been developing a quiz app for practice with a more complex schema interface. I wanted to dive deeper into CoffeScript and found the &hellip;">
+  <meta name="description" content="I am creating an app to provide food cart locations in Manhattan. Here is the code. Food carts generally post their locations on Twitter; in order to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,6 +117,95 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/">Grep and Scan Methods With Regular Expressions in Ruby</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-08-22T18:56:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>6:56 pm</span></time>
+        
+         | <a href="/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am creating an app to provide food cart locations in Manhattan.  <a href='https://github.com/iacutone/food-truck'>Here</a> is the code.  Food carts generally post their locations on Twitter; in order to create latitude and longitude coordinates, I needed to parse tweets.  This is where scan and grep play their role, to match elements in a tweet string.  Let's say this is our tweet: "53rd and park. Ready by 11!"  This string is database column in my locations model.</p>
+
+
+
+
+<p>Code for scan method.</p>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">tweet</span> <span class="o">=</span> <span class="s2">&quot;53rd and park. Ready by 11!&quot;</span>
+</span><span class='line'>  <span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/53/</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;53&quot;] </span>
+</span><span class='line'>  <span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;park&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>The scan method takes a string as an input.  Also, the i is used in the regular expression in order to make it case insensitive.</p>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/Park/</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1">#  =&gt; [] </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Code for grep method.</p>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">tweet</span> <span class="o">=</span> <span class="s2">&quot;53rd and park. Ready by 11!&quot;</span>
+</span><span class='line'>  <span class="n">tweet_array</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">split</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;53rd&quot;, &quot;and&quot;, &quot;park.&quot;, &quot;Ready&quot;, &quot;by&quot;, &quot;11!&quot;] </span>
+</span><span class='line'>  <span class="n">tweet_array</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/53/</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;53rd&quot;]</span>
+</span><span class='line'>  <span class="n">tweet_array</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># =&gt; [&quot;park.&quot;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p><p>The grep method takes an array as an input, so use the string split method to turn it into an array seperated by commas.  Also, the regular expression matches the entire string.  The grep method seems to be more suited as an alternative for the select and map methods.  <a href='http://zigzag.github.io/2010/03/31/grep-in-ruby----a-powerful-enumerable-method.html'>This</a> blog post goes into further detail explaining more cases to use the grep method over more familiar methods.<p></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/08/15/adventures-in-jquery/">Hiding Multiple Checkboxes With JQuery</a></h1>
     
     
@@ -126,7 +215,7 @@
 
 
 
-<time class='entry-date' datetime='2013-08-15T21:09:00-03:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:09 pm</span></time>
+<time class='entry-date' datetime='2013-08-15T21:09:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:09 pm</span></time>
         
          | <a href="/blog/2013/08/15/adventures-in-jquery/#disqus_thread">Comments</a>
         
@@ -232,7 +321,7 @@
 
 
 
-<time class='entry-date' datetime='2013-07-15T20:44:00-03:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:44 pm</span></time>
+<time class='entry-date' datetime='2013-07-15T20:44:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:44 pm</span></time>
         
          | <a href="/blog/2013/07/15/sidekiq-and-carrierwave/#disqus_thread">Comments</a>
         
@@ -458,7 +547,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-30T00:04:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>12:04 am</span></time>
+<time class='entry-date' datetime='2013-06-30T00:04:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>12:04 am</span></time>
         
          | <a href="/blog/2013/06/30/gon-gem/#disqus_thread">Comments</a>
         
@@ -638,7 +727,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-23T01:59:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>1:59 am</span></time>
+<time class='entry-date' datetime='2013-06-23T01:59:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>1:59 am</span></time>
         
          | <a href="/blog/2013/06/23/pluck-method-in-active-record/#disqus_thread">Comments</a>
         
@@ -832,7 +921,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-21T13:13:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2013</span></span> <span class='time'>1:13 pm</span></time>
+<time class='entry-date' datetime='2013-06-21T13:13:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2013</span></span> <span class='time'>1:13 pm</span></time>
         
          | <a href="/blog/2013/06/21/using-impress-dot-js-with-rails/#disqus_thread">Comments</a>
         
@@ -2523,7 +2612,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-18T01:29:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:29 am</span></time>
+<time class='entry-date' datetime='2013-06-18T01:29:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:29 am</span></time>
         
          | <a href="/blog/2013/06/18/client-side-validations/#disqus_thread">Comments</a>
         
@@ -2686,7 +2775,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-10T15:45:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>3:45 pm</span></time>
+<time class='entry-date' datetime='2013-06-10T15:45:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>3:45 pm</span></time>
         
          | <a href="/blog/2013/06/10/amazon-s3/#disqus_thread">Comments</a>
         
@@ -2906,7 +2995,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-05T18:59:00-03:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>6:59 pm</span></time>
+<time class='entry-date' datetime='2013-06-05T18:59:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>6:59 pm</span></time>
         
          | <a href="/blog/2013/06/05/amazon-s3/#disqus_thread">Comments</a>
         
@@ -3170,7 +3259,7 @@
 
 
 
-<time class='entry-date' datetime='2013-04-22T14:13:00-03:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>2:13 pm</span></time>
+<time class='entry-date' datetime='2013-04-22T14:13:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>2:13 pm</span></time>
         
          | <a href="/blog/2013/04/22/binary-search-trees/#disqus_thread">Comments</a>
         
@@ -3269,71 +3358,6 @@
 
 <p><p>h/t Jonathan Shewchuk at UC Berkeley</p>
 <a href='https://www.youtube.com/watch?v=V_3BM0ykITM'>His lecture via Youtube</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/16/the-yipit-api-and-whenever-gem/">The Yipit API and Whenever Gem</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-04-16T17:05:00-03:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>5:05 pm</span></time>
-        
-         | <a href="/blog/2013/04/16/the-yipit-api-and-whenever-gem/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Last week Alex and I presented Platt101 at our NYC on Rails Meetup, at the Flatiron School.  Platt101 let's a user write reviews about restaurants they have been to and renders those restaurants on a Google Map.  The restaurants are based on the 101 best according to New York Magazine.  The restaurants a user has been to render in a different color than restaurants a user hasn't had the pleasure of dining.  A fellow student (h/t Anthony) suggested we impliment a GroupOn link in our restaurant list in order for a user to provide the user incentive to go dine at given restaurants.</p>
-
-
-
-
-<p> We decided to use the <a href='http://yipit.com/about/api/'>Yipit API</a> in order to aggregate all discount incentives from numerous discount sites such as GroupOn.  We accessed the Yipit API via the Yipit <a href='https://github.com/gangster/yipit'>gem</a> for Ruby on Rails, created by Gangster.  Aside from our client session running a few times, the gem provided for all of our data parsing needs.  The Yelp API we used to seed our database with relevant restaurant information included phone numbers.  We searched the phone numbers in our database against phone numbers on Yipit in order to find deals for the given restaurants on our list.  This functionality is provided with a rake task.  Here is the code: </p>
-
-
-<p><br></p>
-
-<p><img src = "/images/yipit.png" height = "500" width = "500"></p>
-
-
-
-
-<p> The rake task provides us the ability to use the Whenever gem in order to run the rake task everyday.  This way our database in reseeded with new data about restaurant deals on a daily basis.  The Whenever gem was easy to impliment.</p>
-
-
-<p><br></p>
-
-<p><img src = "/images/whenever-2.png" height = "500" width = "500"></p>
-
-
-
-
-<p>This code is automatically added to your config > schedule.rb when you run whenever . in terminal.  You can customize Whenever to run whenever you want.</p>
-
-
-
-
-<p>Now, this all works well in development, but Platt101 is deployed on Heroku.  In production, we needed to reset up the Whenever gem.  This is also easy to accomplish on Heroku. Use <a href='https://addons.heroku.com/scheduler'>Heroku Scheduler</a> in order to run a chron job in production.  They do make you use input your credit card info, which is whack, but it says free... we shall see.</p>
-
-
-<p><a href='http://www.platt101.com'>Platt101 can be found here.</a></p>
 </div>
   
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rspec | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-05-15T13:00:09-03:00</updated>
+  <updated>2016-06-02T15:34:34-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[RSpec Example Blocks]]></title>
     <link href="http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/"/>
-    <updated>2016-01-11T17:57:05-03:00</updated>
+    <updated>2016-01-11T15:57:05-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks</id>
     <content type="html"><![CDATA[<p>I recently discovered an interesting test pattern; defining variables in before and after hooks in the rails helper.</p>
 
@@ -61,7 +61,7 @@
   <entry>
     <title type="html"><![CDATA[Using Mocks to Test Mailers in RSpec]]></title>
     <link href="http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/"/>
-    <updated>2015-12-12T15:37:18-03:00</updated>
+    <updated>2015-12-12T13:37:18-05:00</updated>
     <id>http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec</id>
     <content type="html"><![CDATA[<p>I was in the situation where I needed to test the delivery of emails based on specific sets of events. I began testing by inspecting sent emails in ActionMailer::Base.deliveries. However, this method of testing felt verbose and sloppy.</p>
 
@@ -116,7 +116,7 @@ end
   <entry>
     <title type="html"><![CDATA[Shared Contexts With RSpec]]></title>
     <link href="http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec/"/>
-    <updated>2015-11-20T18:45:46-03:00</updated>
+    <updated>2015-11-20T16:45:46-05:00</updated>
     <id>http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec</id>
     <content type="html"><![CDATA[<p>In the past, I used traits with my factories. Below is a simple example of defining a trait:</p>
 
@@ -187,7 +187,7 @@ end
   <entry>
     <title type="html"><![CDATA[Testing Your Way to Success]]></title>
     <link href="http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success/"/>
-    <updated>2013-10-22T21:36:00-03:00</updated>
+    <updated>2013-10-22T21:36:00-05:00</updated>
     <id>http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success</id>
     <content type="html"><![CDATA[<p>I have been immersed in production codebases for my <a href='fohrcard.com'>Fohr Card</a> and <a href='http://www.fracturedatlas.org/'>Fractured Atlas</a> projects.  At first, it feel initimidating trying to figure out all of the models and related associations.  I have found that a great way to wrap your head around the code base is to create a new branch and test the code.</p>
 

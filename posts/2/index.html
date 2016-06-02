@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video &hellip;">
+  <meta name="description" content="I usually do not need to write code using neither constructors nor prototypes in Javascript. So, I always forget how to write them when I need to use &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,7 +117,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/10/31/shell-function/">Shell Function</a></h1>
+      <h1 class="entry-title"><a href="/blog/2015/11/07/prototypes-and-constructors-in-javascript/">Prototypes and Constructors in Javascript</a></h1>
     
     
       <p class="meta">
@@ -126,9 +126,95 @@
 
 
 
-<time class='entry-date' datetime='2015-10-31T00:34:34-03:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>12:34 am</span></time>
+<time class='entry-date' datetime='2015-11-07T12:57:08-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:57 pm</span></time>
         
-         | <a href="/blog/2015/10/31/shell-function/#disqus_thread">Comments</a>
+         | <a href="/blog/2015/11/07/prototypes-and-constructors-in-javascript/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I usually do not need to write code using neither constructors nor prototypes in Javascript. So, I always forget how to write them when I need to use them.</p>
+
+<h2>Constructor</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="nx">Say</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="s2">&quot;Hello&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">say</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Say</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">say</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// &quot;Hello&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Prototype</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="kd">function</span> <span class="nx">Say</span><span class="p">()</span> <span class="p">{}</span>
+</span><span class='line'>   <span class="nx">Say</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;Hello&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">say</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Say</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">say</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// &quot;Hello&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Helpful Links</p>
+
+<p><a href="http://stackoverflow.com/questions/310870/use-of-prototype-vs-this-in-javascript">Use of &lsquo;prototype&rsquo; vs. &lsquo;this&rsquo; in JavaScript?</a></p>
+
+<p><a href="http://stackoverflow.com/questions/4508313/advantages-of-using-prototype-vs-defining-methods-straight-in-the-constructor">Advantages of using prototype, vs defining methods straight in the constructor?</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/10/30/shell-function/">Shell Function</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-10-30T22:34:34-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:34 pm</span></time>
+        
+         | <a href="/blog/2015/10/30/shell-function/#disqus_thread">Comments</a>
         
         
       </p>
@@ -186,7 +272,7 @@
 
 
 
-<time class='entry-date' datetime='2015-10-23T17:30:53-03:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>5:30 pm</span></time>
+<time class='entry-date' datetime='2015-10-23T15:30:53-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>3:30 pm</span></time>
         
          | <a href="/blog/2015/10/23/the-setter-method-in-a-rails-model/#disqus_thread">Comments</a>
         
@@ -310,7 +396,7 @@
 
 
 
-<time class='entry-date' datetime='2015-09-18T20:15:29-03:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:15 pm</span></time>
+<time class='entry-date' datetime='2015-09-18T18:15:29-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:15 pm</span></time>
         
          | <a href="/blog/2015/09/18/rubys-fetch-method/#disqus_thread">Comments</a>
         
@@ -410,7 +496,7 @@
 
 
 
-<time class='entry-date' datetime='2015-09-09T20:48:12-03:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:48 pm</span></time>
+<time class='entry-date' datetime='2015-09-09T18:48:12-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:48 pm</span></time>
         
          | <a href="/blog/2015/09/09/swift-basics/#disqus_thread">Comments</a>
         
@@ -676,7 +762,7 @@
 
 
 
-<time class='entry-date' datetime='2015-09-04T21:45:08-03:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:45 pm</span></time>
+<time class='entry-date' datetime='2015-09-04T19:45:08-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:45 pm</span></time>
         
         
       </p>
@@ -706,7 +792,7 @@
 
 
 
-<time class='entry-date' datetime='2014-02-16T18:40:00-03:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:40 pm</span></time>
+<time class='entry-date' datetime='2014-02-16T18:40:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:40 pm</span></time>
         
          | <a href="/blog/2014/02/16/exceptions-in-ruby/#disqus_thread">Comments</a>
         
@@ -791,7 +877,7 @@
 
 
 
-<time class='entry-date' datetime='2014-01-21T23:46:00-03:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>11:46 pm</span></time>
+<time class='entry-date' datetime='2014-01-21T23:46:00-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>11:46 pm</span></time>
         
          | <a href="/blog/2014/01/21/refactoring-client-side-validations/#disqus_thread">Comments</a>
         
@@ -1146,7 +1232,7 @@
 
 
 
-<time class='entry-date' datetime='2013-10-22T21:36:00-03:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>9:36 pm</span></time>
+<time class='entry-date' datetime='2013-10-22T21:36:00-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>9:36 pm</span></time>
         
          | <a href="/blog/2013/10/22/testing-your-way-to-success/#disqus_thread">Comments</a>
         
@@ -1279,7 +1365,7 @@
 
 
 
-<time class='entry-date' datetime='2013-09-07T01:08:00-03:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:08 am</span></time>
+<time class='entry-date' datetime='2013-09-07T01:08:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:08 am</span></time>
         
          | <a href="/blog/2013/09/07/changing-your-password-from-scratch/#disqus_thread">Comments</a>
         
@@ -1473,95 +1559,6 @@
 
 <p>Now, all use cases of the user improperly editing the form result in false and a validation error occurs.</p>
 
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/">Grep and Scan Methods With Regular Expressions in Ruby</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-08-22T18:56:00-03:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>6:56 pm</span></time>
-        
-         | <a href="/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I am creating an app to provide food cart locations in Manhattan.  <a href='https://github.com/iacutone/food-truck'>Here</a> is the code.  Food carts generally post their locations on Twitter; in order to create latitude and longitude coordinates, I needed to parse tweets.  This is where scan and grep play their role, to match elements in a tweet string.  Let's say this is our tweet: "53rd and park. Ready by 11!"  This string is database column in my locations model.</p>
-
-
-
-
-<p>Code for scan method.</p>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">tweet</span> <span class="o">=</span> <span class="s2">&quot;53rd and park. Ready by 11!&quot;</span>
-</span><span class='line'>  <span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/53/</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1"># =&gt; [&quot;53&quot;] </span>
-</span><span class='line'>  <span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1"># =&gt; [&quot;park&quot;]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>The scan method takes a string as an input.  Also, the i is used in the regular expression in order to make it case insensitive.</p>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/Park/</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1">#  =&gt; [] </span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>Code for grep method.</p>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">tweet</span> <span class="o">=</span> <span class="s2">&quot;53rd and park. Ready by 11!&quot;</span>
-</span><span class='line'>  <span class="n">tweet_array</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">split</span>
-</span><span class='line'>  <span class="c1"># =&gt; [&quot;53rd&quot;, &quot;and&quot;, &quot;park.&quot;, &quot;Ready&quot;, &quot;by&quot;, &quot;11!&quot;] </span>
-</span><span class='line'>  <span class="n">tweet_array</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/53/</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1"># =&gt; [&quot;53rd&quot;]</span>
-</span><span class='line'>  <span class="n">tweet_array</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1"># =&gt; [&quot;park.&quot;]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p><p>The grep method takes an array as an input, so use the string split method to turn it into an array seperated by commas.  Also, the regular expression matches the entire string.  The grep method seems to be more suited as an alternative for the select and map methods.  <a href='http://zigzag.github.io/2010/03/31/grep-in-ruby----a-powerful-enumerable-method.html'>This</a> blog post goes into further detail explaining more cases to use the grep method over more familiar methods.<p></p>
 </div>
   
   

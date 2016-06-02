@@ -4,7 +4,7 @@
   <title><![CDATA[Category: impress.js | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/impress-dot-js/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-05-15T13:00:09-03:00</updated>
+  <updated>2016-06-02T15:34:34-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Using Impress.js With Rails]]></title>
     <link href="http://iacutone.github.io/blog/2013/06/21/using-impress-dot-js-with-rails/"/>
-    <updated>2013-06-21T13:13:00-03:00</updated>
+    <updated>2013-06-21T13:13:00-05:00</updated>
     <id>http://iacutone.github.io/blog/2013/06/21/using-impress-dot-js-with-rails</id>
     <content type="html"><![CDATA[<p>I recently had an interview at an awesome creative agency, <a href='www.canvas.is'>Canvas</a> and wanted to show them something unique in order to make me stand out.  I decided to build a thank you card with <a href='www.github.com/bartaz/impress.js'>Impress.js.</a>  <a href='http://powerful-woodland-7328.herokuapp.com'> This</a> is the thank you card I sent to their CTO.  I enjoyed playing with Impress.js and will definitely incorporate it into many more applications in the future.  However, there is not much documentation about how to get Impress to play nicely in a Rails app.  The app was breaking in production, but working in development.  The code following the impress.js file below specifies where to load the Javascript.</p>
 

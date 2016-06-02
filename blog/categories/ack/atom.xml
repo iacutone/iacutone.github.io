@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ack | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/ack/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-05-15T13:00:09-03:00</updated>
+  <updated>2016-06-02T15:34:34-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Find and Replace Text]]></title>
     <link href="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/"/>
-    <updated>2016-05-15T12:28:24-03:00</updated>
+    <updated>2016-05-15T10:28:24-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/05/15/find-and-replace-text</id>
     <content type="html"><![CDATA[<p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
 
@@ -50,7 +50,7 @@ file1.txt file2.txt
 <pre><code>ack hello -l | xargs sed -i '' 's/hello/bye/g'
 </code></pre>
 
-<p>The -i flag allows for in place editing on the file. in the regex, the s replaces hello with bye and the g indicates globally, in case hello is found more than once in the file. The &lsquo;&rsquo; is sending the change into the correct output file.</p>
+<p>The -i flag allows for in place editing on the file. In the regex, the s replaces hello with bye and the g indicates globally, in case hello is found more than once in the file. The &lsquo;&rsquo; is sending the change into the correct output file.</p>
 ]]></content>
   </entry>
   
