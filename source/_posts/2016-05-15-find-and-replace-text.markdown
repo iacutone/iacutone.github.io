@@ -42,7 +42,7 @@ Finally, we pipe the arguments from xargs to sed.
 ack hello -l | xargs sed -i '' 's/hello/bye/g'
 ```
 
-The -i flag allows for in place editing on the file. in the regex, the s replaces hello with bye and the g indicates globally, in case hello is found more than once in the file. The '' is sending the change into the correct output file.
+The -i flag allows for in place editing on the file. In the regex, the s replaces hello with bye and the g indicates globally, in case hello is found more than once in the file. The '' is sending the change into the correct output file.
 
 
 
