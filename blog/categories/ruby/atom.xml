@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-06-02T15:35:56-05:00</updated>
+  <updated>2016-07-14T17:41:50-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,9 +14,72 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Rails Before_action Method]]></title>
+    <link href="http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/"/>
+    <updated>2016-07-13T13:31:20-04:00</updated>
+    <id>http://iacutone.github.io/blog/2016/07/13/rails-before-action-method</id>
+    <content type="html"><![CDATA[<p>I did not know you could give a <code>before_action</code> a block argument. This is a benefit because you do not have to create a ruby method and pass the method into the <code>before_action</code>.</p>
+
+<p>This got me thinking, what does <code>before_action</code> look like in Rails? The following is the source code from Rails 4.2.7, from <code>AbstractController::Callbacks::ClassMethods</code>.</p>
+
+<pre><code class="ruby"># :method: before_action
+#
+# :call-seq: before_action(names, block)
+#
+# Append a callback before actions. See _insert_callbacks for parameter details.
+
+# Take callback names and an optional callback proc, normalize them,
+# then call the block with each callback. This allows us to abstract
+# the normalization across several methods that use it.
+#
+# ==== Parameters
+# * &lt;tt&gt;callbacks&lt;/tt&gt; - An array of callbacks, with an optional
+#   options hash as the last parameter.
+# * &lt;tt&gt;block&lt;/tt&gt;    - A proc that should be added to the callbacks.
+#
+# ==== Block Parameters
+# * &lt;tt&gt;name&lt;/tt&gt;     - The callback to be added
+# * &lt;tt&gt;options&lt;/tt&gt;  - A hash of options to be used when adding the callback
+
+def _insert_callbacks(callbacks, block = nil)
+  options = callbacks.extract_options!
+  _normalize_callback_options(options)
+  callbacks.push(block) if block
+  callbacks.each do |callback|
+    yield callback, options
+  end
+end
+
+[:before, :after, :around].each do |callback|
+  define_method "#{callback}_action" do |*names, &amp;blk|
+    _insert_callbacks(names, blk) do |name, options|
+      set_callback(:process_action, callback, name, options)
+    end
+  end
+end
+</code></pre>
+
+<p>And I can do cool things like:</p>
+
+<pre><code class="ruby">before_action -&gt; {
+  @foo = Model.find params[:bar]
+}
+</code></pre>
+
+<p>I would like to point out the <code>set_callback</code> method.</p>
+
+<pre><code class="ruby">before_action :authenticate
+
+# can also be called like this
+set_callback :process_action, :before, :authenticate
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Extend and Include in Ruby]]></title>
     <link href="http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby/"/>
-    <updated>2016-06-02T15:25:45-05:00</updated>
+    <updated>2016-06-02T16:25:45-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby</id>
     <content type="html"><![CDATA[<p>I have been trying to clean up some old code with Ruby modules. This post is to help me remember the differences between <code>include</code> and <code>extend</code> in Ruby.</p>
 
@@ -163,77 +226,6 @@ end
 <p>Helpful Links</p>
 
 <p><a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-14/docs/message-expectations/calling-the-original-method">Calling the original method</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Shared Contexts With RSpec]]></title>
-    <link href="http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec/"/>
-    <updated>2015-11-20T16:45:46-05:00</updated>
-    <id>http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec</id>
-    <content type="html"><![CDATA[<p>In the past, I used traits with my factories. Below is a simple example of defining a trait:</p>
-
-<h3>Using traits</h3>
-
-<pre><code class="ruby donations_factories.rb">  FactoryGirl.define do
-    factory :donation do
-      trait :with_amount do
-        amount 10
-      end
-
-      trait :no_amount do
-        amount 0
-      end
-    end
-  end
-</code></pre>
-
-<p>An example spec:</p>
-
-<pre><code class="ruby donation_spec.rb">  RSpec.describe 'Donation Matching', :type =&gt; :model do
-
-    context 'with an amount' do
-      let(:donation) { create(:donation, :with_amount) }
-    end
-
-    context 'with no amount' do
-      let(:donation) { create(:donation, :no_amount) }
-    end
-  end
-</code></pre>
-
-<p>However, I believe that using a shared context is a clearer approach. Defining the amount in a shared context and overriding the amount allows more control over testing use cases.</p>
-
-<h3>Using a shared context</h3>
-
-<pre><code class="ruby donation_spec.rb">  require 'support/shared_contexts/donor_with_donation_context'
-
-  RSpec.describe 'Donation Matching', :type =&gt; :model do
-    include_context 'a donor with a donation'
-
-    context 'with an amount' do
-      // donation.amount == 10 (defined in the shared context)
-    end
-
-    context 'with no amount' do
-      let(:amount) { 0 }
-      // donation.amount == 0
-    end
-
-    context 'with a gnarly' do
-      let(:amount) { 09709780 }
-    end
-  end
-</code></pre>
-
-<pre><code class="ruby spec/support/shared_contexts/donor_with_donation_context.rb">  RSpec.shared_context 'a donor with a donation' do
-    let(:amount) { 10 }
-
-    let(:donation) { create(:donation, amount: amount) }
-  end
-</code></pre>
-
-<p>I especially like the shared context approach because you can have shared context and redefine attributes as needed in specs.</p>
 ]]></content>
   </entry>
   

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>The Yipit API and Whenever Gem - Iacutone.rb</title>
+  <title>Rails Before_action Method - Iacutone.rb</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content="Last week Alex and I presented Platt101 at our NYC on Rails Meetup, at the Flatiron School. Platt101 let's a user write reviews about restaurants &hellip;">
+  <meta name="description" content="I did not know you could give a before_action a block argument. This is a benefit because you do not have to create a ruby method and pass the method &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://iacutone.github.io/blog/2013/04/16/the-yipit-api-and-whenever-gem">
+  <link rel="canonical" href="http://iacutone.github.io/blog/2016/07/13/rails-before-action-method">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Iacutone.rb" type="application/atom+xml">
@@ -115,7 +115,7 @@
   <header>
     
       
-        <h1 class="entry-title">The Yipit API and Whenever Gem</h1>
+        <h1 class="entry-title">Rails Before_action Method</h1>
       
     
     
@@ -125,7 +125,7 @@
 
 
 
-<time class='entry-date' datetime='2013-04-16T17:05:00-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>5:05 pm</span></time>
+<time class='entry-date' datetime='2016-07-13T13:31:20-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:31 pm</span></time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -135,40 +135,106 @@
   </header>
 
 
-<div class="entry-content"><p>Last week Alex and I presented Platt101 at our NYC on Rails Meetup, at the Flatiron School.  Platt101 let's a user write reviews about restaurants they have been to and renders those restaurants on a Google Map.  The restaurants are based on the 101 best according to New York Magazine.  The restaurants a user has been to render in a different color than restaurants a user hasn't had the pleasure of dining.  A fellow student (h/t Anthony) suggested we impliment a GroupOn link in our restaurant list in order for a user to provide the user incentive to go dine at given restaurants.</p>
+<div class="entry-content"><p>I did not know you could give a <code>before_action</code> a block argument. This is a benefit because you do not have to create a ruby method and pass the method into the <code>before_action</code>.</p>
+
+<p>This got me thinking, what does <code>before_action</code> look like in Rails? The following is the source code from Rails 4.2.7, from <code>AbstractController::Callbacks::ClassMethods</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># :method: before_action</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># :call-seq: before_action(names, block)</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Append a callback before actions. See _insert_callbacks for parameter details.</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Take callback names and an optional callback proc, normalize them,</span>
+</span><span class='line'><span class="c1"># then call the block with each callback. This allows us to abstract</span>
+</span><span class='line'><span class="c1"># the normalization across several methods that use it.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># ==== Parameters</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;callbacks&lt;/tt&gt; - An array of callbacks, with an optional</span>
+</span><span class='line'><span class="c1">#   options hash as the last parameter.</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;block&lt;/tt&gt;    - A proc that should be added to the callbacks.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># ==== Block Parameters</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;name&lt;/tt&gt;     - The callback to be added</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;options&lt;/tt&gt;  - A hash of options to be used when adding the callback</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">_insert_callbacks</span><span class="p">(</span><span class="n">callbacks</span><span class="p">,</span> <span class="n">block</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">options</span> <span class="o">=</span> <span class="n">callbacks</span><span class="o">.</span><span class="n">extract_options!</span>
+</span><span class='line'>  <span class="n">_normalize_callback_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">callbacks</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="k">if</span> <span class="n">block</span>
+</span><span class='line'>  <span class="n">callbacks</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">callback</span><span class="o">|</span>
+</span><span class='line'>    <span class="k">yield</span> <span class="n">callback</span><span class="p">,</span> <span class="n">options</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">[</span><span class="ss">:before</span><span class="p">,</span> <span class="ss">:after</span><span class="p">,</span> <span class="ss">:around</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">callback</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">callback</span><span class="si">}</span><span class="s2">_action&quot;</span> <span class="k">do</span> <span class="o">|*</span><span class="n">names</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">blk</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">_insert_callbacks</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">blk</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span> <span class="n">options</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">set_callback</span><span class="p">(</span><span class="ss">:process_action</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>And I can do cool things like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_action</span> <span class="o">-&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="vi">@foo</span> <span class="o">=</span> <span class="no">Model</span><span class="o">.</span><span class="n">find</span> <span class="n">params</span><span class="o">[</span><span class="ss">:bar</span><span class="o">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p> We decided to use the <a href='http://yipit.com/about/api/'>Yipit API</a> in order to aggregate all discount incentives from numerous discount sites such as GroupOn.  We accessed the Yipit API via the Yipit <a href='https://github.com/gangster/yipit'>gem</a> for Ruby on Rails, created by Gangster.  Aside from our client session running a few times, the gem provided for all of our data parsing needs.  The Yelp API we used to seed our database with relevant restaurant information included phone numbers.  We searched the phone numbers in our database against phone numbers on Yipit in order to find deals for the given restaurants on our list.  This functionality is provided with a rake task.  Here is the code: </p>
+<p>I would like to point out the <code>set_callback</code> method.</p>
 
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_action</span> <span class="ss">:authenticate</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># can also be called like this</span>
+</span><span class='line'><span class="n">set_callback</span> <span class="ss">:process_action</span><span class="p">,</span> <span class="ss">:before</span><span class="p">,</span> <span class="ss">:authenticate</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p><br></p>
-
-<p><img src = "/images/yipit.png" height = "500" width = "500"></p>
-
-
-
-
-<p> The rake task provides us the ability to use the Whenever gem in order to run the rake task everyday.  This way our database in reseeded with new data about restaurant deals on a daily basis.  The Whenever gem was easy to impliment.</p>
-
-
-<p><br></p>
-
-<p><img src = "/images/whenever-2.png" height = "500" width = "500"></p>
-
-
-
-
-<p>This code is automatically added to your config > schedule.rb when you run whenever . in terminal.  You can customize Whenever to run whenever you want.</p>
-
-
-
-
-<p>Now, this all works well in development, but Platt101 is deployed on Heroku.  In production, we needed to reset up the Whenever gem.  This is also easy to accomplish on Heroku. Use <a href='https://addons.heroku.com/scheduler'>Heroku Scheduler</a> in order to run a chron job in production.  They do make you use input your credit card info, which is whack, but it says free... we shall see.</p>
-
-
-<p><a href='http://www.platt101.com'>Platt101 can be found here.</a></p>
 </div>
 
 
@@ -185,16 +251,22 @@
 
 
 
-<time class='entry-date' datetime='2013-04-16T17:05:00-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>5:05 pm</span></time>
+<time class='entry-date' datetime='2016-07-13T13:31:20-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:31 pm</span></time>
       
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2013/04/16/the-yipit-api-and-whenever-gem/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2013/04/16/the-yipit-api-and-whenever-gem/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/" >Tweet</a>
   
   
   
@@ -203,10 +275,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/03/01/jambox/" title="Previous Post: Jambox">&laquo; Jambox</a>
+        <a class="basic-alignment left" href="/blog/2016/06/02/extend-and-include-in-ruby/" title="Previous Post: Extend and Include in Ruby">&laquo; Extend and Include in Ruby</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/04/22/binary-search-trees/" title="Next Post: Binary Search Trees">Binary Search Trees &raquo;</a>
       
     </p>
   </footer>
@@ -236,8 +306,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://iacutone.github.io/blog/2013/04/16/the-yipit-api-and-whenever-gem/';
-        var disqus_url = 'http://iacutone.github.io/blog/2013/04/16/the-yipit-api-and-whenever-gem/';
+        var disqus_identifier = 'http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/';
+        var disqus_url = 'http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/';
         var disqus_script = 'embed.js';
       
     (function () {

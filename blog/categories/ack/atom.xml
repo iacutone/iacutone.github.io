@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ack | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/ack/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-06-02T15:35:56-05:00</updated>
+  <updated>2016-07-14T17:41:50-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Find and Replace Text]]></title>
     <link href="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/"/>
-    <updated>2016-05-15T10:28:24-05:00</updated>
+    <updated>2016-05-15T11:28:24-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/05/15/find-and-replace-text</id>
     <content type="html"><![CDATA[<p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
 

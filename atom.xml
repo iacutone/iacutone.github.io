@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-06-02T15:35:56-05:00</updated>
+  <updated>2016-07-14T17:41:50-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,9 +14,117 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Rails Before_action Method]]></title>
+    <link href="http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/"/>
+    <updated>2016-07-13T13:31:20-04:00</updated>
+    <id>http://iacutone.github.io/blog/2016/07/13/rails-before-action-method</id>
+    <content type="html"><![CDATA[<p>I did not know you could give a <code>before_action</code> a block argument. This is a benefit because you do not have to create a ruby method and pass the method into the <code>before_action</code>.</p>
+
+<p>This got me thinking, what does <code>before_action</code> look like in Rails? The following is the source code from Rails 4.2.7, from <code>AbstractController::Callbacks::ClassMethods</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># :method: before_action</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># :call-seq: before_action(names, block)</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Append a callback before actions. See _insert_callbacks for parameter details.</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Take callback names and an optional callback proc, normalize them,</span>
+</span><span class='line'><span class="c1"># then call the block with each callback. This allows us to abstract</span>
+</span><span class='line'><span class="c1"># the normalization across several methods that use it.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># ==== Parameters</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;callbacks&lt;/tt&gt; - An array of callbacks, with an optional</span>
+</span><span class='line'><span class="c1">#   options hash as the last parameter.</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;block&lt;/tt&gt;    - A proc that should be added to the callbacks.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># ==== Block Parameters</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;name&lt;/tt&gt;     - The callback to be added</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;options&lt;/tt&gt;  - A hash of options to be used when adding the callback</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">_insert_callbacks</span><span class="p">(</span><span class="n">callbacks</span><span class="p">,</span> <span class="n">block</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">options</span> <span class="o">=</span> <span class="n">callbacks</span><span class="o">.</span><span class="n">extract_options!</span>
+</span><span class='line'>  <span class="n">_normalize_callback_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">callbacks</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="k">if</span> <span class="n">block</span>
+</span><span class='line'>  <span class="n">callbacks</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">callback</span><span class="o">|</span>
+</span><span class='line'>    <span class="k">yield</span> <span class="n">callback</span><span class="p">,</span> <span class="n">options</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">[</span><span class="ss">:before</span><span class="p">,</span> <span class="ss">:after</span><span class="p">,</span> <span class="ss">:around</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">callback</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">callback</span><span class="si">}</span><span class="s2">_action&quot;</span> <span class="k">do</span> <span class="o">|*</span><span class="n">names</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">blk</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">_insert_callbacks</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">blk</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span> <span class="n">options</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">set_callback</span><span class="p">(</span><span class="ss">:process_action</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And I can do cool things like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_action</span> <span class="o">-&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="vi">@foo</span> <span class="o">=</span> <span class="no">Model</span><span class="o">.</span><span class="n">find</span> <span class="n">params</span><span class="o">[</span><span class="ss">:bar</span><span class="o">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I would like to point out the <code>set_callback</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_action</span> <span class="ss">:authenticate</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># can also be called like this</span>
+</span><span class='line'><span class="n">set_callback</span> <span class="ss">:process_action</span><span class="p">,</span> <span class="ss">:before</span><span class="p">,</span> <span class="ss">:authenticate</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Extend and Include in Ruby]]></title>
     <link href="http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby/"/>
-    <updated>2016-06-02T15:25:45-05:00</updated>
+    <updated>2016-06-02T16:25:45-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby</id>
     <content type="html"><![CDATA[<p>I have been trying to clean up some old code with Ruby modules. This post is to help me remember the differences between <code>include</code> and <code>extend</code> in Ruby.</p>
 
@@ -76,7 +184,7 @@
   <entry>
     <title type="html"><![CDATA[Find and Replace Text]]></title>
     <link href="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/"/>
-    <updated>2016-05-15T10:28:24-05:00</updated>
+    <updated>2016-05-15T11:28:24-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/05/15/find-and-replace-text</id>
     <content type="html"><![CDATA[<p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
 
@@ -620,7 +728,7 @@
   <entry>
     <title type="html"><![CDATA[Shell Function]]></title>
     <link href="http://iacutone.github.io/blog/2015/10/30/shell-function/"/>
-    <updated>2015-10-30T22:34:34-05:00</updated>
+    <updated>2015-10-30T23:34:34-04:00</updated>
     <id>http://iacutone.github.io/blog/2015/10/30/shell-function</id>
     <content type="html"><![CDATA[<p>I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video sites.&rdquo; It&rsquo;s super useful. However, it default downloads to the current terminal directory. Let&rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.</p>
 
@@ -657,7 +765,7 @@
   <entry>
     <title type="html"><![CDATA[The Setter Method in a Rails Model]]></title>
     <link href="http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model/"/>
-    <updated>2015-10-23T15:30:53-05:00</updated>
+    <updated>2015-10-23T16:30:53-04:00</updated>
     <id>http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model</id>
     <content type="html"><![CDATA[<p>At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&rsquo;s say we need to do something in a before_save callback such as lowercase a user&rsquo;s email.</p>
 
@@ -758,7 +866,7 @@
   <entry>
     <title type="html"><![CDATA[Ruby's Fetch Method]]></title>
     <link href="http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/"/>
-    <updated>2015-09-18T18:15:29-05:00</updated>
+    <updated>2015-09-18T19:15:29-04:00</updated>
     <id>http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method</id>
     <content type="html"><![CDATA[<p>Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash.</p>
 
@@ -835,7 +943,7 @@
   <entry>
     <title type="html"><![CDATA[Swift Basics]]></title>
     <link href="http://iacutone.github.io/blog/2015/09/09/swift-basics/"/>
-    <updated>2015-09-09T18:48:12-05:00</updated>
+    <updated>2015-09-09T19:48:12-04:00</updated>
     <id>http://iacutone.github.io/blog/2015/09/09/swift-basics</id>
     <content type="html"><![CDATA[<h1>String Interpolation</h1>
 
@@ -1078,7 +1186,7 @@
   <entry>
     <title type="html"><![CDATA[My Return to Blogging]]></title>
     <link href="http://iacutone.github.io/blog/2015/09/04/my-return-to-blogging/"/>
-    <updated>2015-09-04T19:45:08-05:00</updated>
+    <updated>2015-09-04T20:45:08-04:00</updated>
     <id>http://iacutone.github.io/blog/2015/09/04/my-return-to-blogging</id>
     <content type="html"><![CDATA[<p>The goal of this blog is to refine my writing skills. In order to fulfill this goal I will write about something interesting I learned on a weekly basis. I find that if I do not get into a routine, I will not fulfill my goal. So, every Friday after work I will post on this blog. I have no goals about the legth of posts, but to write something with clarity and thoughfulness.</p>
 ]]></content>
@@ -1481,7 +1589,7 @@
   <entry>
     <title type="html"><![CDATA[Testing Your Way to Success]]></title>
     <link href="http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success/"/>
-    <updated>2013-10-22T21:36:00-05:00</updated>
+    <updated>2013-10-22T21:36:00-04:00</updated>
     <id>http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success</id>
     <content type="html"><![CDATA[<p>I have been immersed in production codebases for my <a href='fohrcard.com'>Fohr Card</a> and <a href='http://www.fracturedatlas.org/'>Fractured Atlas</a> projects.  At first, it feel initimidating trying to figure out all of the models and related associations.  I have found that a great way to wrap your head around the code base is to create a new branch and test the code.</p>
 
@@ -1585,198 +1693,6 @@
 
 <p><h3>Other Resources</h3>
 <p>I found this book invaluable in learning best practices in testing: <a href='https://leanpub.com/everydayrailsrspec'>Everday RSpec</a></br>h/t Victoria Friedman</p></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Changing Your Password From Scratch]]></title>
-    <link href="http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch/"/>
-    <updated>2013-09-07T01:08:00-05:00</updated>
-    <id>http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch</id>
-    <content type="html"><![CDATA[<p> So say you are using devise and have none of the has_secure_password medthod available to you.  One should learn the bcrypt gem... and needs to abstract some methods in order to parse an encrypted password.  Cool, Bcrypt can do that, as located <a href ='  https://github.com/rails/rails/blob/b965ce361b89ad33a4a4b422f8e564233926c723/activemodel/lib/active_model/secure_password.rb#L42
-'>here.</a> Here is my modified code in order to confirm if a new password in order to apply a boolean value to an inputed password.</p>
-
-
-
-
-<figure class='code'><figcaption><span>edit.html.haml lang: ruby </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'> <span class="nt">%li</span>
-</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:current_password</span>
-</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">password_field</span> <span class="ss">:current_password</span>
-</span><span class='line'>      # =&gt; &#39;password&#39;
-</span><span class='line'>    <span class="nt">%li</span>
-</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:new_password</span><span class="p">,</span> <span class="s1">&#39;New Password&#39;</span>
-</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">password_field</span> <span class="ss">:new_password</span>
-</span><span class='line'>      # =&gt; &#39;new_password&#39;
-</span><span class='line'>
-</span><span class='line'>  <span class="nc">.buttons</span>
-</span><span class='line'>    <span class="nt">%button</span> Save
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>user.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="n">unencrypted_password</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">if</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span> <span class="o">==</span> <span class="n">unencrypted_password</span> <span class="o">&amp;&amp;</span> <span class="nb">self</span>
-</span><span class='line'>      <span class="n">bcrypt</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span>
-</span><span class='line'>      <span class="c1"># creates a bcrypt variable if the encrypted passwors result is true</span>
-</span><span class='line'>      <span class="c1"># =&gt; &quot;$2a$10$wgOzLhy84peHUD9wr9UkgOKRpwfls/0h48NYVvKIOdUdbz3XOEpSK&quot; </span>
-</span><span class='line'>      <span class="n">password</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">hash_secret</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">bcrypt</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span>
-</span><span class='line'>      <span class="c1"># then salts the new password</span>
-</span><span class='line'>      <span class="c1"># =&gt; &quot;$2a$10$VUNoD3xdAp7ytTIsTyH5feY.DNUKA4efIdkcI6ViBQ532o8lyNV/e&quot; </span>
-</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="kp">nil</span> <span class="k">unless</span> <span class="n">reset_secure_compare</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">encrypted_password</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kp">true</span>
-</span><span class='line'>    <span class="k">else</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span> <span class="o">!=</span> <span class="n">unencrypted_password</span> <span class="o">&amp;&amp;</span> <span class="nb">self</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kp">false</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p> <p>You might be wondering what the reset_secure_password method is doing.  Well, it is pulled from the Devise docs and is preventing <a href='http://en.wikipedia.org/wiki/Timing_attack'>timing attacks,</a> when an attacker attempts to compromise an encryption by analyzing the time taken in order to execute the password and salting algorithms.</p></p>
-
-<p>Cool, now I can pass my current_password attribute to make sure it is true.  I need to make a custom <a href='http://edgeguides.rubyonrails.org/active_record_validations.html'>Active Record Validations.</a></p>
-
-
-
-
-<figure class='code'><figcaption><span>user.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="k">def</span> <span class="nf">correct_password_update_validator</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">true</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">encrypted_password</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">new_password</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>   <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>If this validates, encrypted_password on the database returns true.  Now I need validations for events with blank fields (I want nothing to happen), and also, if current_password is blank and new_password and present, visa versa.</p>
-
-
-
-
-<figure class='code'><figcaption><span>user.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">validate</span> <span class="ss">:incorrect_password_update_validator</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
-</span><span class='line'>  <span class="n">validate</span> <span class="ss">:correct_password_update_validator</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
-</span><span class='line'>  <span class="n">validate</span> <span class="ss">:current_password_present</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
-</span><span class='line'>  <span class="n">validate</span> <span class="ss">:new_password_present</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
-</span><span class='line'>  <span class="n">validate</span> <span class="ss">:current_password_true_present</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">private</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">current_password_true_present</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">true</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">blank?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:new_password</span><span class="p">,</span> <span class="s2">&quot; needs to be filled out.&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">current_password_present</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">blank?</span>
-</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:current_password</span><span class="p">,</span> <span class="s2">&quot; needs to be filled out.&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">new_password_present</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">blank?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:new_password</span><span class="p">,</span> <span class="s2">&quot; needs to be filled out.&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">incorrect_password_update_validator</span>
-</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:current_password</span><span class="p">,</span> <span class="s2">&quot; does not match.&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">reset_secure_compare</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">blank?</span> <span class="o">||</span> <span class="n">b</span><span class="o">.</span><span class="n">blank?</span> <span class="o">||</span> <span class="n">a</span><span class="o">.</span><span class="n">bytesize</span> <span class="o">!=</span> <span class="n">b</span><span class="o">.</span><span class="n">bytesize</span>
-</span><span class='line'>    <span class="n">l</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">unpack</span> <span class="s2">&quot;C</span><span class="si">#{</span><span class="n">a</span><span class="o">.</span><span class="n">bytesize</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span class='line'>    <span class="n">b</span><span class="o">.</span><span class="n">each_byte</span> <span class="p">{</span> <span class="o">|</span><span class="n">byte</span><span class="o">|</span> <span class="n">res</span> <span class="o">|=</span> <span class="n">byte</span> <span class="o">^</span> <span class="n">l</span><span class="o">.</span><span class="n">shift</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>Now, all use cases of the user improperly editing the form result in false and a validation error occurs.</p>
-
 ]]></content>
   </entry>
   

@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I am creating an app to provide food cart locations in Manhattan. Here is the code. Food carts generally post their locations on Twitter; in order to &hellip;">
+  <meta name="description" content="So say you are using devise and have none of the has_secure_password medthod available to you. One should learn the bcrypt gem... and needs to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,6 +117,221 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/09/07/changing-your-password-from-scratch/">Changing Your Password From Scratch</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-09-07T01:08:00-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:08 am</span></time>
+        
+         | <a href="/blog/2013/09/07/changing-your-password-from-scratch/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p> So say you are using devise and have none of the has_secure_password medthod available to you.  One should learn the bcrypt gem... and needs to abstract some methods in order to parse an encrypted password.  Cool, Bcrypt can do that, as located <a href ='  https://github.com/rails/rails/blob/b965ce361b89ad33a4a4b422f8e564233926c723/activemodel/lib/active_model/secure_password.rb#L42
+'>here.</a> Here is my modified code in order to confirm if a new password in order to apply a boolean value to an inputed password.</p>
+
+
+
+
+<figure class='code'><figcaption><span>edit.html.haml lang: ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'> <span class="nt">%li</span>
+</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:current_password</span>
+</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">password_field</span> <span class="ss">:current_password</span>
+</span><span class='line'>      # =&gt; &#39;password&#39;
+</span><span class='line'>    <span class="nt">%li</span>
+</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="ss">:new_password</span><span class="p">,</span> <span class="s1">&#39;New Password&#39;</span>
+</span><span class='line'>      <span class="p">=</span> <span class="n">f</span><span class="o">.</span><span class="n">password_field</span> <span class="ss">:new_password</span>
+</span><span class='line'>      # =&gt; &#39;new_password&#39;
+</span><span class='line'>
+</span><span class='line'>  <span class="nc">.buttons</span>
+</span><span class='line'>    <span class="nt">%button</span> Save
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>user.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="n">unencrypted_password</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span> <span class="o">==</span> <span class="n">unencrypted_password</span> <span class="o">&amp;&amp;</span> <span class="nb">self</span>
+</span><span class='line'>      <span class="n">bcrypt</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># creates a bcrypt variable if the encrypted passwors result is true</span>
+</span><span class='line'>      <span class="c1"># =&gt; &quot;$2a$10$wgOzLhy84peHUD9wr9UkgOKRpwfls/0h48NYVvKIOdUdbz3XOEpSK&quot; </span>
+</span><span class='line'>      <span class="n">password</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Engine</span><span class="o">.</span><span class="n">hash_secret</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">bcrypt</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># then salts the new password</span>
+</span><span class='line'>      <span class="c1"># =&gt; &quot;$2a$10$VUNoD3xdAp7ytTIsTyH5feY.DNUKA4efIdkcI6ViBQ532o8lyNV/e&quot; </span>
+</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="kp">nil</span> <span class="k">unless</span> <span class="n">reset_secure_compare</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">encrypted_password</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kp">true</span>
+</span><span class='line'>    <span class="k">else</span> <span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">encrypted_password</span><span class="p">)</span> <span class="o">!=</span> <span class="n">unencrypted_password</span> <span class="o">&amp;&amp;</span> <span class="nb">self</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> <p>You might be wondering what the reset_secure_password method is doing.  Well, it is pulled from the Devise docs and is preventing <a href='http://en.wikipedia.org/wiki/Timing_attack'>timing attacks,</a> when an attacker attempts to compromise an encryption by analyzing the time taken in order to execute the password and salting algorithms.</p></p>
+
+<p>Cool, now I can pass my current_password attribute to make sure it is true.  I need to make a custom <a href='http://edgeguides.rubyonrails.org/active_record_validations.html'>Active Record Validations.</a></p>
+
+
+
+
+<figure class='code'><figcaption><span>user.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="k">def</span> <span class="nf">correct_password_update_validator</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">true</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">encrypted_password</span> <span class="o">=</span> <span class="o">::</span><span class="no">BCrypt</span><span class="o">::</span><span class="no">Password</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">new_password</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>   <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>If this validates, encrypted_password on the database returns true.  Now I need validations for events with blank fields (I want nothing to happen), and also, if current_password is blank and new_password and present, visa versa.</p>
+
+
+
+
+<figure class='code'><figcaption><span>user.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">validate</span> <span class="ss">:incorrect_password_update_validator</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:correct_password_update_validator</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:current_password_present</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:new_password_present</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>  <span class="n">validate</span> <span class="ss">:current_password_true_present</span><span class="p">,</span> <span class="ss">on</span><span class="p">:</span> <span class="ss">:update</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">current_password_true_present</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">true</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">blank?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:new_password</span><span class="p">,</span> <span class="s2">&quot; needs to be filled out.&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">current_password_present</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:current_password</span><span class="p">,</span> <span class="s2">&quot; needs to be filled out.&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">new_password_present</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">blank?</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:new_password</span><span class="p">,</span> <span class="s2">&quot; needs to be filled out.&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">incorrect_password_update_validator</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">current_password</span><span class="p">)</span> <span class="o">==</span> <span class="kp">false</span> <span class="ow">and</span> <span class="n">current_password</span><span class="o">.</span><span class="n">present?</span> <span class="ow">and</span> <span class="n">new_password</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>      <span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="ss">:current_password</span><span class="p">,</span> <span class="s2">&quot; does not match.&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">reset_secure_compare</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">blank?</span> <span class="o">||</span> <span class="n">b</span><span class="o">.</span><span class="n">blank?</span> <span class="o">||</span> <span class="n">a</span><span class="o">.</span><span class="n">bytesize</span> <span class="o">!=</span> <span class="n">b</span><span class="o">.</span><span class="n">bytesize</span>
+</span><span class='line'>    <span class="n">l</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">unpack</span> <span class="s2">&quot;C</span><span class="si">#{</span><span class="n">a</span><span class="o">.</span><span class="n">bytesize</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="n">b</span><span class="o">.</span><span class="n">each_byte</span> <span class="p">{</span> <span class="o">|</span><span class="n">byte</span><span class="o">|</span> <span class="n">res</span> <span class="o">|=</span> <span class="n">byte</span> <span class="o">^</span> <span class="n">l</span><span class="o">.</span><span class="n">shift</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<p>Now, all use cases of the user improperly editing the form result in false and a validation error occurs.</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/">Grep and Scan Methods With Regular Expressions in Ruby</a></h1>
     
     
@@ -126,7 +341,7 @@
 
 
 
-<time class='entry-date' datetime='2013-08-22T18:56:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>6:56 pm</span></time>
+<time class='entry-date' datetime='2013-08-22T18:56:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>6:56 pm</span></time>
         
          | <a href="/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/#disqus_thread">Comments</a>
         
@@ -215,7 +430,7 @@
 
 
 
-<time class='entry-date' datetime='2013-08-15T21:09:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:09 pm</span></time>
+<time class='entry-date' datetime='2013-08-15T21:09:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:09 pm</span></time>
         
          | <a href="/blog/2013/08/15/adventures-in-jquery/#disqus_thread">Comments</a>
         
@@ -321,7 +536,7 @@
 
 
 
-<time class='entry-date' datetime='2013-07-15T20:44:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:44 pm</span></time>
+<time class='entry-date' datetime='2013-07-15T20:44:00-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:44 pm</span></time>
         
          | <a href="/blog/2013/07/15/sidekiq-and-carrierwave/#disqus_thread">Comments</a>
         
@@ -547,7 +762,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-30T00:04:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>12:04 am</span></time>
+<time class='entry-date' datetime='2013-06-30T00:04:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>12:04 am</span></time>
         
          | <a href="/blog/2013/06/30/gon-gem/#disqus_thread">Comments</a>
         
@@ -727,7 +942,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-23T01:59:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>1:59 am</span></time>
+<time class='entry-date' datetime='2013-06-23T01:59:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>1:59 am</span></time>
         
          | <a href="/blog/2013/06/23/pluck-method-in-active-record/#disqus_thread">Comments</a>
         
@@ -921,7 +1136,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-21T13:13:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2013</span></span> <span class='time'>1:13 pm</span></time>
+<time class='entry-date' datetime='2013-06-21T13:13:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2013</span></span> <span class='time'>1:13 pm</span></time>
         
          | <a href="/blog/2013/06/21/using-impress-dot-js-with-rails/#disqus_thread">Comments</a>
         
@@ -2612,7 +2827,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-18T01:29:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:29 am</span></time>
+<time class='entry-date' datetime='2013-06-18T01:29:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>1:29 am</span></time>
         
          | <a href="/blog/2013/06/18/client-side-validations/#disqus_thread">Comments</a>
         
@@ -2775,7 +2990,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-10T15:45:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>3:45 pm</span></time>
+<time class='entry-date' datetime='2013-06-10T15:45:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>3:45 pm</span></time>
         
          | <a href="/blog/2013/06/10/amazon-s3/#disqus_thread">Comments</a>
         
@@ -2995,7 +3210,7 @@
 
 
 
-<time class='entry-date' datetime='2013-06-05T18:59:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>6:59 pm</span></time>
+<time class='entry-date' datetime='2013-06-05T18:59:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>6:59 pm</span></time>
         
          | <a href="/blog/2013/06/05/amazon-s3/#disqus_thread">Comments</a>
         
@@ -3238,126 +3453,6 @@
 <p><a href='http://railscasts.com/episodes/253-carrierwave-file-uploads'>Carrierwave Railscast</a><br />
 <a href='http://railscasts.com/episodes/383-uploading-to-amazon-s3'>Uploading to Amazon S3 Railscast</a><br />
 <a href='http://railscasts.com/episodes/366-sidekiq'>Sidekiq Railscast</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/22/binary-search-trees/">Binary Search Trees</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-04-22T14:13:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>2:13 pm</span></time>
-        
-         | <a href="/blog/2013/04/22/binary-search-trees/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Properties</h2>
-
-
-<ol>
-    <li>The left subtree of a node contains only nodes with keys less than the node's key.</li>
-    <li>The right subtree of a node contains only nodes with keys greater than the node's key.</li>
-    <li>The left and right subtree must each also be a binary search tree.</li>
-    <li>There must be no duplicate nodes.</li>
-</ol>
-
-
-
-
-<h3>Benefits</h3>
-
-
-<ul>
-    <li>Insert, find and remove any entry</li>
-    <li>Quickly find entry with min/max key</li>
-    <li>Entry nearest another entry, like in a dictionary, but cannot remember how to spell the word</li>
-</ul>
-
-
-
-
-<h3>BST Invariant</h3>
-
-
-<p><p>For any node x, every key in the left subtree of x is &lt;= x&rsquo;s key</p>
-<p>For any node x, every key in the right subtree of x is >= x&rsquo;s key</p>
-<p><img src = "/images/BST.png" height = "500" width = "500"></p><br>
-<p>Inorder traversal of a binary search tree visits nodes in sorted order, the left of root (18) are displayed before the right.<p/></p>
-
-<p><h3>Operations</h3>
-<h4>Entry Find (Object k)</h4>
-<ul>
-    <li>Object looking for compared to object stored in key (if it is there)</li>
-    <li>If true, returns the entry</li>
-    <li>Else returns nil</li>
-    <li>Good for exact matches, can do faster with hash table</li>
-</ul><br>
-<p>How to find smallest key >= k or largest key &lt;= k?<p/>
-    <p>When searching down the tree for a key k that is not in the tree, we encounter both.</p>
-    <ul>
-        <li>Node containing smallest key > k, and</li>
-        <li>Node containing largest key &lt; k </li>
-    </ul><br></p>
-
-<pre><code>&lt;p&gt;Ex. search for 27 as k (from above pic)&lt;/p&gt;
-&lt;ul&gt;
-    &lt;li&gt;Keeps searching nodes to the right, gets to 28 and returns nil&lt;/li&gt;
-    &lt;li&gt;encounters 25 &lt; k and 28 &gt; k&lt;/li&gt;
-&lt;/ul&gt;
-</code></pre>
-
-<p><h4> Entry first();<br> -If empty return null, otherwise start at root and walk down left repeatedly until you reach node with no left child, that node has minimum key.</h4>
-<h4> Entry last();<br> -Mirror of left, but walks down right tree</h4></p>
-
-<p><h4>Entry insert(Object k, Object v);</h4>
-<ul>
-    <li>Follow same path through the tree as find();</li>
-    <li>When you reach null reference, replace null with reference to new node with entry(k, v), duplicate keys are allowed.</li>
-    <li>Puts new entry on the left subtree of old one</li>
-</ul></p>
-
-<p><h4>The delete operations (where shit gets complex)</h4>
-<h4>Entry remove(Object k);</h4>
-<ul>
-    <li>Find node n with key k, if k not found return null</li>
-    <li>If n has no children, detach it from parent</li>
-    <li>If n has one child, move child up to take n&rsquo;s place</li>
-    <li>If node has 2 children</li>
-    <ul>
-        <li>Suppose we want to remove 12 from above pic</li>
-        <li>Let x be the node in n&rsquo;s right subtree with smallest key</li>
-        <ul>
-            <li>Keep going to the left, in this case, 13 is node x, only has one child</li>
-            <ul>
-                <li>Remove x, has no left child and therefore, is easily removed</li>
-                <li>Replace n&rsquo;s key with x&rsquo;s key</li>
-            </ul>
-        </ul>
-    </ul>
-</ul></p>
-
-<p><p><img src = "/images/bstexample.png" height = "500" width = "500"></p><br></p>
-
-<p><p>h/t Jonathan Shewchuk at UC Berkeley</p>
-<a href='https://www.youtube.com/watch?v=V_3BM0ykITM'>His lecture via Youtube</a></p>
 </div>
   
   

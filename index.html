@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I have been trying to clean up some old code with Ruby modules. This post is to help me remember the differences between include and extend in Ruby. &hellip;">
+  <meta name="description" content="I did not know you could give a before_action a block argument. This is a benefit because you do not have to create a ruby method and pass the method &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,6 +117,137 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2016/07/13/rails-before-action-method/">Rails Before_action Method</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-07-13T13:31:20-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:31 pm</span></time>
+        
+         | <a href="/blog/2016/07/13/rails-before-action-method/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I did not know you could give a <code>before_action</code> a block argument. This is a benefit because you do not have to create a ruby method and pass the method into the <code>before_action</code>.</p>
+
+<p>This got me thinking, what does <code>before_action</code> look like in Rails? The following is the source code from Rails 4.2.7, from <code>AbstractController::Callbacks::ClassMethods</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># :method: before_action</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># :call-seq: before_action(names, block)</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Append a callback before actions. See _insert_callbacks for parameter details.</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Take callback names and an optional callback proc, normalize them,</span>
+</span><span class='line'><span class="c1"># then call the block with each callback. This allows us to abstract</span>
+</span><span class='line'><span class="c1"># the normalization across several methods that use it.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># ==== Parameters</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;callbacks&lt;/tt&gt; - An array of callbacks, with an optional</span>
+</span><span class='line'><span class="c1">#   options hash as the last parameter.</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;block&lt;/tt&gt;    - A proc that should be added to the callbacks.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># ==== Block Parameters</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;name&lt;/tt&gt;     - The callback to be added</span>
+</span><span class='line'><span class="c1"># * &lt;tt&gt;options&lt;/tt&gt;  - A hash of options to be used when adding the callback</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">_insert_callbacks</span><span class="p">(</span><span class="n">callbacks</span><span class="p">,</span> <span class="n">block</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">options</span> <span class="o">=</span> <span class="n">callbacks</span><span class="o">.</span><span class="n">extract_options!</span>
+</span><span class='line'>  <span class="n">_normalize_callback_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">callbacks</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="k">if</span> <span class="n">block</span>
+</span><span class='line'>  <span class="n">callbacks</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">callback</span><span class="o">|</span>
+</span><span class='line'>    <span class="k">yield</span> <span class="n">callback</span><span class="p">,</span> <span class="n">options</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">[</span><span class="ss">:before</span><span class="p">,</span> <span class="ss">:after</span><span class="p">,</span> <span class="ss">:around</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">callback</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">callback</span><span class="si">}</span><span class="s2">_action&quot;</span> <span class="k">do</span> <span class="o">|*</span><span class="n">names</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">blk</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">_insert_callbacks</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">blk</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span> <span class="n">options</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">set_callback</span><span class="p">(</span><span class="ss">:process_action</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And I can do cool things like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_action</span> <span class="o">-&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="vi">@foo</span> <span class="o">=</span> <span class="no">Model</span><span class="o">.</span><span class="n">find</span> <span class="n">params</span><span class="o">[</span><span class="ss">:bar</span><span class="o">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I would like to point out the <code>set_callback</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_action</span> <span class="ss">:authenticate</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># can also be called like this</span>
+</span><span class='line'><span class="n">set_callback</span> <span class="ss">:process_action</span><span class="p">,</span> <span class="ss">:before</span><span class="p">,</span> <span class="ss">:authenticate</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2016/06/02/extend-and-include-in-ruby/">Extend and Include in Ruby</a></h1>
     
     
@@ -126,7 +257,7 @@
 
 
 
-<time class='entry-date' datetime='2016-06-02T15:25:45-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2016</span></span> <span class='time'>3:25 pm</span></time>
+<time class='entry-date' datetime='2016-06-02T16:25:45-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2016</span></span> <span class='time'>4:25 pm</span></time>
         
          | <a href="/blog/2016/06/02/extend-and-include-in-ruby/#disqus_thread">Comments</a>
         
@@ -209,7 +340,7 @@
 
 
 
-<time class='entry-date' datetime='2016-05-15T10:28:24-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>10:28 am</span></time>
+<time class='entry-date' datetime='2016-05-15T11:28:24-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>11:28 am</span></time>
         
          | <a href="/blog/2016/05/15/find-and-replace-text/#disqus_thread">Comments</a>
         
@@ -825,57 +956,6 @@
 
 
 <p>I especially like the shared context approach because you can have shared context and redefine attributes as needed in specs.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/13/auto-layout-xcode-for-navigation-bar/">Auto Layout Xcode for Navigation Bar</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-13T19:03:02-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:03 pm</span></time>
-        
-         | <a href="/blog/2015/11/13/auto-layout-xcode-for-navigation-bar/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Finding auto layout information is difficult. The steps below pin a navigation bar to the top of the screen for all iOS devices.</p>
-
-<p><img class="center" src="/images/constraints.gif" title="" ></p>
-
-<h3>Steps</h3>
-
-<ul>
-<li>Make sure &ldquo;Navigation Bar&rdquo; is selected on the left menu</li>
-<li>Click the &ldquo;Pin&rdquo; button on the bottom right corner</li>
-<li>Click the top, left and right constraints</li>
-<li>Click the Height constraint</li>
-<li>Add the 4 contraints</li>
-</ul>
-
-
-<p>The above steps &ldquo;pin&rdquo; the navigation bar object to the top of the view and stretch the navigation bar to the sides of the view. The height constraint keeps a static height for the navigation bar.</p>
-
-<p>Helpful Links</p>
-
-<p><a href="https://github.com/codepath/ios_guides/wiki/Auto-Layout-Basics">Auto Layout Basics</a></p>
 </div>
   
   
