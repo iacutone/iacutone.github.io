@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I did not know you could give a before_action a block argument. This is a benefit because you do not have to create a ruby method and pass the method &hellip;">
+  <meta name="description" content="While setting up my VIM environment, I read a blogpost which states ack can ignore directories. For cleaner ack output you can setup the file below &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,7 +117,50 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2016/07/13/rails-before-action-method/">Rails Before_action Method</a></h1>
+      <h1 class="entry-title"><a href="/blog/2016/09/15/filtering-ack-results/">Filtering Ack Results</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-09-15T10:23:52-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>10:23 am</span></time>
+        
+         | <a href="/blog/2016/09/15/filtering-ack-results/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>While setting up my VIM environment, I read a blogpost which states ack can ignore directories. For cleaner <code>ack</code> output you can setup the file below:</p>
+
+<figure class='code'><figcaption><span>.ackrc</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>--ignore-dir<span class="o">=</span>log
+</span><span class='line'>--ignore-dir<span class="o">=</span>public/assets
+</span><span class='line'>--ignore-dir<span class="o">=</span>vendor/assets
+</span><span class='line'>--ignore-dir<span class="o">=</span>tmp/cache
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/07/13/rails-before-action-method/">Rails `before_action` Method</a></h1>
     
     
       <p class="meta">
@@ -384,7 +427,7 @@
 </span><span class='line'>file1.txt file2.txt</span></code></pre></td></tr></table></div></figure>
 
 
-<p>xargs is a Unix utility that constructs argument lists.</p>
+<p>xargs is a Unix utility that constructs argument lists and is smashing the filenames into one line.</p>
 
 <p>Finally, we pipe the arguments from xargs to sed.</p>
 
@@ -812,150 +855,6 @@
 <p>Helpful Links</p>
 
 <p><a href="http://bogardon.github.io/xcode/environment-variables/2013/05/20/configuring-env-variables-in-xcode.html">Configuring ENV Variables in XCode</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/20/shared-contexts-with-rspec/">Shared Contexts With RSpec</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-20T16:45:46-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:45 pm</span></time>
-        
-         | <a href="/blog/2015/11/20/shared-contexts-with-rspec/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In the past, I used traits with my factories. Below is a simple example of defining a trait:</p>
-
-<h3>Using traits</h3>
-
-<figure class='code'><figcaption><span>donations_factories.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">factory</span> <span class="ss">:donation</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">trait</span> <span class="ss">:with_amount</span> <span class="k">do</span>
-</span><span class='line'>        <span class="n">amount</span> <span class="mi">10</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">trait</span> <span class="ss">:no_amount</span> <span class="k">do</span>
-</span><span class='line'>        <span class="n">amount</span> <span class="mi">0</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>An example spec:</p>
-
-<figure class='code'><figcaption><span>donation_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="s1">&#39;Donation Matching&#39;</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="ss">:model</span> <span class="k">do</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with an amount&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:donation</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:donation</span><span class="p">,</span> <span class="ss">:with_amount</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with no amount&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:donation</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:donation</span><span class="p">,</span> <span class="ss">:no_amount</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>However, I believe that using a shared context is a clearer approach. Defining the amount in a shared context and overriding the amount allows more control over testing use cases.</p>
-
-<h3>Using a shared context</h3>
-
-<figure class='code'><figcaption><span>donation_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;support/shared_contexts/donor_with_donation_context&#39;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="s1">&#39;Donation Matching&#39;</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="ss">:model</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">include_context</span> <span class="s1">&#39;a donor with a donation&#39;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with an amount&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="sr">//</span> <span class="n">donation</span><span class="o">.</span><span class="n">amount</span> <span class="o">==</span> <span class="mi">10</span> <span class="p">(</span><span class="n">defined</span> <span class="k">in</span> <span class="n">the</span> <span class="n">shared</span> <span class="n">context</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with no amount&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:amount</span><span class="p">)</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">}</span>
-</span><span class='line'>      <span class="sr">//</span> <span class="n">donation</span><span class="o">.</span><span class="n">amount</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with a gnarly&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:amount</span><span class="p">)</span> <span class="p">{</span> <span class="mi">09709780</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>spec/support/shared_contexts/donor_with_donation_context.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">shared_context</span> <span class="s1">&#39;a donor with a donation&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:amount</span><span class="p">)</span> <span class="p">{</span> <span class="mi">10</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:donation</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:donation</span><span class="p">,</span> <span class="ss">amount</span><span class="p">:</span> <span class="n">amount</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I especially like the shared context approach because you can have shared context and redefine attributes as needed in specs.</p>
 </div>
   
   

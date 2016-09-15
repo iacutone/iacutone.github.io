@@ -9,7 +9,16 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="Finding auto layout information is difficult. The steps below pin a navigation bar to the top of the screen for all iOS devices. Steps Make sure & &hellip;">
+  <meta name="description" content="In the past, I used traits with my factories. Below is a simple example of defining a trait: Using traits donations_factories.rb1
+2
+3
+4
+5
+6
+7
+8
+9
+10 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,6 +120,150 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/20/shared-contexts-with-rspec/">Shared Contexts With RSpec</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-20T16:45:46-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:45 pm</span></time>
+        
+         | <a href="/blog/2015/11/20/shared-contexts-with-rspec/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In the past, I used traits with my factories. Below is a simple example of defining a trait:</p>
+
+<h3>Using traits</h3>
+
+<figure class='code'><figcaption><span>donations_factories.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">factory</span> <span class="ss">:donation</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">trait</span> <span class="ss">:with_amount</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">amount</span> <span class="mi">10</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">trait</span> <span class="ss">:no_amount</span> <span class="k">do</span>
+</span><span class='line'>        <span class="n">amount</span> <span class="mi">0</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>An example spec:</p>
+
+<figure class='code'><figcaption><span>donation_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="s1">&#39;Donation Matching&#39;</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="ss">:model</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with an amount&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:donation</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:donation</span><span class="p">,</span> <span class="ss">:with_amount</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with no amount&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:donation</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:donation</span><span class="p">,</span> <span class="ss">:no_amount</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, I believe that using a shared context is a clearer approach. Defining the amount in a shared context and overriding the amount allows more control over testing use cases.</p>
+
+<h3>Using a shared context</h3>
+
+<figure class='code'><figcaption><span>donation_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;support/shared_contexts/donor_with_donation_context&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="s1">&#39;Donation Matching&#39;</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="ss">:model</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">include_context</span> <span class="s1">&#39;a donor with a donation&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with an amount&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="sr">//</span> <span class="n">donation</span><span class="o">.</span><span class="n">amount</span> <span class="o">==</span> <span class="mi">10</span> <span class="p">(</span><span class="n">defined</span> <span class="k">in</span> <span class="n">the</span> <span class="n">shared</span> <span class="n">context</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with no amount&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:amount</span><span class="p">)</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'>      <span class="sr">//</span> <span class="n">donation</span><span class="o">.</span><span class="n">amount</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with a gnarly&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:amount</span><span class="p">)</span> <span class="p">{</span> <span class="mi">09709780</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>spec/support/shared_contexts/donor_with_donation_context.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">shared_context</span> <span class="s1">&#39;a donor with a donation&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:amount</span><span class="p">)</span> <span class="p">{</span> <span class="mi">10</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:donation</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:donation</span><span class="p">,</span> <span class="ss">amount</span><span class="p">:</span> <span class="n">amount</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I especially like the shared context approach because you can have shared context and redefine attributes as needed in specs.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1262,139 +1415,6 @@
   <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply'>Function.prototype.apply()</a></li>
 </ul>
 
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/22/testing-your-way-to-success/">Testing Your Way to Success</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-10-22T21:36:00-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>9:36 pm</span></time>
-        
-         | <a href="/blog/2013/10/22/testing-your-way-to-success/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have been immersed in production codebases for my <a href='fohrcard.com'>Fohr Card</a> and <a href='http://www.fracturedatlas.org/'>Fractured Atlas</a> projects.  At first, it feel initimidating trying to figure out all of the models and related associations.  I have found that a great way to wrap your head around the code base is to create a new branch and test the code.</p>
-
-
-
-
-<p>A good basic set-up is to start unit testing the models.  In order to do this depends on if your codebase is using a relational database or something like Mongoid.</p>
-
-
-
-
-<h3>Relational Databases</h3>
-
-
-<figure class='code'><figcaption><span>Gemfile </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;guard-rspec&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
-</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;rspec-rails&#39;</span>
-</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;factory_girl_rails&#39;</span>
-</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;faker&#39;</span>
-</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;shoulda-matchers&#39;</span>
-</span><span class='line'>     <span class="n">gem</span> <span class="s1">&#39;terminal-notifier-guard&#39;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<ul>
-    <li>Guard RSpec waits for you to save your files and automatically runs your tests, thereby reducing the time needed to run tests.</li>
-    <li>I like the RSpec syntax over Unit Test and Mini Test.</li>
-    <li>Factory Girl Rails creates objects for your tests.  This gem deserves its own blog post. </li>
-    <li>The Faker Gem is used in conjunction with Factory Girl Rails to create fake data.</li>
-    <li>I like to use Shoulda Matchers to test validaitons and associations in the code.  This gem and firing up Rails Console to play with the objects in my testing is the crux to learning a new codebase.</li>
-    <li>Some people find Terminal Notifier annoying, but it helps me know if my tests pass when I have Sublime maximized on my 11 inch MacBook Air screen.</li>
-</ul>
-
-
-<p></p>
-
-<h3>Mongoid</h3>
-
-
-<figure class='code'><figcaption><span>Gemfile </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;guard-rspec&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;fabrication&#39;</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;faker&#39;</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;rspec-rails&#39;</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;mongoid-rspec&#39;</span>
-</span><span class='line'>    <span class="n">gem</span> <span class="s1">&#39;terminal-notifier-guard&#39;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p><p>The gems for Mongoid testing are similar to those used in testing with a relational database.<p>
-<ul>
-    <li>The Fabrication gem is similar to building objects with Factory Girl, except the documentation website <a href='http://www.fabricationgem.org/'>rocks.</a></li>
-    <li>The Mongoid RSpec gem is similar to Shoulda-Matchers</li>
-</ul></p>
-
-<p><h3>Gems</h3>
-<a href='https://github.com/guard/guard-rspec'>Guard RSpec</a></br>
-<a href='https://github.com/rspec/rspec-rails'>RSpec Rails</a></br>
-<a href='https://github.com/thoughtbot/factory_girl_rails'>Factory Girl Rails</a></br>
-<a href='https://github.com/btelles/faker'>Faker</a></br>
-<a href='https://github.com/thoughtbot/shoulda-matchers'>Shoulda Matchers</a></br>
-<a href='https://github.com/Springest/terminal-notifier-guard'>Terminal Notifier Guard</a></br>
-<a href='https://github.com/paulelliott/fabrication'>Fabrication</a></br>
-<a href='https://github.com/evansagge/mongoid-rspec'>Mongoid RSpec</a></br></br></p>
-
-<p><h3>Other Resources</h3>
-<p>I found this book invaluable in learning best practices in testing: <a href='https://leanpub.com/everydayrailsrspec'>Everday RSpec</a></br>h/t Victoria Friedman</p></p>
 </div>
   
   

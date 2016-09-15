@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Grep | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/grep/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-07-14T17:41:50-04:00</updated>
+  <updated>2016-09-15T10:31:39-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Filtering Ack Results]]></title>
+    <link href="http://iacutone.github.io/blog/2016/09/15/filtering-ack-results/"/>
+    <updated>2016-09-15T10:23:52-04:00</updated>
+    <id>http://iacutone.github.io/blog/2016/09/15/filtering-ack-results</id>
+    <content type="html"><![CDATA[<p>While setting up my VIM environment, I read a blogpost which states ack can ignore directories. For cleaner <code>ack</code> output you can setup the file below:</p>
+
+<pre><code class="bash .ackrc">--ignore-dir=log
+--ignore-dir=public/assets
+--ignore-dir=vendor/assets
+--ignore-dir=tmp/cache
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Find and Replace Text]]></title>
@@ -43,7 +58,7 @@ file2.txt
 file1.txt file2.txt
 </code></pre>
 
-<p>xargs is a Unix utility that constructs argument lists.</p>
+<p>xargs is a Unix utility that constructs argument lists and is smashing the filenames into one line.</p>
 
 <p>Finally, we pipe the arguments from xargs to sed.</p>
 
