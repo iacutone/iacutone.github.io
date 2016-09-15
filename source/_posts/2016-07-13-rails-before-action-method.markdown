@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Rails before_action method
+title: Rails `before_action` Method
 date: 2016-07-13 13:31:20 -0400
 comments: true
 categories: ruby rails

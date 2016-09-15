@@ -34,7 +34,7 @@ ack hello -l | xargs
 file1.txt file2.txt
 ```
 
-xargs is a Unix utility that constructs argument lists.
+xargs is a Unix utility that constructs argument lists and is smashing the filenames into one line.
 
 Finally, we pipe the arguments from xargs to sed.
 
