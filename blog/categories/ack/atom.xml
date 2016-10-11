@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ack | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/ack/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-09-15T10:31:39-04:00</updated>
+  <updated>2016-10-11T15:58:06-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -18,7 +18,7 @@
     <link href="http://iacutone.github.io/blog/2016/09/15/filtering-ack-results/"/>
     <updated>2016-09-15T10:23:52-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/09/15/filtering-ack-results</id>
-    <content type="html"><![CDATA[<p>While setting up my VIM environment, I read a blogpost which states ack can ignore directories. For cleaner <code>ack</code> output you can setup the file below:</p>
+    <content type="html"><![CDATA[<p>While setting up my VIM environment, I read a blogpost which states <code>ack</code> can ignore directories. For cleaner <code>ack</code> output you can setup the file below:</p>
 
 <pre><code class="bash .ackrc">--ignore-dir=log
 --ignore-dir=public/assets

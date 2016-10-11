@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://iacutone.github.io/blog/2016/10/11/level-up-with-vim/</loc>
+    <lastmod>2016-10-11T13:02:35-04:00</lastmod>
+  </url>
+  <url>
     <loc>http://iacutone.github.io/blog/2016/09/15/filtering-ack-results/</loc>
     <lastmod>2016-09-15T10:23:52-04:00</lastmod>
   </url>
@@ -208,12 +212,6 @@
     <loc>http://iacutone.github.io/blog/categories/ack/</loc>
   </url>
   <url>
-    <loc>http://iacutone.github.io/posts/2/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/posts/3/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/posts/4/</loc>
+    <loc>http://iacutone.github.io/blog/categories/vim/</loc>
   </url>
 </urlset>

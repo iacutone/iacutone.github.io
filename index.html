@@ -9,7 +9,8 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="While setting up my VIM environment, I read a blogpost which states ack can ignore directories. For cleaner ack output you can setup the file below &hellip;">
+  <meta name="description" content="Why? How much time do you spend in your text editor? My goal is to to work more efficiently. How? Break into manageable pieces
+Eventually use Vim &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,6 +118,80 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2016/10/11/level-up-with-vim/">Level Up With Vim</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-10-11T13:02:35-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:02 pm</span></time>
+        
+         | <a href="/blog/2016/10/11/level-up-with-vim/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Why?</h3>
+
+<p>How much time do you spend in your text editor? My goal is to to work more efficiently.</p>
+
+<h3>How?</h3>
+
+<ul>
+<li>Break into manageable pieces</li>
+<li>Eventually use Vim fulltime</li>
+</ul>
+
+
+<h5>Intro Video</h5>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=_NUO4JEtkDw">Learning Vim in a Week</a></li>
+</ul>
+
+
+<h5>Vimtutor</h5>
+
+<ul>
+<li>Comprehensive introduction to Vim</li>
+<li>Type <code>vimtutor</code> in a Terminal sessions</li>
+</ul>
+
+
+<h5>Screencasts</h5>
+
+<ul>
+<li><a href="http://derekwyatt.org/vim/tutorials/novice/">http://derekwyatt.org/vim/tutorials/novice/</a></li>
+<li>Watch one of these videos everyday</li>
+</ul>
+
+
+<h5>My Dotfile Repo</h5>
+
+<ul>
+<li><a href="https://github.com/iacutone/dotfiles">Dotfiles</a></li>
+<li>Slowly build and customize your vimrc</li>
+<li>I find these plugins useful <a href="https://github.com/kien/ctrlp.vim">Ctrl-P</a> and <a href="https://github.com/tpope/vim-rails">Vim Rails</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2016/09/15/filtering-ack-results/">Filtering Ack Results</a></h1>
     
     
@@ -136,7 +211,7 @@
   </header>
 
 
-  <div class="entry-content"><p>While setting up my VIM environment, I read a blogpost which states ack can ignore directories. For cleaner <code>ack</code> output you can setup the file below:</p>
+  <div class="entry-content"><p>While setting up my VIM environment, I read a blogpost which states <code>ack</code> can ignore directories. For cleaner <code>ack</code> output you can setup the file below:</p>
 
 <figure class='code'><figcaption><span>.ackrc</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -800,61 +875,6 @@
 <p>Helpful Links</p>
 
 <p><a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-14/docs/message-expectations/calling-the-original-method">Calling the original method</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/12/03/env-variables-in-xcode/">ENV Variables in XCode</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-12-03T18:02:14-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>6:02 pm</span></time>
-        
-         | <a href="/blog/2015/12/03/env-variables-in-xcode/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Setting ENV variables in XCode in not straighforward. I have broken down how to accomplish setting up an ENV variable in the following videos and code example.</p>
-
-<div class="embed-video-container"><iframe src="//www.youtube.com/embed/r5HZwbkA52I" allowfullscreen></iframe></div>
-
-
-<p>Make a new conifuration file and set any ENV variables you need.</p>
-
-<div class="embed-video-container"><iframe src="//www.youtube.com/embed/jwuQgWb58Xs" allowfullscreen></iframe></div>
-
-
-<p>In the debug environment, use the debug.xcconfig file. Then, assign the value to something, in this case, SignUpUrl corresponds with the SIGN_UP_URL, which is set to localhost:4567/sign_up.</p>
-
-<figure class='code'><figcaption><span>SignUpController.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'>  <span class="k">var</span> <span class="nl">info</span><span class="p">:[</span><span class="nl">NSObject</span><span class="p">:</span><span class="n">AnyObject</span><span class="p">]</span> <span class="o">=</span> <span class="bp">NSBundle</span><span class="p">.</span><span class="n">mainBundle</span><span class="p">().</span><span class="n">infoDictionary</span><span class="o">!</span>
-</span><span class='line'>  <span class="k">var</span> <span class="n">sign_up_url</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s">&quot;SignUpUrl&quot;</span><span class="p">]</span> <span class="kt">as</span><span class="o">!</span> <span class="n">String</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The sign_up_url variable is set to localhost:4567/signup.</p>
-
-<p>Helpful Links</p>
-
-<p><a href="http://bogardon.github.io/xcode/environment-variables/2013/05/20/configuring-env-variables-in-xcode.html">Configuring ENV Variables in XCode</a></p>
 </div>
   
   
