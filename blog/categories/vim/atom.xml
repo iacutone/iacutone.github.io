@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vim | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/vim/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-10-18T10:34:03-04:00</updated>
+  <updated>2016-11-01T17:37:39-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Vim, Thoughts After Two Weeks]]></title>
+    <link href="http://iacutone.github.io/blog/2016/10/31/vim/"/>
+    <updated>2016-10-31T16:31:06-04:00</updated>
+    <id>http://iacutone.github.io/blog/2016/10/31/vim</id>
+    <content type="html"><![CDATA[<p>Purposefully, I began using Vim during a non-strenuous work week which helped manage frustration. I have been using solely Vim as a text editor for two weeks and have experienced improved efficienies over my previous text editor, Sublime.</p>
+
+<h5>Improvments</h5>
+
+<p>The ability to change between files quickly using the <a href="https://github.com/kien/ctrlp.vim">Ctrl-P</a> plugin is the biggest quality of life increase. Commands such as <code>/</code> and <code>?</code> make finding word matches in a file easy. Using RSpec with Vim is also great; I can change my code and re-run a single test without switching screens! There are many small wins with using Vim and they add up.</p>
+
+<h5>Pain Points</h5>
+
+<p>Adding new files does not work if the directory does not exist. The <a href="https://github.com/pbrisbin/vim-mkdir">mkdir</a> plugin solves this issue. Furthermore, commenting out code is a pain without <a href="https://github.com/tpope/vim-commentary">vim-commentary</a>. Checking my vimrc file into version controller has been helpful in debgging where breaking changes originate.</p>
+
+<h5>More Resources</h5>
+
+<p><a href="http://vimawesome.com">Vim Awesome</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Level Up With Vim]]></title>
