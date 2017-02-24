@@ -5,27 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Exceptions in Ruby - Iacutone.rb</title>
+  <title>RSpec and Elastic Search - Iacutone.rb</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content="I inherited some interesting code last week. A user has the ability to sign into the website with omniauth. 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17 &hellip;">
+  <meta name="description" content="I had a difficult time setting up ElasticSearch on both RSpec (CircleCI) and Heroku. The ElasticSearch test cluster was not working on the CircleCI &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://iacutone.github.io/blog/2014/02/16/exceptions-in-ruby">
+  <link rel="canonical" href="http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Iacutone.rb" type="application/atom+xml">
@@ -131,7 +115,7 @@
   <header>
     
       
-        <h1 class="entry-title">Exceptions in Ruby</h1>
+        <h1 class="entry-title">RSpec and Elastic Search</h1>
       
     
     
@@ -141,7 +125,7 @@
 
 
 
-<time class='entry-date' datetime='2014-02-16T18:40:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:40 pm</span></time>
+<time class='entry-date' datetime='2017-02-24T11:39:11-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>11:39 am</span></time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -151,12 +135,9 @@
   </header>
 
 
-<div class="entry-content"><p>I inherited some interesting code last week.  A user has the ability to sign into the website with omniauth.</p>
+<div class="entry-content"><p>I had a difficult time setting up  ElasticSearch on both RSpec (CircleCI) and Heroku. The ElasticSearch test cluster was not working on the CircleCI Docker image. Fortunately, one can configure the Circle environment to start with an ElasticSearch process. So, instead of using the test cluster, both my local testing environment and Circle environment use a real ElasticSearch process.</p>
 
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -172,39 +153,72 @@
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">num</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Enter a number&quot;</span>
-</span><span class='line'>  <span class="n">num</span> <span class="o">=</span> <span class="nb">gets</span><span class="o">.</span><span class="n">chomp</span><span class="o">.</span><span class="n">to_i</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># ElasticSearch</span>
+</span><span class='line'><span class="c1">#</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">3</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;It&#39;s a 3!&quot;</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>          <span class="k">raise</span> <span class="s2">&quot;Wrong number, you entered a </span><span class="si">#{</span><span class="n">num</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">before</span> <span class="ss">:all</span><span class="p">,</span> <span class="ss">elasticsearch</span><span class="p">:</span> <span class="kp">true</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">port</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;CIRCLE_CI_ES_URL&#39;</span><span class="o">].</span><span class="n">present?</span> <span class="p">?</span> <span class="mi">9200</span> <span class="p">:</span> <span class="mi">9250</span>
+</span><span class='line'>  <span class="no">Elasticsearch</span><span class="o">::</span><span class="no">Model</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="no">Elasticsearch</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">port</span><span class="p">:</span> <span class="n">port</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">num2</span>
-</span><span class='line'>  <span class="n">num</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">before</span> <span class="ss">:each</span><span class="p">,</span> <span class="ss">elasticsearch</span><span class="p">:</span> <span class="kp">true</span> <span class="k">do</span>
+</span><span class='line'>  <span class="no">Campaign</span><span class="o">.</span><span class="n">__elasticsearch__</span><span class="o">.</span><span class="n">create_index!</span><span class="p">(</span><span class="ss">force</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">begin</span>
-</span><span class='line'>  <span class="n">num2</span>
-</span><span class='line'><span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">ex</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="n">ex</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">after</span> <span class="ss">:each</span><span class="p">,</span> <span class="ss">elasticsearch</span><span class="p">:</span> <span class="kp">true</span> <span class="k">do</span>
+</span><span class='line'>  <span class="no">Campaign</span><span class="o">.</span><span class="n">__elasticsearch__</span><span class="o">.</span><span class="n">delete_index!</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>When a test needs to use ElasticSearch:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before</span> <span class="p">{</span> <span class="no">Campaign</span><span class="o">.</span><span class="n">__elasticsearch__</span><span class="o">.</span><span class="n">refresh_index!</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span> <span class="s1">&#39;#search&#39;</span><span class="p">,</span> <span class="ss">elasticsearch</span><span class="p">:</span> <span class="kp">true</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">expect</span><span class="p">(</span><span class="n">search</span><span class="o">.</span><span class="n">results</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_present</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Reference</p>
+<p>I ran into issues using ElasticSearch on Heroku when creating an index. Heroku review apps are configurable by defining an <code>app.json</code>. In the json file, Heroku can spin up an ElasticSearch process.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s2">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;postdeploy&quot;</span><span class="p">:</span> <span class="s2">&quot;bundle exec rake db:schema:load db:seed&quot;</span>
+</span><span class='line'><span class="p">},</span>
+</span><span class='line'><span class="s2">&quot;formation&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;web&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;free&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="s2">&quot;elasticsearch&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;free&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p><a href='http://www.ruby-doc.org/core-2.1.0/Exception.html'>Ruby Exception Class</a></p>
+<p>The process is running before any Ruby code is executed. The next step is to create the index using <code>postdeploy</code>. Before creating ActiveRecord objects in the <code>seed.rb</code> file, create an index with <code>Model.index(force: true)</code>.</p>
 </div>
 
 
@@ -221,13 +235,13 @@
 
 
 
-<time class='entry-date' datetime='2014-02-16T18:40:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:40 pm</span></time>
+<time class='entry-date' datetime='2017-02-24T11:39:11-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>11:39 am</span></time>
       
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ruby/'>ruby</a>
+    <a class='category' href='/blog/categories/elasticsearch/'>elasticsearch</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/rspec/'>rspec</a>
   
 </span>
 
@@ -236,7 +250,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2014/02/16/exceptions-in-ruby/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2014/02/16/exceptions-in-ruby/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search/" >Tweet</a>
   
   
   
@@ -245,10 +259,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/01/21/refactoring-client-side-validations/" title="Previous Post: Refactoring Client Side Validations">&laquo; Refactoring Client Side Validations</a>
+        <a class="basic-alignment left" href="/blog/2016/10/31/vim/" title="Previous Post: Vim, Thoughts After Two Weeks">&laquo; Vim, Thoughts After Two Weeks</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/09/04/my-return-to-blogging/" title="Next Post: My Return to Blogging">My Return to Blogging &raquo;</a>
       
     </p>
   </footer>
@@ -278,8 +290,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://iacutone.github.io/blog/2014/02/16/exceptions-in-ruby/';
-        var disqus_url = 'http://iacutone.github.io/blog/2014/02/16/exceptions-in-ruby/';
+        var disqus_identifier = 'http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search/';
+        var disqus_url = 'http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search/';
         var disqus_script = 'embed.js';
       
     (function () {

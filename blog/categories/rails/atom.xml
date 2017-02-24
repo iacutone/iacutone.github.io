@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2016-11-01T17:37:39-04:00</updated>
+  <updated>2017-02-24T17:23:47-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RSpec and Elastic Search]]></title>
+    <link href="http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search/"/>
+    <updated>2017-02-24T11:39:11-05:00</updated>
+    <id>http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search</id>
+    <content type="html"><![CDATA[<p>I had a difficult time setting up  ElasticSearch on both RSpec (CircleCI) and Heroku. The ElasticSearch test cluster was not working on the CircleCI Docker image. Fortunately, one can configure the Circle environment to start with an ElasticSearch process. So, instead of using the test cluster, both my local testing environment and Circle environment use a real ElasticSearch process.</p>
+
+<pre><code class="ruby">#
+# ElasticSearch
+#
+
+config.before :all, elasticsearch: true do
+  port = ENV['CIRCLE_CI_ES_URL'].present? ? 9200 : 9250
+  Elasticsearch::Model.client = Elasticsearch::Client.new(port: port)
+end
+
+config.before :each, elasticsearch: true do
+  Campaign.__elasticsearch__.create_index!(force: true)
+end
+
+config.after :each, elasticsearch: true do
+  Campaign.__elasticsearch__.delete_index!
+end
+</code></pre>
+
+<p>When a test needs to use ElasticSearch:</p>
+
+<pre><code class="ruby">before { Campaign.__elasticsearch__.refresh_index! }
+
+describe '#search', elasticsearch: true do
+  expect(search.results).to be_present
+end
+</code></pre>
+
+<p>I ran into issues using ElasticSearch on Heroku when creating an index. Heroku review apps are configurable by defining an <code>app.json</code>. In the json file, Heroku can spin up an ElasticSearch process.</p>
+
+<pre><code>"scripts": {
+  "postdeploy": "bundle exec rake db:schema:load db:seed"
+},
+"formation": {
+  "web": {
+    "size": "free",
+    "quantity": 1
+  },
+  "elasticsearch": {
+    "size": "free",
+    "quantity": 1
+  }
+}
+</code></pre>
+
+<p>The process is running before any Ruby code is executed. The next step is to create the index using <code>postdeploy</code>. Before creating ActiveRecord objects in the <code>seed.rb</code> file, create an index with <code>Model.index(force: true)</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rails `before_action` Method]]></title>
@@ -147,51 +202,6 @@ foo.number_to_currency 2
 <h3>Helpful Links</h3>
 
 <p><a href="http://stackoverflow.com/questions/941594/understanding-the-rails-authenticity-token">Understanding the Rails Authenticity Token</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RSpec Example Blocks]]></title>
-    <link href="http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks/"/>
-    <updated>2016-01-11T15:57:05-05:00</updated>
-    <id>http://iacutone.github.io/blog/2016/01/11/rspec-example-blocks</id>
-    <content type="html"><![CDATA[<p>I recently discovered an interesting test pattern; defining variables in before and after hooks in the rails helper.</p>
-
-<pre><code class="ruby rails_helper.rb">  config.before(:example, hook: true) do
-    @hook = 'before hook'
-  end
-</code></pre>
-
-<pre><code class="ruby some_spec.rb">  RSpec.describe "some variable I need" do
-
-    describe 'my hook', hook: true do
-      it 'runs the hook' do
-        expect(@hook).to eq 'before hook' # returns true
-      end
-    end
-  end
-</code></pre>
-
-<h3>A Real Example</h3>
-
-<p>Let&rsquo;s say we are testing a controller and want to make sure only an admin has access to specific views.</p>
-
-<pre><code class="ruby rails_helper.rb">  config.before(:example, admin_signed_in: true) do
-    current_user_double = Test::User.new :admin =&gt; true
-    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(current_user_double)
-  end
-
-  config.before(:example, user_signed_in: true) do
-    current_user_double = Test::User.new :admin =&gt; false
-    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(current_user_double)
-  end
-</code></pre>
-
-<p>When setting admin_signed_in to true in a describe block, we have access to an admin user. I think it is cleaner to set up these users in a hook instead of a shared context or explicitly in the spec.</p>
-
-<p>Helpful Links</p>
-
-<p><a href="https://www.relishapp.com/rspec/rspec-core/docs/hooks/filters">Hooks</a></p>
 ]]></content>
   </entry>
   

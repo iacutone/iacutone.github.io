@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Elasticsearch | Iacutone.rb]]></title>
+  <link href="http://iacutone.github.io/blog/categories/elasticsearch/atom.xml" rel="self"/>
+  <link href="http://iacutone.github.io/"/>
+  <updated>2017-02-24T17:23:47-05:00</updated>
+  <id>http://iacutone.github.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[RSpec and Elastic Search]]></title>
+    <link href="http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search/"/>
+    <updated>2017-02-24T11:39:11-05:00</updated>
+    <id>http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search</id>
+    <content type="html"><![CDATA[<p>I had a difficult time setting up  ElasticSearch on both RSpec (CircleCI) and Heroku. The ElasticSearch test cluster was not working on the CircleCI Docker image. Fortunately, one can configure the Circle environment to start with an ElasticSearch process. So, instead of using the test cluster, both my local testing environment and Circle environment use a real ElasticSearch process.</p>
+
+<pre><code class="ruby">#
+# ElasticSearch
+#
+
+config.before :all, elasticsearch: true do
+  port = ENV['CIRCLE_CI_ES_URL'].present? ? 9200 : 9250
+  Elasticsearch::Model.client = Elasticsearch::Client.new(port: port)
+end
+
+config.before :each, elasticsearch: true do
+  Campaign.__elasticsearch__.create_index!(force: true)
+end
+
+config.after :each, elasticsearch: true do
+  Campaign.__elasticsearch__.delete_index!
+end
+</code></pre>
+
+<p>When a test needs to use ElasticSearch:</p>
+
+<pre><code class="ruby">before { Campaign.__elasticsearch__.refresh_index! }
+
+describe '#search', elasticsearch: true do
+  expect(search.results).to be_present
+end
+</code></pre>
+
+<p>I ran into issues using ElasticSearch on Heroku when creating an index. Heroku review apps are configurable by defining an <code>app.json</code>. In the json file, Heroku can spin up an ElasticSearch process.</p>
+
+<pre><code>"scripts": {
+  "postdeploy": "bundle exec rake db:schema:load db:seed"
+},
+"formation": {
+  "web": {
+    "size": "free",
+    "quantity": 1
+  },
+  "elasticsearch": {
+    "size": "free",
+    "quantity": 1
+  }
+}
+</code></pre>
+
+<p>The process is running before any Ruby code is executed. The next step is to create the index using <code>postdeploy</code>. Before creating ActiveRecord objects in the <code>seed.rb</code> file, create an index with <code>Model.index(force: true)</code>.</p>
+]]></content>
+  </entry>
+  
+</feed>
