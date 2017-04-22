@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-02-24T17:23:47-05:00</updated>
+  <updated>2017-04-22T18:03:38-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,84 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[My Photo Storage Solution]]></title>
+    <link href="http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/"/>
+    <updated>2017-04-15T10:58:55-04:00</updated>
+    <id>http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution</id>
+    <content type="html"><![CDATA[<p>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available <a href="http://github.com/iacutone/scripts">here</a>.</p>
+
+<p>I like this solution because the entire process is automatic. You are notified when the photo transfer has finished with an email. Also, for redundancy, I created a cron job that syncs all of the photos on my hard drive to Amazon photos. I use <a href="https://rclone.org/">this service</a> to sync the photos in the cloud.</p>
+
+<p>I found the hardest part of setting up my sync process is remembering the mount points.</p>
+
+<h3>Steps</h3>
+
+<h5>Mount the external hard drive to a folder on your pi.</h5>
+
+<ul>
+<li><code>sudo fdisk -l</code> take note of the Device, something like <code>/dev/sdb1</code></li>
+<li>I like to mount the drive under the home dir, <code>sudo mount /dev/sdb1 ~/external_hd/</code></li>
+<li>Run <code>lsblk -f</code>  to know here files are mounted</li>
+</ul>
+
+
+<h5>Create a <code>udev</code> rule</h5>
+
+<ul>
+<li><code>udev</code> rules live here: <code>/etc/udev/rules.d</code></li>
+<li><code>cd /etc/udev/rules.d</code></li>
+<li><code>touch 50-sdcard.rules</code></li>
+<li><code>chmod +x 50-sdcard.rules</code></li>
+<li><code>sudo fdisk -l</code> again to find the sd card device name, in this instance &lsquo;sda1&rsquo;</li>
+<li><code>echo 'KERNEL=="sda1", ACTION=="add", RUN+="/home/pi/sdcard/sdcard_added.sh"' &lt; 50-sdcard.rules</code></li>
+<li><code>tail -f /var/log/syslog</code> is extremely useful for debugging udev rules</li>
+</ul>
+
+
+<h5><code>rsync</code> when an sd card is added</h5>
+
+<ul>
+<li><code>touch /home/pi/sdcard/sdcard_added.sh</code></li>
+<li><code>chmod +x /home/pi/sdcard/sdcard_added.sh</code></li>
+<li>create the script</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;`date +%Y-%m-%d:%H:%M:%S` SD card inserted&quot;</span> &gt;&gt; /home/pi/sdcard/output.log
+</span><span class='line'>mount /dev/sda1 /home/pi/SD_CARD
+</span><span class='line'>rsync -av /home/pi/SD_CARD/DCIM/100MSDCF/ /home/pi/external_hd/raw_photos
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>Sync photos to cloud provider</h5>
+
+<ul>
+<li>Set up cron job</li>
+<li><code>sudo crontab -e</code></li>
+<li><code>00 4 * * * /home/pi/sd_card/rclone_cron.sh</code>, this runs the cron job at 4 am, daily</li>
+<li>create the bast script</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'>/usr/sbin/rclone sync /home/pi/external_hd/raw_photos/ amazon:raw_photos --config /home/pi/.rclone.conf -v
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RSpec and Elastic Search]]></title>
@@ -1120,249 +1198,6 @@
 
 
 <p>I like the ability to call #fetch with a default return value if one does not exist. This leads to better ways to handle nil or catch errors.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Swift Basics]]></title>
-    <link href="http://iacutone.github.io/blog/2015/09/09/swift-basics/"/>
-    <updated>2015-09-09T19:48:12-04:00</updated>
-    <id>http://iacutone.github.io/blog/2015/09/09/swift-basics</id>
-    <content type="html"><![CDATA[<h1>String Interpolation</h1>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Eric&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;Hello, \(name)&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;Hello, Eric&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Dictionaries</h1>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">response</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;id&quot;</span><span class="o">:</span><span class="mi">14</span><span class="p">,</span><span class="s">&quot;email&quot;</span><span class="o">:</span><span class="s">&quot;test@email.com&quot;</span><span class="p">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">let</span> <span class="kt">id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s">&quot;id&quot;</span><span class="p">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 14</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s">&quot;email&quot;</span><span class="p">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;test@email.com&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Tuples</h1>
-
-<h3>Unnamed Tuples</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">coordinates</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">999</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">let</span> <span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span> <span class="o">=</span> <span class="n">coordinates</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;Latitude is \(lat)&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;Latitude is 100&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">println</span><span class="p">(</span><span class="s">&quot;Longtitude is \(lon)&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Longitude is 999</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Named Tuples</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="n">response</span> <span class="o">=</span> <span class="p">(</span><span class="nl">code</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="nl">message</span><span class="p">:</span> <span class="s">&quot;All good&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">response</span><span class="mf">.0</span>
-</span><span class='line'><span class="c1">// 200</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">response</span><span class="mf">.1</span>
-</span><span class='line'><span class="c1">// &quot;All good&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">response</span><span class="p">.</span><span class="n">code</span>
-</span><span class='line'><span class="c1">// 200</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">respsonse</span><span class="p">.</span><span class="n">message</span>
-</span><span class='line'><span class="c1">// &quot;All good&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Swift Classes</h1>
-
-<h3>Creating a class</h3>
-
-<figure class='code'><figcaption><span>Person.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nl">Person</span><span class="p">:</span> <span class="bp">NSObject</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">var</span> <span class="nl">name</span><span class="p">:</span> <span class="n">String</span>
-</span><span class='line'>  <span class="k">var</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span>
-</span><span class='line'>  <span class="k">var</span> <span class="nl">zip</span><span class="p">:</span> <span class="n">Int</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">init</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="nl">zip</span><span class="p">:</span> <span class="n">Int</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
-</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">zip</span> <span class="o">=</span> <span class="n">zip</span>
-</span><span class='line'>    <span class="nb">super</span><span class="p">.</span><span class="k">init</span><span class="p">()</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Create data for Person Class</h3>
-
-<figure class='code'><figcaption><span>SampleData.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">let</span> <span class="n">personData</span> <span class="o">=</span> <span class="p">[</span>
-</span><span class='line'>  <span class="n">Person</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="s">&quot;Eric&quot;</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="s">&quot;eric.iacutone@gmail.com&quot;</span><span class="p">,</span> <span class="nl">zip</span><span class="p">:</span> <span class="mi">12345</span><span class="p">)</span>
-</span><span class='line'><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Instantiating Person Class</h3>
-
-<figure class='code'><figcaption><span>PersonViewController.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">var</span> <span class="nl">person</span><span class="p">:</span><span class="n">Array</span> <span class="o">=</span> <span class="n">personData</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, if you copy and paste the the files into a XCode Playground, you can call methods on your person object.</p>
-
-<figure class='code'><figcaption><span>Playground.swift</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">count</span>
-</span><span class='line'><span class="c1">// 1</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">first</span><span class="o">?</span><span class="p">.</span><span class="n">zip</span>
-</span><span class='line'><span class="c1">// 12345</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Enums</h1>
-
-<p>An enumeration defines a common type for a group of related values and enables you to work with those values in a type-safe way within your code. - <a href="https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Enumerations.html">Swift docs</a></p>
-
-<p>Use an enum when you need a consistent data value.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">enum</span> <span class="nl">CountryType</span><span class="p">:</span><span class="n">String</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">case</span> <span class="n">UnitedStates</span> <span class="o">=</span> <span class="s">&quot;United States&quot;</span>
-</span><span class='line'>    <span class="k">case</span> <span class="n">Spain</span> <span class="o">=</span> <span class="s">&quot;Spain&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">init</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nb">self</span> <span class="o">=</span> <span class="p">.</span><span class="n">UnitedStates</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">var</span> <span class="n">type</span> <span class="o">=</span> <span class="n">CountryType</span><span class="p">.</span><span class="n">UnitedStates</span><span class="p">.</span><span class="n">rawValue</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;United States&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Structs</h1>
-
-<p>A struct allows you to create a structured data type which provides storage of data using properties and extending its functionality via methods. -<a href="http://blog.teamtreehouse.com/enums-structs-swift">Tree House</a></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='swift'><span class='line'><span class="k">struct</span> <span class="n">Person</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">var</span> <span class="nl">name</span><span class="p">:</span> <span class="n">String</span>
-</span><span class='line'>    <span class="k">var</span> <span class="nl">email</span><span class="p">:</span> <span class="n">String</span>
-</span><span class='line'>    <span class="k">var</span> <span class="nl">country</span><span class="p">:</span> <span class="n">CountryType</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">var</span> <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="nl">name</span><span class="p">:</span> <span class="s">&quot;Eric&quot;</span><span class="p">,</span> <span class="nl">email</span><span class="p">:</span> <span class="s">&quot;eric.iacutone@gmail.com&quot;</span><span class="p">,</span> <span class="nl">country</span><span class="p">:</span> <span class="n">CountryType</span><span class="p">.</span><span class="n">UnitedStates</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">name</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;Eric&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">person</span><span class="p">.</span><span class="n">country</span><span class="p">.</span><span class="n">rawValue</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// &quot;United States&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
 ]]></content>
   </entry>
   

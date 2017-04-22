@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Linux | Iacutone.rb]]></title>
+  <link href="http://iacutone.github.io/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://iacutone.github.io/"/>
+  <updated>2017-04-22T18:03:38-04:00</updated>
+  <id>http://iacutone.github.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My Photo Storage Solution]]></title>
+    <link href="http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/"/>
+    <updated>2017-04-15T10:58:55-04:00</updated>
+    <id>http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution</id>
+    <content type="html"><![CDATA[<p>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available <a href="http://github.com/iacutone/scripts">here</a>.</p>
+
+<p>I like this solution because the entire process is automatic. You are notified when the photo transfer has finished with an email. Also, for redundancy, I created a cron job that syncs all of the photos on my hard drive to Amazon photos. I use <a href="https://rclone.org/">this service</a> to sync the photos in the cloud.</p>
+
+<p>I found the hardest part of setting up my sync process is remembering the mount points.</p>
+
+<h3>Steps</h3>
+
+<h5>Mount the external hard drive to a folder on your pi.</h5>
+
+<ul>
+<li><code>sudo fdisk -l</code> take note of the Device, something like <code>/dev/sdb1</code></li>
+<li>I like to mount the drive under the home dir, <code>sudo mount /dev/sdb1 ~/external_hd/</code></li>
+<li>Run <code>lsblk -f</code>  to know here files are mounted</li>
+</ul>
+
+
+<h5>Create a <code>udev</code> rule</h5>
+
+<ul>
+<li><code>udev</code> rules live here: <code>/etc/udev/rules.d</code></li>
+<li><code>cd /etc/udev/rules.d</code></li>
+<li><code>touch 50-sdcard.rules</code></li>
+<li><code>chmod +x 50-sdcard.rules</code></li>
+<li><code>sudo fdisk -l</code> again to find the sd card device name, in this instance &lsquo;sda1&rsquo;</li>
+<li><code>echo 'KERNEL=="sda1", ACTION=="add", RUN+="/home/pi/sdcard/sdcard_added.sh"' &lt; 50-sdcard.rules</code></li>
+<li><code>tail -f /var/log/syslog</code> is extremely useful for debugging udev rules</li>
+</ul>
+
+
+<h5><code>rsync</code> when an sd card is added</h5>
+
+<ul>
+<li><code>touch /home/pi/sdcard/sdcard_added.sh</code></li>
+<li><code>chmod +x /home/pi/sdcard/sdcard_added.sh</code></li>
+<li>create the script
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;&lt;/li&gt;
+</span><span class='line'>&lt;/ul&gt;
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;echo <span class="p">&amp;</span>ldquo<span class="p">;</span>&lt;code&gt;date +%Y-%m-%d:%H:%M:%S&lt;/code&gt; SD card inserted<span class="p">&amp;</span>rdquo<span class="p">;</span> &gt;&gt; /home/pi/sdcard/output.log
+</span><span class='line'>mount /dev/sda1 /home/pi/SD_CARD
+</span><span class='line'>rsync -av /home/pi/SD_CARD/DCIM/100MSDCF/ /home/pi/external_hd/raw_photos
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h5>Sync photos to cloud provider</h5>
+
+<ul>
+<li>Set up cron job</li>
+<li><code>sudo crontab -e</code></li>
+<li><code>00 4 * * * /home/pi/sd_card/rclone_cron.sh</code>, this runs the cron job at 4 am, daily</li>
+<li>create the bast script
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;h1&gt;!/bin/sh&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;/usr/sbin/rclone sync /home/pi/external_hd/raw_photos/ amazon:raw_photos <span class="p">&amp;</span>ndash<span class="p">;</span>config /home/pi/.rclone.conf -v
+</span></code></pre></td></tr></table></div></figure></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
