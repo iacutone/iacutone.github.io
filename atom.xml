@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-04-22T18:03:38-04:00</updated>
+  <updated>2017-04-26T12:25:58-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -45,6 +45,14 @@
 <li><code>sudo fdisk -l</code> again to find the sd card device name, in this instance &lsquo;sda1&rsquo;</li>
 <li><code>echo 'KERNEL=="sda1", ACTION=="add", RUN+="/home/pi/sdcard/sdcard_added.sh"' &lt; 50-sdcard.rules</code></li>
 <li><code>tail -f /var/log/syslog</code> is extremely useful for debugging udev rules</li>
+</ul>
+
+
+<h5>Create an fstab privilege</h5>
+
+<ul>
+<li><code>vi /etc/fstab</code></li>
+<li>Add <code>/dev/sda1     /home/pi/SD_CARD  auto rw,user,noauto      0       0</code></li>
 </ul>
 
 
