@@ -169,7 +169,9 @@
 
 <ul>
 <li><code>vi /etc/fstab</code></li>
-<li>Add <code>/dev/sda1     /home/pi/SD_CARD  auto rw,user,noauto      0       0</code></li>
+<li>Find device uuid with <code>blkid</code></li>
+<li>Add <code>UUID=&lt;your-uuid&gt; /home/pi/SD_CARD auto rw,users,noauto      0       0</code></li>
+<li>Uncomment out &lsquo;user_allow_other&rsquo; in <code>/etc/fuse.conf</code></li>
 </ul>
 
 

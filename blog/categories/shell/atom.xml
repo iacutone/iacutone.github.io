@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Shell | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/shell/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-04-26T12:25:58-04:00</updated>
+  <updated>2017-04-29T11:24:49-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -52,7 +52,9 @@
 
 <ul>
 <li><code>vi /etc/fstab</code></li>
-<li>Add <code>/dev/sda1     /home/pi/SD_CARD  auto rw,user,noauto      0       0</code></li>
+<li>Find device uuid with <code>blkid</code></li>
+<li>Add <code>UUID=&lt;your-uuid&gt; /home/pi/SD_CARD auto rw,users,noauto      0       0</code></li>
+<li>Uncomment out &lsquo;user_allow_other&rsquo; in <code>/etc/fuse.conf</code></li>
 </ul>
 
 
