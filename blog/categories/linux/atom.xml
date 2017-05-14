@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-04-29T11:24:49-04:00</updated>
+  <updated>2017-05-14T14:51:55-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -21,8 +21,6 @@
     <content type="html"><![CDATA[<p>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available <a href="http://github.com/iacutone/scripts">here</a>.</p>
 
 <p>I like this solution because the entire process is automatic. You are notified when the photo transfer has finished with an email. Also, for redundancy, I created a cron job that syncs all of the photos on my hard drive to Amazon photos. I use <a href="https://rclone.org/">this service</a> to sync the photos in the cloud.</p>
-
-<p>I found the hardest part of setting up my sync process is remembering the mount points.</p>
 
 <h3>Steps</h3>
 
@@ -92,8 +90,19 @@
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;h1&gt;!/bin/sh&lt;/h1&gt;
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;/usr/sbin/rclone sync /home/pi/external_hd/raw_photos/ amazon:raw_photos <span class="p">&amp;</span>ndash<span class="p">;</span>config /home/pi/.rclone.conf -v
-</span></code></pre></td></tr></table></div></figure></p></li>
+</span><span class='line'>/usr/sbin/rclone sync /home/pi/external_hd/raw_photos/ amazon:raw_photos <span class="p">&amp;</span>ndash<span class="p">;</span>config /home/pi/.rclone.conf -v
+</span></code></pre></td></tr></table></div></figure>
+
+<h5>Send Email Notification</h5></li>
+<li>I used <a href="https://rianjs.net/2013/08/send-email-from-linux-server-using-gmail-and-ubuntu-two-factor-authentication">this post</a> to easily add email notifications when the rsync process completes</li>
+</ul>
+
+
+<h5>Tips Since Creating My Photo Process</h5>
+
+<ul>
+<li>I could not get the above code to work with Debian due to permission issues</li>
+<li>It is better to identify from UUID instead of KERNEL for setting up udev rules, run <code>ls -l /dev/disk/by-uuid</code> to discover device UUID&rsquo;s</li>
 </ul>
 
 ]]></content>

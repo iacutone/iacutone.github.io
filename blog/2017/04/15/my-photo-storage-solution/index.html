@@ -139,8 +139,6 @@
 
 <p>I like this solution because the entire process is automatic. You are notified when the photo transfer has finished with an email. Also, for redundancy, I created a cron job that syncs all of the photos on my hard drive to Amazon photos. I use <a href="https://rclone.org/">this service</a> to sync the photos in the cloud.</p>
 
-<p>I found the hardest part of setting up my sync process is remembering the mount points.</p>
-
 <h3>Steps</h3>
 
 <h5>Mount the external hard drive to a folder on your pi.</h5>
@@ -214,6 +212,19 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<h5>Send Email Notification</h5>
+
+<ul>
+<li>I used <a href="https://rianjs.net/2013/08/send-email-from-linux-server-using-gmail-and-ubuntu-two-factor-authentication">this post</a> to easily add email notifications when the rsync process completes</li>
+</ul>
+
+
+<h5>Tips Since Creating My Photo Process</h5>
+
+<ul>
+<li>I could not get the above code to work with Debian due to permission issues</li>
+<li>It is better to identify from UUID instead of KERNEL for setting up udev rules, run <code>ls -l /dev/disk/by-uuid</code> to discover device UUID&rsquo;s</li>
+</ul>
 
 </div>
 
