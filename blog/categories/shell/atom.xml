@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Shell | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/shell/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-05-14T14:53:09-04:00</updated>
+  <updated>2017-06-08T12:05:06-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -103,6 +103,15 @@
 <ul>
 <li>I could not get the above code to work with Debian due to permission issues</li>
 <li>It is better to identify from UUID instead of KERNEL for setting up udev rules, run <code>ls -l /dev/disk/by-uuid</code> to discover device UUID&rsquo;s</li>
+</ul>
+
+
+<h5>RClone</h5>
+
+<ul>
+<li>Amazon has blocked all thrid party applications from pushing to Amazon Drive. For more information see <a href="https://forum.rclone.org/t/rclone-has-been-banned-from-amazon-drive/2314">this</a></li>
+<li>I am going to implement <a href="https://github.com/duplicati/duplicati">Duplicati</a> as a solution to sync my photos to Amazon Drive</li>
+<li>Another potential solution is to continute to use rclone, but host the files on Google Drive</li>
 </ul>
 
 ]]></content>

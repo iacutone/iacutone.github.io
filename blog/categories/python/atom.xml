@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Python | Iacutone.rb]]></title>
+  <link href="http://iacutone.github.io/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://iacutone.github.io/"/>
+  <updated>2017-06-08T12:05:06-04:00</updated>
+  <id>http://iacutone.github.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Artificial Intelligence Nano Degree]]></title>
+    <link href="http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree/"/>
+    <updated>2017-06-05T17:33:41-04:00</updated>
+    <id>http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree</id>
+    <content type="html"><![CDATA[<p>I started the <a href="https://www.udacity.com/course/artificial-intelligence-nanodegree--nd889">Udacity</a> Artificial Intelligence Nano Degree last month.</p>
+
+<h3>Project 1, Sudoku Solver</h3>
+
+<ul>
+<li><a href="http://norvig.com/sudoku.html">This</a> post helpful for building a sudoku solver.</li>
+</ul>
+
+
+<p>The Sudoku Solver was a fun project. I enjoy learning by writing code to make tests pass, like Ruby Katas.</p>
+
+<h3>Project 2, Isolation Game</h3>
+
+<ul>
+<li><a href="http://inst.eecs.berkeley.edu/~cs61b/fa14/ta-materials/apps/ab_tree_practice/">This</a> application is useful for visualizing alpha beta pruning.</li>
+<li><a href="https://www.youtube.com/watch?v=STjW3eH0Cik">This</a> is a good introduction to the minimax function and alphabeta pruning.</li>
+</ul>
+
+
+<p>Creating an algo to play an Isolation Game is much more complicated than the first project and was very frustrating to build. Unlike the first project, there is barely a test framework to follow. You push your methods to a remote Udacity server which gives feedback about test failures. This development cycle is difficult to debug because you can neither use a debugger nor get <code>print</code> output.</p>
+
+<p>Writing a synopsis for a research paper is also required for the project. I chose to write about <a href="https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf">AlphaGo</a>. I cannot understand the math proofs in the paper, so understanding the paper took several took several attempts.</p>
+]]></content>
+  </entry>
+  
+</feed>

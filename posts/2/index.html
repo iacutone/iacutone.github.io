@@ -9,11 +9,12 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="For the error &ldquo;WARNING: Can&rsquo;t verify CSRF token authenticity&rdquo;, add a CSRF token. _form.html.haml1
+  <meta name="description" content="The .none class method was introduced in Rails 4.0.2 and is helpful when returning a blank array will break. 1
 2
 3
 4
-= form_tag some_path(@ &hellip;">
+5
+Organization.none.paginate( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -115,6 +116,55 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/03/04/activerecord-none/">ActiveRecord None</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-04T19:15:38-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>7:15 pm</span></time>
+        
+         | <a href="/blog/2016/03/04/activerecord-none/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The .none class method was introduced in Rails 4.0.2 and is helpful when returning a blank array will break.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Organization</span><span class="o">.</span><span class="n">none</span><span class="o">.</span><span class="n">paginate</span><span class="p">(</span><span class="ss">page</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
+</span><span class='line'> <span class="o">=&gt;</span> <span class="c1">#&lt;ActiveRecord::Relation []&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">[].</span><span class="n">paginate</span><span class="p">(</span><span class="ss">page</span><span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
+</span><span class='line'> <span class="o">=&gt;</span> <span class="ss">NoMethodError</span><span class="p">:</span> <span class="n">undefined</span> <span class="nb">method</span> <span class="sb">`paginate&#39; for []:Array</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Helpful Links</h3>
+
+<p><a href="http://apidock.com/rails/v4.0.2/ActiveRecord/QueryMethods/none">none</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -883,106 +933,6 @@
 <p><a href="http://stackoverflow.com/questions/10464793/what-is-the-right-way-to-override-a-setter-method-in-ruby-on-rails">What is the right way to override a setter method in Ruby on Rails?</a></p>
 
 <p><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#class-ActiveRecord%3a%3aBase-label-Overwriting+default+accessors">Overwriting default accessors</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/09/18/rubys-fetch-method/">Ruby's Fetch Method</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-09-18T19:15:29-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:15 pm</span></time>
-        
-         | <a href="/blog/2015/09/18/rubys-fetch-method/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash.</p>
-
-<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
-</span><span class='line'>    <span class="c1"># do things</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The code above will call #present? on nil if params[:search][:organization_id] does not exist.</p>
-
-<p>A better way to write the conditional:</p>
-
-<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">].</span><span class="n">present</span> <span class="ow">and</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
-</span><span class='line'>    <span class="c1"># do things</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Writing a similar conditional with #fetch:</p>
-
-<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
-</span><span class='line'>    <span class="c1"># do things</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let&rsquo;s break this method down into simpler components:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
-</span><span class='line'>  <span class="sr">//</span> <span class="p">{}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;searched!&quot;</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
-</span><span class='line'>  <span class="sr">//</span> <span class="s2">&quot;searched!&quot;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nb">puts</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>  <span class="sr">//</span> <span class="kp">nil</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:organization_id</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>  <span class="sr">//</span> <span class="mi">1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I like the ability to call #fetch with a default return value if one does not exist. This leads to better ways to handle nil or catch errors.</p>
 </div>
   
   

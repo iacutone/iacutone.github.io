@@ -9,18 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="String Interpolation 1
-2
-3
-4
-5
-var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, Eric&quot; Dictionaries 1
-2
-3
-4
-5
-6
-7 &hellip;">
+  <meta name="description" content="Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -122,6 +111,106 @@ var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, 
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/18/rubys-fetch-method/">Ruby's Fetch Method</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-18T19:15:29-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:15 pm</span></time>
+        
+         | <a href="/blog/2015/09/18/rubys-fetch-method/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash.</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The code above will call #present? on nil if params[:search][:organization_id] does not exist.</p>
+
+<p>A better way to write the conditional:</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">].</span><span class="n">present</span> <span class="ow">and</span> <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">][</span><span class="ss">:organization_id</span><span class="o">].</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Writing a similar conditional with #fetch:</p>
+
+<figure class='code'><figcaption><span>searches_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span><span class="o">.</span><span class="n">present?</span>
+</span><span class='line'>    <span class="c1"># do things</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s break this method down into simpler components:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:search</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;searched!&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:search</span><span class="p">,</span> <span class="p">{})</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="s2">&quot;searched!&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="kp">nil</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:organization_id</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">params</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:organization_id</span><span class="p">,</span> <span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="sr">//</span> <span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I like the ability to call #fetch with a default return value if one does not exist. This leads to better ways to handle nil or catch errors.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1621,186 +1710,6 @@ var name = &quot;Eric&quot; println(&quot;Hello, \(name)&quot;) // &quot;Hello, 
 <p><p>I really like this gem and recommend it to anyone trying to run background processes to upload pictures via Carrierwave.</p></p>
 
 <p><p>h/t Blake Johnson</p></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/30/gon-gem/">Gon Gem</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-06-30T00:04:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>12:04 am</span></time>
-        
-         | <a href="/blog/2013/06/30/gon-gem/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I ran into difficulties trying to find a way to implement jQuery in a modal.  It is not possible to use remote: true in a form_tag with Twitter Bootstrap.  I successfully used the <a href='https://github.com/gazay/gon'>Gon Gem</a> in order to remove elements from the DOM when an instance variable reached a certain number.  If you find yourself in the position of needing to remove elements from a modal, this gem seems to be the way to go.</p>
-
-
-
-
-<figure class='code'><figcaption><span>user_controller.rb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">create</span>
-</span><span class='line'>      <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:user</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">save</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="vi">@day_one_counter</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>        <span class="vi">@day_one_counter</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">pluck</span><span class="p">(</span><span class="ss">:time1</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">#@day_one_counter outputs an array of elements from the :time1 column. =&gt; [&quot;11:00&quot;, &quot;11:00&quot;, nil, nil, nil]</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">b</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="vi">@day_one_counter</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">v</span><span class="o">|</span>
-</span><span class='line'>          <span class="n">b</span><span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span class='line'>        <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">#the block increments the key/value pairs in the instantiated Hash. =&gt; {&quot;11:00&quot;=&gt;2, nil=&gt;3}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="vi">@time1</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:00&quot;</span><span class="o">]</span>
-</span><span class='line'>        <span class="n">gon</span><span class="o">.</span><span class="n">time1</span> <span class="o">=</span> <span class="vi">@time1</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">#@time1 pulls out the value of the pair =&gt; 2</span>
-</span><span class='line'>        <span class="c1">#gon.time1 =&gt; 2, in order to use the @time1 instance variable in users.js</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="vi">@time2</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:20&quot;</span><span class="o">]</span>
-</span><span class='line'>        <span class="n">gon</span><span class="o">.</span><span class="n">time2</span> <span class="o">=</span> <span class="vi">@time2</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="vi">@time3</span> <span class="o">=</span> <span class="n">b</span><span class="o">[</span><span class="s2">&quot;11:40&quot;</span><span class="o">]</span>
-</span><span class='line'>        <span class="n">gon</span><span class="o">.</span><span class="n">time3</span> <span class="o">=</span> <span class="vi">@time3</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">render</span> <span class="ss">:time</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>        <span class="n">render</span> <span class="ss">:new</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>This is a conintuation of the Pluck Method from my last blog post.  For an overview of what is happening, read the comments provided above.  With the gone.time1 variable, I can now use jQuery in my users.js file in order to remove elements from the DOM that go over a given number, in this case 5.</p>
-
-
-
-
-<figure class='code'><figcaption><span>users.js </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nx">gon</span><span class="p">.</span><span class="nx">time1</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.wrapper1&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">gon</span><span class="p">.</span><span class="nx">time2</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.wrapper2&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>...and the form</p>
-
-
-
-
-<figure class='code'><figcaption><span>_time1.html.erb </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="o">&lt;</span><span class="sx">%= form_for @user do |f| %&gt;</span>
-</span><span class='line'><span class="sx">     &lt;div class=</span><span class="s1">&#39;wrapper1&#39;</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="o">&gt;</span><span class="mi">11</span><span class="p">:</span><span class="mo">00</span> <span class="n">A</span><span class="o">.</span><span class="n">M</span><span class="o">.</span> <span class="o">&lt;</span><span class="sx">%= f.radio_button(:time1, &#39;11:00&#39;) %&gt;&lt;br /&gt;&lt;%=</span> <span class="mi">5</span> <span class="o">-</span> <span class="vi">@time1</span> <span class="k">unless</span> <span class="vi">@time1</span> <span class="o">==</span> <span class="kp">nil</span> <span class="sx">%&gt; spots remaining.&lt;/div&gt;</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s1">&#39;wrapper2&#39;</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;pad&#39;</span><span class="o">&gt;</span><span class="mi">11</span><span class="p">:</span><span class="mi">20</span> <span class="n">A</span><span class="o">.</span><span class="n">M</span><span class="o">.</span> <span class="o">&lt;</span><span class="sx">%= f.radio_button(:time1, &#39;11:20&#39;) %&gt;&lt;br /&gt;&lt;%=</span> <span class="mi">5</span> <span class="o">-</span> <span class="vi">@time2</span> <span class="k">unless</span> <span class="vi">@time2</span> <span class="o">==</span> <span class="kp">nil</span> <span class="sx">%&gt; spots remaining.&lt;/div&gt;</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s1">&#39;wrapper&#39;</span><span class="o">&gt;&lt;</span><span class="sx">%= f.radio_button(:time1, &#39;No time.&#39;) %&gt;  Interested but not available during these times. Please inform me of future conversation opportunities.&lt;br /&gt;&lt;/div&gt;</span>
-</span><span class='line'><span class="sx"> &lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">hidden_field</span> <span class="ss">:day</span><span class="p">,</span> <span class="ss">:value</span> <span class="o">=&gt;</span> <span class="s1">&#39;July 10&#39;</span> <span class="sx">%&gt;</span>
-</span><span class='line'><span class="sx"> &lt;button class=&quot;btn btn-inverse&quot; type=&quot;submit&quot;class=&quot;actions&quot;&gt;</span><span class="no">Submit</span><span class="o">&lt;</span><span class="sr">/button&gt;</span>
-</span><span class='line'><span class="sr"> &lt;% end %&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>Since the @time1 instance variable and therefore, gon.time1 are saved after my create action, the applicable time is > 4 if I want a total of 5 elements for a particular time on my :time1 column.  The next time the modal is visited, the element will be removed!</p>
-
-
-
-
-<p>I am so excited I found this gem and got my modal to work correctly! Also, a thanks for Railscast for the tutorial on the gem.</p>
-
-
-
-
-<p><a href='http://railscasts.com/episodes/324-passing-data-to-javascript'>Passing Data to Javascript</a></p>
-
-
-
 </div>
   
   

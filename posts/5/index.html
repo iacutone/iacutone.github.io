@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>My Photo Storage Solution - Iacutone.rb</title>
+  <title>Iacutone.rb</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content="I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will &hellip;">
+  <meta name="description" content="Don&#8217;t change master.
+$ git pull &#8211;&#8211;rebase -to pull from the master and then create new branch -now you have an up to date branch to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution">
+  <link rel="canonical" href="http://iacutone.github.io/posts/5">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Iacutone.rb" type="application/atom+xml">
@@ -109,14 +110,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      
-        <h1 class="entry-title">My Photo Storage Solution</h1>
-      
+      <h1 class="entry-title"><a href="/blog/2013/02/13/git-commandments/">Git Commandments</a></h1>
     
     
       <p class="meta">
@@ -125,9 +127,9 @@
 
 
 
-<time class='entry-date' datetime='2017-04-15T10:58:55-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>10:58 am</span></time>
+<time class='entry-date' datetime='2013-02-13T09:17:00-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:17 am</span></time>
         
-         | <a href="#disqus_thread">Comments</a>
+         | <a href="/blog/2013/02/13/git-commandments/#disqus_thread">Comments</a>
         
         
       </p>
@@ -135,163 +137,58 @@
   </header>
 
 
-<div class="entry-content"><p>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available <a href="http://github.com/iacutone/scripts">here</a>.</p>
+  <div class="entry-content"><div class="entry-content">
+<p>Don&#8217;t change master.</p>
+<p><code>$ git pull &#8211;&#8211;rebase</code></p>
 
-<p>I like this solution because the entire process is automatic. You are notified when the photo transfer has finished with an email. Also, for redundancy, I created a cron job that syncs all of the photos on my hard drive to Amazon photos. I use <a href="https://rclone.org/">this service</a> to sync the photos in the cloud.</p>
+<p>  -to pull from the master and then create new  branch</p>
 
-<h3>Steps</h3>
+<p>  -now you have an up to date branch to code your   magic</p>
+<p><code>$ git status</code></p>
 
-<h5>Mount the external hard drive to a folder on your pi.</h5>
+<p>  -run after you change things in your branch</p>
 
-<ul>
-<li><code>sudo fdisk -l</code> take note of the Device, something like <code>/dev/sdb1</code></li>
-<li>I like to mount the drive under the home dir, <code>sudo mount /dev/sdb1 ~/external_hd/</code></li>
-<li>Run <code>lsblk -f</code>  to know here files are mounted</li>
-</ul>
+<p>  -shows you what changed</p>
+<p><code>$ git add .</code></p>
 
+<p><code>$ git commit -m &#8220;Your message&#8221;<code></p>
 
-<h5>Create a <code>udev</code> rule</h5>
+<p><code>$ git co master</code></p>
 
-<ul>
-<li><code>udev</code> rules live here: <code>/etc/udev/rules.d</code></li>
-<li><code>cd /etc/udev/rules.d</code></li>
-<li><code>touch 50-sdcard.rules</code></li>
-<li><code>chmod +x 50-sdcard.rules</code></li>
-<li><code>sudo fdisk -l</code> again to find the sd card device name, in this instance &lsquo;sda1&rsquo;</li>
-<li><code>echo 'KERNEL=="sda1", ACTION=="add", RUN+="/home/pi/sdcard/sdcard_added.sh"' &lt; 50-sdcard.rules</code></li>
-<li><code>tail -f /var/log/syslog</code> is extremely useful for debugging udev rules</li>
-</ul>
+<p> -checkout master before your merge</p>
 
+<p><code>$ git pull &#8211;&#8211;rebase</code></p>
 
-<h5>Create an fstab privilege</h5>
+<p>  -ensure that there haven&#8217;t been any changes before you merge to master branch</p>
 
-<ul>
-<li><code>vi /etc/fstab</code></li>
-<li>Find device uuid with <code>blkid</code></li>
-<li>Add <code>UUID=&lt;your-uuid&gt; /home/pi/SD_CARD auto rw,users,noauto      0       0</code></li>
-<li>Uncomment out &lsquo;user_allow_other&rsquo; in <code>/etc/fuse.conf</code></li>
-</ul>
+<p><code>$ git merge <branch name> -m &#8220;Your message&#8221;</code></p>
+<p><code>$ git push</code></p>
 
+<p>-data now updated on git!</p>
 
-<h5><code>rsync</code> when an sd card is added</h5>
-
-<ul>
-<li><code>touch /home/pi/sdcard/sdcard_added.sh</code></li>
-<li><code>chmod +x /home/pi/sdcard/sdcard_added.sh</code></li>
-<li>create the script</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;`date +%Y-%m-%d:%H:%M:%S` SD card inserted&quot;</span> &gt;&gt; /home/pi/sdcard/output.log
-</span><span class='line'>mount /dev/sda1 /home/pi/SD_CARD
-</span><span class='line'>rsync -av /home/pi/SD_CARD/DCIM/100MSDCF/ /home/pi/external_hd/raw_photos
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Sync photos to cloud provider</h5>
-
-<ul>
-<li>Set up cron job</li>
-<li><code>sudo crontab -e</code></li>
-<li><code>00 4 * * * /home/pi/sd_card/rclone_cron.sh</code>, this runs the cron job at 4 am, daily</li>
-<li>create the bast script</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
-</span><span class='line'>/usr/sbin/rclone sync /home/pi/external_hd/raw_photos/ amazon:raw_photos --config /home/pi/.rclone.conf -v
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Send Email Notification</h5>
-
-<ul>
-<li>I used <a href="https://rianjs.net/2013/08/send-email-from-linux-server-using-gmail-and-ubuntu-two-factor-authentication">this post</a> to easily add email notifications when the rsync process completes</li>
-</ul>
-
-
-<h5>Tips Since Creating My Photo Process</h5>
-
-<ul>
-<li>I could not get the above code to work with Debian due to permission issues</li>
-<li>It is better to identify from UUID instead of KERNEL for setting up udev rules, run <code>ls -l /dev/disk/by-uuid</code> to discover device UUID&rsquo;s</li>
-</ul>
-
-
-<h5>RClone</h5>
-
-<ul>
-<li>Amazon has blocked all thrid party applications from pushing to Amazon Drive. For more information see <a href="https://forum.rclone.org/t/rclone-has-been-banned-from-amazon-drive/2314">this</a></li>
-<li>I am going to implement <a href="https://github.com/duplicati/duplicati">Duplicati</a> as a solution to sync my photos to Amazon Drive</li>
-<li>Another potential solution is to continute to use rclone, but host the files on Google Drive</li>
-</ul>
 
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
+</div>
+  
   
 
 
-
-
-      
-
-
-
-
-<time class='entry-date' datetime='2017-04-15T10:58:55-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>10:58 am</span></time>
-      
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/shell/'>shell</a>
-  
-</span>
-
-
-    </p>
+  <div class="pagination">
     
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/" >Tweet</a>
-  
-  
-  
-</div>
-
+    <a href="/blog/archives">Blog Archives</a>
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2017/02/24/rspec-and-elastic-search/" title="Previous Post: RSpec and Elastic Search">&laquo; RSpec and Elastic Search</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2017/06/05/artificial-intelligence-nano-degree/" title="Next Post: Artificial Intelligence Nano Degree">Artificial Intelligence Nano Degree &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a class="next" href="/posts/4">Newer &rarr;</a>
+    
+  </div>
 </div>
-  </section>
-
-
-</div>
+<aside class="sidebar">
+  
+    
+  
+</aside>
 
     </div>
   </div>
@@ -307,10 +204,7 @@
       var disqus_shortname = 'iacutone';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/';
-        var disqus_url = 'http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
