@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-06-08T12:05:06-04:00</updated>
+  <updated>2017-07-19T19:01:03-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[My Photo Storage Solution]]></title>
     <link href="http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/"/>
-    <updated>2017-04-15T10:58:55-04:00</updated>
+    <updated>2017-04-15T09:58:55-05:00</updated>
     <id>http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution</id>
     <content type="html"><![CDATA[<p>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available <a href="http://github.com/iacutone/scripts">here</a>.</p>
 

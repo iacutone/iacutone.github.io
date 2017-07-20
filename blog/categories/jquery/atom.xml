@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Jquery | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/jquery/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-06-08T12:05:06-04:00</updated>
+  <updated>2017-07-19T19:01:03-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -355,7 +355,7 @@
   <entry>
     <title type="html"><![CDATA[Hiding Multiple Checkboxes With JQuery]]></title>
     <link href="http://iacutone.github.io/blog/2013/08/15/adventures-in-jquery/"/>
-    <updated>2013-08-15T21:09:00-04:00</updated>
+    <updated>2013-08-15T21:09:00-05:00</updated>
     <id>http://iacutone.github.io/blog/2013/08/15/adventures-in-jquery</id>
     <content type="html"><![CDATA[<p>I have been developing a <a href='https://github.com/iacutone/new-quiz'>quiz app</a> for practice with a more complex schema interface.  I wanted to dive deeper into CoffeScript and found the opportunity while trying to figure out how a student can add an answer to a given quiz.  If a checkbox for a given answer is checked, I wanted the remaining checkboxes to disappear.  Also, if the student checked the incorrect box, the browser should render all checkboxes again.  Here is my <a href='https://gist.github.com/iacutone/c28e8fa1324f82b508e0'>code.</a></p>
 
@@ -446,7 +446,7 @@
   <entry>
     <title type="html"><![CDATA[Gon Gem]]></title>
     <link href="http://iacutone.github.io/blog/2013/06/30/gon-gem/"/>
-    <updated>2013-06-30T00:04:00-04:00</updated>
+    <updated>2013-06-30T00:04:00-05:00</updated>
     <id>http://iacutone.github.io/blog/2013/06/30/gon-gem</id>
     <content type="html"><![CDATA[<p>I ran into difficulties trying to find a way to implement jQuery in a modal.  It is not possible to use remote: true in a form_tag with Twitter Bootstrap.  I successfully used the <a href='https://github.com/gazay/gon'>Gon Gem</a> in order to remove elements from the DOM when an instance variable reached a certain number.  If you find yourself in the position of needing to remove elements from a modal, this gem seems to be the way to go.</p>
 

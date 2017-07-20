@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-06-08T12:05:06-04:00</updated>
+  <updated>2017-07-19T19:01:03-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Artificial Intelligence Nano Degree]]></title>
     <link href="http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree/"/>
-    <updated>2017-06-05T17:33:41-04:00</updated>
+    <updated>2017-06-05T16:33:41-05:00</updated>
     <id>http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree</id>
     <content type="html"><![CDATA[<p>I started the <a href="https://www.udacity.com/course/artificial-intelligence-nanodegree--nd889">Udacity</a> Artificial Intelligence Nano Degree last month.</p>
 
@@ -24,6 +24,7 @@
 
 <ul>
 <li><a href="http://norvig.com/sudoku.html">This</a> post helpful for building a sudoku solver.</li>
+<li><a href="https://github.com/iacutone/AIND-Sudoku">My Solution</a></li>
 </ul>
 
 
@@ -34,12 +35,23 @@
 <ul>
 <li><a href="http://inst.eecs.berkeley.edu/~cs61b/fa14/ta-materials/apps/ab_tree_practice/">This</a> application is useful for visualizing alpha beta pruning.</li>
 <li><a href="https://www.youtube.com/watch?v=STjW3eH0Cik">This</a> is a good introduction to the minimax function and alphabeta pruning.</li>
+<li><a href="http://stpk.cs.rtu.lv/sites/all/files/stpk/materiali/mi/artificial%20intelligence%20a%20modern%20approach.pdf">Artificial Intelligence, A Modern Appoach</a> chapter 5 helped clarify ideas expressed in the Udacity videos.</li>
+<li><a href="https://github.com/iacutone/AIND-Isolation">My Solution</a></li>
 </ul>
 
 
-<p>Creating an algo to play an Isolation Game is much more complicated than the first project and was very frustrating to build. Unlike the first project, there is barely a test framework to follow. You push your methods to a remote Udacity server which gives feedback about test failures. This development cycle is difficult to debug because you can neither use a debugger nor get <code>print</code> output.</p>
+<p>Creating an algo to play an Isolation Game is much more complicated than the first project and was very frustrating to build. Unlike the first project, there is barely a test framework to follow. You push your methods to a remote Udacity server which gives feedback about test failures. This development cycle is difficult to debug because you can neither use a debugger nor get <code>print</code> output. After the minimax and alphabeta functions pass the remote tests, things get interesting. You are asked to write custom heuristics in order to decide the best move for your player. I wish Udacity gave more hints as to game heuristics.</p>
 
-<p>Writing a synopsis for a research paper is also required for the project. I chose to write about <a href="https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf">AlphaGo</a>. I cannot understand the math proofs in the paper, so understanding the paper took several took several attempts.</p>
+<p>Writing a synopsis for a research paper is also required for the project. I chose to write about <a href="https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf">AlphaGo</a>. Due to my lack of knowledge reading math proofs, it took several attempts to understand the paper.</p>
+
+<h3>Project 3, Implement a Planning Search</h3>
+
+<p>Using planning problems—states, actions, and goals for planning algorithms.</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ySN5Wnu88nE">This</a> Computerphile video is a good reinforcement for A* search.</li>
+</ul>
+
 ]]></content>
   </entry>
   

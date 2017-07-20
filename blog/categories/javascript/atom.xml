@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Javascript | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-06-08T12:05:06-04:00</updated>
+  <updated>2017-07-19T19:01:03-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -397,7 +397,7 @@
   <entry>
     <title type="html"><![CDATA[Gon Gem]]></title>
     <link href="http://iacutone.github.io/blog/2013/06/30/gon-gem/"/>
-    <updated>2013-06-30T00:04:00-04:00</updated>
+    <updated>2013-06-30T00:04:00-05:00</updated>
     <id>http://iacutone.github.io/blog/2013/06/30/gon-gem</id>
     <content type="html"><![CDATA[<p>I ran into difficulties trying to find a way to implement jQuery in a modal.  It is not possible to use remote: true in a form_tag with Twitter Bootstrap.  I successfully used the <a href='https://github.com/gazay/gon'>Gon Gem</a> in order to remove elements from the DOM when an instance variable reached a certain number.  If you find yourself in the position of needing to remove elements from a modal, this gem seems to be the way to go.</p>
 
@@ -565,7 +565,7 @@
   <entry>
     <title type="html"><![CDATA[Using Impress.js With Rails]]></title>
     <link href="http://iacutone.github.io/blog/2013/06/21/using-impress-dot-js-with-rails/"/>
-    <updated>2013-06-21T13:13:00-04:00</updated>
+    <updated>2013-06-21T13:13:00-05:00</updated>
     <id>http://iacutone.github.io/blog/2013/06/21/using-impress-dot-js-with-rails</id>
     <content type="html"><![CDATA[<p>I recently had an interview at an awesome creative agency, <a href='www.canvas.is'>Canvas</a> and wanted to show them something unique in order to make me stand out.  I decided to build a thank you card with <a href='www.github.com/bartaz/impress.js'>Impress.js.</a>  <a href='http://powerful-woodland-7328.herokuapp.com'> This</a> is the thank you card I sent to their CTO.  I enjoyed playing with Impress.js and will definitely incorporate it into many more applications in the future.  However, there is not much documentation about how to get Impress to play nicely in a Rails app.  The app was breaking in production, but working in development.  The code following the impress.js file below specifies where to load the Javascript.</p>
 

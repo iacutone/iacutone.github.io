@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Devise | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/devise/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-06-08T12:05:06-04:00</updated>
+  <updated>2017-07-19T19:01:03-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Changing Your Password From Scratch]]></title>
     <link href="http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch/"/>
-    <updated>2013-09-07T01:08:00-04:00</updated>
+    <updated>2013-09-07T01:08:00-05:00</updated>
     <id>http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch</id>
     <content type="html"><![CDATA[<p> So say you are using devise and have none of the has_secure_password medthod available to you.  One should learn the bcrypt gem... and needs to abstract some methods in order to parse an encrypted password.  Cool, Bcrypt can do that, as located <a href ='  https://github.com/rails/rails/blob/b965ce361b89ad33a4a4b422f8e564233926c723/activemodel/lib/active_model/secure_password.rb#L42
 '>here.</a> Here is my modified code in order to confirm if a new password in order to apply a boolean value to an inputed password.</p>
