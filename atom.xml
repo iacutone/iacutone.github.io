@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-07-19T19:01:03-05:00</updated>
+  <updated>2017-08-19T13:48:51-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,9 +14,120 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Python, First Impressions]]></title>
+    <link href="http://iacutone.github.io/blog/2017/08/11/python-first-thoughts/"/>
+    <updated>2017-08-11T19:39:12-04:00</updated>
+    <id>http://iacutone.github.io/blog/2017/08/11/python-first-thoughts</id>
+    <content type="html"><![CDATA[<h4>Debugging</h4>
+
+<ul>
+<li>Write the following code to use an interactive debugger in Python.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">pdb</span>
+</span><span class='line'><span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Self</h4>
+
+<ul>
+<li>Passing a reference to <code>self</code> seems repetitive.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Hello&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Testing</h4>
+
+<ul>
+<li>You need to pass in the -s to <code>print</code> test output. I expected <code>print</code> to log output regardless.</li>
+</ul>
+
+
+<h4>Modules</h4>
+
+<ul>
+<li>You can conditionally implement different behavior when importing modules in Python.</li>
+<li>Taken from <a href="https://stackoverflow.com/questions/419163/what-does-if-name-main-do">this</a> StackOverflow example.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>one.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;func() in one.py&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;top-level in one.py&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;one.py is being run directly&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">else</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;one.py is being imported into another module&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>two.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">one</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;top-level in two.py&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">one</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;two.py is being run directly&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">else</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;two.py is being imported into another module&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running <code>python one.py</code> returns:
+<code>
+top-level in one.py
+one.py is being run directly
+</code></p>
+
+<p>While running <code>python two.py</code> returns:
+<code>
+top-level in one.py
+one.py is being imported into another module
+top-level in two.py
+func() in one.py
+two.py is being run directly
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Artificial Intelligence Nano Degree]]></title>
     <link href="http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree/"/>
-    <updated>2017-06-05T16:33:41-05:00</updated>
+    <updated>2017-06-05T17:33:41-04:00</updated>
     <id>http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree</id>
     <content type="html"><![CDATA[<p>I started the <a href="https://www.udacity.com/course/artificial-intelligence-nanodegree--nd889">Udacity</a> Artificial Intelligence Nano Degree last month.</p>
 
@@ -58,7 +169,7 @@
   <entry>
     <title type="html"><![CDATA[My Photo Storage Solution]]></title>
     <link href="http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/"/>
-    <updated>2017-04-15T09:58:55-05:00</updated>
+    <updated>2017-04-15T10:58:55-04:00</updated>
     <id>http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution</id>
     <content type="html"><![CDATA[<p>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available <a href="http://github.com/iacutone/scripts">here</a>.</p>
 
@@ -258,7 +369,7 @@
   <entry>
     <title type="html"><![CDATA[Vim, Thoughts After Two Weeks]]></title>
     <link href="http://iacutone.github.io/blog/2016/10/31/vim/"/>
-    <updated>2016-10-31T15:31:06-05:00</updated>
+    <updated>2016-10-31T16:31:06-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/10/31/vim</id>
     <content type="html"><![CDATA[<p>Purposefully, I began using Vim during a non-strenuous work week which helped manage frustration. I have been using solely Vim as a text editor for two weeks and have experienced improved efficienies over my previous text editor, Sublime.</p>
 
@@ -279,7 +390,7 @@
   <entry>
     <title type="html"><![CDATA[Level Up With Vim]]></title>
     <link href="http://iacutone.github.io/blog/2016/10/11/level-up-with-vim/"/>
-    <updated>2016-10-11T12:02:35-05:00</updated>
+    <updated>2016-10-11T13:02:35-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/10/11/level-up-with-vim</id>
     <content type="html"><![CDATA[<p>How much time do you spend in your text editor? We spend most of our time reading through text and jumping between files. My goal is to find a tool in order to help me do this more efficiently. I have found that learning Vim is not overwhelming or difficult if you break the units of work down into manageable pieces. The ultimate goal is to use Vim fulltime. Below are my curated steps:</p>
 
@@ -329,7 +440,7 @@
   <entry>
     <title type="html"><![CDATA[Filtering Ack Results]]></title>
     <link href="http://iacutone.github.io/blog/2016/09/15/filtering-ack-results/"/>
-    <updated>2016-09-15T09:23:52-05:00</updated>
+    <updated>2016-09-15T10:23:52-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/09/15/filtering-ack-results</id>
     <content type="html"><![CDATA[<p>While setting up my VIM environment, I read a blogpost which states <code>ack</code> can ignore directories. For cleaner <code>ack</code> output you can setup the file below:</p>
 
@@ -349,7 +460,7 @@
   <entry>
     <title type="html"><![CDATA[Rails `before_action` Method]]></title>
     <link href="http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/"/>
-    <updated>2016-07-13T12:31:20-05:00</updated>
+    <updated>2016-07-13T13:31:20-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/07/13/rails-before-action-method</id>
     <content type="html"><![CDATA[<p>I did not know you could give a <code>before_action</code> a block argument. This is a benefit because you do not have to create a ruby method and pass the method into the <code>before_action</code>.</p>
 
@@ -457,7 +568,7 @@
   <entry>
     <title type="html"><![CDATA[Extend and Include in Ruby]]></title>
     <link href="http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby/"/>
-    <updated>2016-06-02T15:25:45-05:00</updated>
+    <updated>2016-06-02T16:25:45-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby</id>
     <content type="html"><![CDATA[<p>I have been trying to clean up some old code with Ruby modules. This post is to help me remember the differences between <code>include</code> and <code>extend</code> in Ruby.</p>
 
@@ -517,7 +628,7 @@
   <entry>
     <title type="html"><![CDATA[Find and Replace Text]]></title>
     <link href="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/"/>
-    <updated>2016-05-15T10:28:24-05:00</updated>
+    <updated>2016-05-15T11:28:24-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/05/15/find-and-replace-text</id>
     <content type="html"><![CDATA[<p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
 
@@ -1061,7 +1172,7 @@
   <entry>
     <title type="html"><![CDATA[Shell Function]]></title>
     <link href="http://iacutone.github.io/blog/2015/10/30/shell-function/"/>
-    <updated>2015-10-30T22:34:34-05:00</updated>
+    <updated>2015-10-30T23:34:34-04:00</updated>
     <id>http://iacutone.github.io/blog/2015/10/30/shell-function</id>
     <content type="html"><![CDATA[<p>I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video sites.&rdquo; It&rsquo;s super useful. However, it default downloads to the current terminal directory. Let&rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.</p>
 
@@ -1092,107 +1203,6 @@
 <p>Helpful Links</p>
 
 <p><a href="https://github.com/rg3/youtube-dl">youtube-dl</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Setter Method in a Rails Model]]></title>
-    <link href="http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model/"/>
-    <updated>2015-10-23T15:30:53-05:00</updated>
-    <id>http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model</id>
-    <content type="html"><![CDATA[<p>At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&rsquo;s say we need to do something in a before_save callback such as lowercase a user&rsquo;s email.</p>
-
-<figure class='code'><figcaption><span>user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">before_save</span><span class="p">:</span> <span class="n">lowercase_email</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">lowercase_email</span>
-</span><span class='line'>  <span class="nb">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="nb">self</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">downcase</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>How is this code implemented without using before_save? One method would be overriding the setter accessor.</p>
-
-<figure class='code'><figcaption><span>user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">email</span><span class="o">=</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-</span><span class='line'> <span class="n">email</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">downcase</span>
-</span><span class='line'> <span class="k">super</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, when the email attribute is updated, my email setter method is called.</p>
-
-<p>Currently, both implementations for downcasing an email are straightforward. However, as the application grows, the before_save callback is more difficult to test and maintain. The before_save is implicit and might have unexpected side effects. Here is a basic spec.</p>
-
-<figure class='code'><figcaption><span>user_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">User</span> <span class="k">do</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#lowercase_email&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="s1">&#39;GNARLY@email.com&#39;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;lowercases the email&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">lowercase_email</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="s1">&#39;gnarly@email.com&#39;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Instead, let&rsquo;s test the <em>behavior</em> of what we expect.</p>
-
-<figure class='code'><figcaption><span>user_creation_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="s1">&#39;User Creation&#39;</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">{</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;:email&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="s1">&#39;GNARLY@email.com&#39;</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="s1">&#39;it returns a standardized email&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="s1">&#39;gnarly@email.com&#39;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The first spec is directly testing the callback, whereas the latter spec is testing the <em>behavior</em> of the expected outcome. The latter spec is easier to reason about and change. This is an easy example, but as callbacks grow changing their behavior becomes more difficult. This is especially true if the callbacks are coupled with other models.</p>
-
-<p><em>Helpful Links</em></p>
-
-<p><a href="http://stackoverflow.com/questions/10464793/what-is-the-right-way-to-override-a-setter-method-in-ruby-on-rails">What is the right way to override a setter method in Ruby on Rails?</a></p>
-
-<p><a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html#class-ActiveRecord%3a%3aBase-label-Overwriting+default+accessors">Overwriting default accessors</a></p>
 ]]></content>
   </entry>
   

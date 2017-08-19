@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://iacutone.github.io/blog/2017/08/11/python-first-thoughts/</loc>
+    <lastmod>2017-08-11T19:39:12-04:00</lastmod>
+  </url>
+  <url>
     <loc>http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree/</loc>
-    <lastmod>2017-06-05T16:33:41-05:00</lastmod>
+    <lastmod>2017-06-05T17:33:41-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/</loc>
-    <lastmod>2017-04-15T09:58:55-05:00</lastmod>
+    <lastmod>2017-04-15T10:58:55-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2017/02/24/rspec-and-elastic-search/</loc>
@@ -14,27 +18,27 @@
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/10/31/vim/</loc>
-    <lastmod>2016-10-31T15:31:06-05:00</lastmod>
+    <lastmod>2016-10-31T16:31:06-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/10/11/level-up-with-vim/</loc>
-    <lastmod>2016-10-11T12:02:35-05:00</lastmod>
+    <lastmod>2016-10-11T13:02:35-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/09/15/filtering-ack-results/</loc>
-    <lastmod>2016-09-15T09:23:52-05:00</lastmod>
+    <lastmod>2016-09-15T10:23:52-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/</loc>
-    <lastmod>2016-07-13T12:31:20-05:00</lastmod>
+    <lastmod>2016-07-13T13:31:20-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby/</loc>
-    <lastmod>2016-06-02T15:25:45-05:00</lastmod>
+    <lastmod>2016-06-02T16:25:45-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/</loc>
-    <lastmod>2016-05-15T10:28:24-05:00</lastmod>
+    <lastmod>2016-05-15T11:28:24-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2016/03/12/jquery-beforesend/</loc>
@@ -74,23 +78,23 @@
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/10/30/shell-function/</loc>
-    <lastmod>2015-10-30T22:34:34-05:00</lastmod>
+    <lastmod>2015-10-30T23:34:34-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/10/23/the-setter-method-in-a-rails-model/</loc>
-    <lastmod>2015-10-23T15:30:53-05:00</lastmod>
+    <lastmod>2015-10-23T16:30:53-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/09/18/rubys-fetch-method/</loc>
-    <lastmod>2015-09-18T18:15:29-05:00</lastmod>
+    <lastmod>2015-09-18T19:15:29-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/09/09/swift-basics/</loc>
-    <lastmod>2015-09-09T18:48:12-05:00</lastmod>
+    <lastmod>2015-09-09T19:48:12-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2015/09/04/my-return-to-blogging/</loc>
-    <lastmod>2015-09-04T19:45:08-05:00</lastmod>
+    <lastmod>2015-09-04T20:45:08-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2014/02/16/exceptions-in-ruby/</loc>
@@ -102,55 +106,55 @@
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success/</loc>
-    <lastmod>2013-10-22T21:36:00-05:00</lastmod>
+    <lastmod>2013-10-22T21:36:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/09/07/changing-your-password-from-scratch/</loc>
-    <lastmod>2013-09-07T01:08:00-05:00</lastmod>
+    <lastmod>2013-09-07T01:08:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/</loc>
-    <lastmod>2013-08-22T18:56:00-05:00</lastmod>
+    <lastmod>2013-08-22T18:56:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/08/15/adventures-in-jquery/</loc>
-    <lastmod>2013-08-15T21:09:00-05:00</lastmod>
+    <lastmod>2013-08-15T21:09:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/07/15/sidekiq-and-carrierwave/</loc>
-    <lastmod>2013-07-15T20:44:00-05:00</lastmod>
+    <lastmod>2013-07-15T20:44:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/30/gon-gem/</loc>
-    <lastmod>2013-06-30T00:04:00-05:00</lastmod>
+    <lastmod>2013-06-30T00:04:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/23/pluck-method-in-active-record/</loc>
-    <lastmod>2013-06-23T01:59:00-05:00</lastmod>
+    <lastmod>2013-06-23T01:59:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/21/using-impress-dot-js-with-rails/</loc>
-    <lastmod>2013-06-21T13:13:00-05:00</lastmod>
+    <lastmod>2013-06-21T13:13:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/18/client-side-validations/</loc>
-    <lastmod>2013-06-18T01:29:00-05:00</lastmod>
+    <lastmod>2013-06-18T01:29:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/10/amazon-s3/</loc>
-    <lastmod>2013-06-10T15:45:00-05:00</lastmod>
+    <lastmod>2013-06-10T15:45:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/06/05/amazon-s3/</loc>
-    <lastmod>2013-06-05T18:59:00-05:00</lastmod>
+    <lastmod>2013-06-05T18:59:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/04/22/binary-search-trees/</loc>
-    <lastmod>2013-04-22T14:13:00-05:00</lastmod>
+    <lastmod>2013-04-22T14:13:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/04/16/the-yipit-api-and-whenever-gem/</loc>
-    <lastmod>2013-04-16T17:05:00-05:00</lastmod>
+    <lastmod>2013-04-16T17:05:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/2013/03/01/jambox/</loc>
@@ -241,17 +245,5 @@
   </url>
   <url>
     <loc>http://iacutone.github.io/blog/categories/python/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/posts/2/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/posts/3/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/posts/4/</loc>
-  </url>
-  <url>
-    <loc>http://iacutone.github.io/posts/5/</loc>
   </url>
 </urlset>

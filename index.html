@@ -9,8 +9,10 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I started the Udacity Artificial Intelligence Nano Degree last month. Project 1, Sudoku Solver This post helpful for building a sudoku solver.
-My &hellip;">
+  <meta name="description" content="Debugging Write the following code to use an interactive debugger in Python. 1
+2
+import pdb
+pdb.set_trace() Self Passing a reference to self seems &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -118,6 +120,140 @@ My &hellip;">
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2017/08/11/python-first-thoughts/">Python, First Impressions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-08-11T19:39:12-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>7:39 pm</span></time>
+        
+         | <a href="/blog/2017/08/11/python-first-thoughts/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>Debugging</h4>
+
+<ul>
+<li>Write the following code to use an interactive debugger in Python.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">pdb</span>
+</span><span class='line'><span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Self</h4>
+
+<ul>
+<li>Passing a reference to <code>self</code> seems repetitive.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Hello&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Testing</h4>
+
+<ul>
+<li>You need to pass in the -s to <code>print</code> test output. I expected <code>print</code> to log output regardless.</li>
+</ul>
+
+
+<h4>Modules</h4>
+
+<ul>
+<li>You can conditionally implement different behavior when importing modules in Python.</li>
+<li>Taken from <a href="https://stackoverflow.com/questions/419163/what-does-if-name-main-do">this</a> StackOverflow example.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>one.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;func() in one.py&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;top-level in one.py&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;one.py is being run directly&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">else</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;one.py is being imported into another module&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>two.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">one</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;top-level in two.py&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">one</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;two.py is being run directly&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">else</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;two.py is being imported into another module&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running <code>python one.py</code> returns:
+<code>
+top-level in one.py
+one.py is being run directly
+</code></p>
+
+<p>While running <code>python two.py</code> returns:
+<code>
+top-level in one.py
+one.py is being imported into another module
+top-level in two.py
+func() in one.py
+two.py is being run directly
+</code></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2017/06/05/artificial-intelligence-nano-degree/">Artificial Intelligence Nano Degree</a></h1>
     
     
@@ -127,7 +263,7 @@ My &hellip;">
 
 
 
-<time class='entry-date' datetime='2017-06-05T16:33:41-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>4:33 pm</span></time>
+<time class='entry-date' datetime='2017-06-05T17:33:41-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>5:33 pm</span></time>
         
          | <a href="/blog/2017/06/05/artificial-intelligence-nano-degree/#disqus_thread">Comments</a>
         
@@ -192,7 +328,7 @@ My &hellip;">
 
 
 
-<time class='entry-date' datetime='2017-04-15T09:58:55-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>9:58 am</span></time>
+<time class='entry-date' datetime='2017-04-15T10:58:55-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>10:58 am</span></time>
         
          | <a href="/blog/2017/04/15/my-photo-storage-solution/#disqus_thread">Comments</a>
         
@@ -438,7 +574,7 @@ My &hellip;">
 
 
 
-<time class='entry-date' datetime='2016-10-31T15:31:06-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>3:31 pm</span></time>
+<time class='entry-date' datetime='2016-10-31T16:31:06-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>4:31 pm</span></time>
         
          | <a href="/blog/2016/10/31/vim/#disqus_thread">Comments</a>
         
@@ -482,7 +618,7 @@ My &hellip;">
 
 
 
-<time class='entry-date' datetime='2016-10-11T12:02:35-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>12:02 pm</span></time>
+<time class='entry-date' datetime='2016-10-11T13:02:35-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:02 pm</span></time>
         
          | <a href="/blog/2016/10/11/level-up-with-vim/#disqus_thread">Comments</a>
         
@@ -555,7 +691,7 @@ My &hellip;">
 
 
 
-<time class='entry-date' datetime='2016-09-15T09:23:52-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:23 am</span></time>
+<time class='entry-date' datetime='2016-09-15T10:23:52-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>10:23 am</span></time>
         
          | <a href="/blog/2016/09/15/filtering-ack-results/#disqus_thread">Comments</a>
         
@@ -598,7 +734,7 @@ My &hellip;">
 
 
 
-<time class='entry-date' datetime='2016-07-13T12:31:20-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>12:31 pm</span></time>
+<time class='entry-date' datetime='2016-07-13T13:31:20-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:31 pm</span></time>
         
          | <a href="/blog/2016/07/13/rails-before-action-method/#disqus_thread">Comments</a>
         
@@ -729,7 +865,7 @@ My &hellip;">
 
 
 
-<time class='entry-date' datetime='2016-06-02T15:25:45-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2016</span></span> <span class='time'>3:25 pm</span></time>
+<time class='entry-date' datetime='2016-06-02T16:25:45-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2016</span></span> <span class='time'>4:25 pm</span></time>
         
          | <a href="/blog/2016/06/02/extend-and-include-in-ruby/#disqus_thread">Comments</a>
         
@@ -812,7 +948,7 @@ My &hellip;">
 
 
 
-<time class='entry-date' datetime='2016-05-15T10:28:24-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>10:28 am</span></time>
+<time class='entry-date' datetime='2016-05-15T11:28:24-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>11:28 am</span></time>
         
          | <a href="/blog/2016/05/15/find-and-replace-text/#disqus_thread">Comments</a>
         
@@ -865,67 +1001,6 @@ My &hellip;">
 
 
 <p>The -i flag allows for in place editing on the file. In the regex, the s replaces hello with bye and the g indicates globally, in case hello is found more than once in the file. The &lsquo;&rsquo; is sending the change into the correct output file.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/03/12/jquery-beforesend/">JQuery beforeSend Function</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-03-12T15:32:09-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:32 pm</span></time>
-        
-         | <a href="/blog/2016/03/12/jquery-beforesend/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial solution was to disable the submit button if the comment is blank. However, using the <code>beforeSend</code> function provides a cleaner solution.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'>  <span class="nv">comment = </span><span class="p">(</span><span class="s">&#39;.form-field-comment&#39;</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span>
-</span><span class='line'>    <span class="nv">type: </span><span class="s">&#39;POST&#39;</span>
-</span><span class='line'>    <span class="nv">dataType: </span><span class="s">&#39;script&#39;</span>
-</span><span class='line'>    <span class="nv">url: </span><span class="nx">comment_form</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s">&#39;action&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="nv">data:</span>
-</span><span class='line'>      <span class="nv">comment:</span>
-</span><span class='line'>        <span class="nv">body: </span><span class="nx">comment</span>
-</span><span class='line'>    <span class="nv">beforeSend: </span><span class="nf">() -&gt;</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nx">comment</span> <span class="o">is</span> <span class="s">&#39;&#39;</span>
-</span><span class='line'>        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1"># do this instead of disabling the submit button </span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>With the above code, the comment form is never posted if the comment is blank.</p>
 </div>
   
   

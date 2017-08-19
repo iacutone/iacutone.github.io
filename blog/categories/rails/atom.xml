@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-07-19T19:01:03-05:00</updated>
+  <updated>2017-08-19T13:48:51-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -71,7 +71,7 @@ end
   <entry>
     <title type="html"><![CDATA[Rails `before_action` Method]]></title>
     <link href="http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/"/>
-    <updated>2016-07-13T12:31:20-05:00</updated>
+    <updated>2016-07-13T13:31:20-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/07/13/rails-before-action-method</id>
     <content type="html"><![CDATA[<p>I did not know you could give a <code>before_action</code> a block argument. This is a benefit because you do not have to create a ruby method and pass the method into the <code>before_action</code>.</p>
 
@@ -134,7 +134,7 @@ set_callback :process_action, :before, :authenticate
   <entry>
     <title type="html"><![CDATA[Extend and Include in Ruby]]></title>
     <link href="http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby/"/>
-    <updated>2016-06-02T15:25:45-05:00</updated>
+    <updated>2016-06-02T16:25:45-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby</id>
     <content type="html"><![CDATA[<p>I have been trying to clean up some old code with Ruby modules. This post is to help me remember the differences between <code>include</code> and <code>extend</code> in Ruby.</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-07-19T19:01:03-05:00</updated>
+  <updated>2017-08-19T13:48:51-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,9 +14,91 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Python, First Impressions]]></title>
+    <link href="http://iacutone.github.io/blog/2017/08/11/python-first-thoughts/"/>
+    <updated>2017-08-11T19:39:12-04:00</updated>
+    <id>http://iacutone.github.io/blog/2017/08/11/python-first-thoughts</id>
+    <content type="html"><![CDATA[<h4>Debugging</h4>
+
+<ul>
+<li>Write the following code to use an interactive debugger in Python.</li>
+</ul>
+
+
+<pre><code class="python">import pdb
+pdb.set_trace()
+</code></pre>
+
+<h4>Self</h4>
+
+<ul>
+<li>Passing a reference to <code>self</code> seems repetitive.</li>
+</ul>
+
+
+<pre><code class="python">class Foo:
+  def bar(self)
+    print('Hello')
+</code></pre>
+
+<h4>Testing</h4>
+
+<ul>
+<li>You need to pass in the -s to <code>print</code> test output. I expected <code>print</code> to log output regardless.</li>
+</ul>
+
+
+<h4>Modules</h4>
+
+<ul>
+<li>You can conditionally implement different behavior when importing modules in Python.</li>
+<li>Taken from <a href="https://stackoverflow.com/questions/419163/what-does-if-name-main-do">this</a> StackOverflow example.</li>
+</ul>
+
+
+<pre><code class="python one.py">def func():
+    print("func() in one.py")
+
+print("top-level in one.py")
+
+if __name__ == "__main__":
+    print("one.py is being run directly")
+else:
+    print("one.py is being imported into another module")
+</code></pre>
+
+<pre><code class="python two.py">import one
+
+print("top-level in two.py")
+one.func()
+
+if __name__ == "__main__":
+    print("two.py is being run directly")
+else:
+    print("two.py is being imported into another module")
+</code></pre>
+
+<p>Running <code>python one.py</code> returns:
+<code>
+top-level in one.py
+one.py is being run directly
+</code></p>
+
+<p>While running <code>python two.py</code> returns:
+<code>
+top-level in one.py
+one.py is being imported into another module
+top-level in two.py
+func() in one.py
+two.py is being run directly
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Artificial Intelligence Nano Degree]]></title>
     <link href="http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree/"/>
-    <updated>2017-06-05T16:33:41-05:00</updated>
+    <updated>2017-06-05T17:33:41-04:00</updated>
     <id>http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree</id>
     <content type="html"><![CDATA[<p>I started the <a href="https://www.udacity.com/course/artificial-intelligence-nanodegree--nd889">Udacity</a> Artificial Intelligence Nano Degree last month.</p>
 

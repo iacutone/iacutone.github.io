@@ -5,11 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Find and Replace Text - Iacutone.rb</title>
+  <title>Python, First Impressions - Iacutone.rb</title>
   <meta name="author" content="">
 
   
-  <meta name="description" content="If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a &hellip;">
+  <meta name="description" content="Debugging Write the following code to use an interactive debugger in Python. 1
+2
+import pdb
+pdb.set_trace() Self Passing a reference to self seems &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +21,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text">
+  <link rel="canonical" href="http://iacutone.github.io/blog/2017/08/11/python-first-thoughts">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Iacutone.rb" type="application/atom+xml">
@@ -115,7 +118,7 @@
   <header>
     
       
-        <h1 class="entry-title">Find and Replace Text</h1>
+        <h1 class="entry-title">Python, First Impressions</h1>
       
     
     
@@ -125,7 +128,7 @@
 
 
 
-<time class='entry-date' datetime='2016-05-15T11:28:24-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>11:28 am</span></time>
+<time class='entry-date' datetime='2017-08-11T19:39:12-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>7:39 pm</span></time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -135,49 +138,109 @@
   </header>
 
 
-<div class="entry-content"><p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
+<div class="entry-content"><h4>Debugging</h4>
 
-<p><code>ack pivotal_commentor -l | xargs sed -i '' 's/pivotal_commentor/commentor/g'</code></p>
+<ul>
+<li>Write the following code to use an interactive debugger in Python.</li>
+</ul>
 
-<p>Let&rsquo;s break this command down with a simple example.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">pdb</span>
+</span><span class='line'><span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Self</h4>
+
+<ul>
+<li>Passing a reference to <code>self</code> seems repetitive.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Hello&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Testing</h4>
+
+<ul>
+<li>You need to pass in the -s to <code>print</code> test output. I expected <code>print</code> to log output regardless.</li>
+</ul>
+
+
+<h4>Modules</h4>
+
+<ul>
+<li>You can conditionally implement different behavior when importing modules in Python.</li>
+<li>Taken from <a href="https://stackoverflow.com/questions/419163/what-does-if-name-main-do">this</a> StackOverflow example.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>one.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir test
-</span><span class='line'>cd test
-</span><span class='line'>touch file1.txt
-</span><span class='line'>touch file2.txt</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;func() in one.py&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;top-level in one.py&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;one.py is being run directly&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">else</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;one.py is being imported into another module&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>And lets add the text &lsquo;hello&rsquo; to both text files.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+
+<figure class='code'><figcaption><span>two.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l
-</span><span class='line'>file1.txt
-</span><span class='line'>file2.txt</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">one</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;top-level in two.py&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">one</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;two.py is being run directly&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">else</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;two.py is being imported into another module&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>ack is like grep and found the files containing the string hello. The -l flag &ldquo;Only print filenames containing matches&rdquo;</p>
+<p>Running <code>python one.py</code> returns:
+<code>
+top-level in one.py
+one.py is being run directly
+</code></p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l | xargs
-</span><span class='line'>file1.txt file2.txt</span></code></pre></td></tr></table></div></figure>
-
-
-<p>xargs is a Unix utility that constructs argument lists and is smashing the filenames into one line.</p>
-
-<p>Finally, we pipe the arguments from xargs to sed.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l | xargs sed -i '' 's/hello/bye/g'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The -i flag allows for in place editing on the file. In the regex, the s replaces hello with bye and the g indicates globally, in case hello is found more than once in the file. The &lsquo;&rsquo; is sending the change into the correct output file.</p>
+<p>While running <code>python two.py</code> returns:
+<code>
+top-level in one.py
+one.py is being imported into another module
+top-level in two.py
+func() in one.py
+two.py is being run directly
+</code></p>
 </div>
 
 
@@ -194,13 +257,13 @@
 
 
 
-<time class='entry-date' datetime='2016-05-15T11:28:24-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>11:28 am</span></time>
+<time class='entry-date' datetime='2017-08-11T19:39:12-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>7:39 pm</span></time>
       
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/ack/'>ack</a>, <a class='category' href='/blog/categories/grep/'>grep</a>
+    <a class='category' href='/blog/categories/python/'>python</a>
   
 </span>
 
@@ -209,7 +272,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://iacutone.github.io/blog/2017/08/11/python-first-thoughts/" data-via="iacutone" data-counturl="http://iacutone.github.io/blog/2017/08/11/python-first-thoughts/" >Tweet</a>
   
   
   
@@ -218,10 +281,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2016/03/12/jquery-beforesend/" title="Previous Post: JQuery beforeSend Function">&laquo; JQuery beforeSend Function</a>
+        <a class="basic-alignment left" href="/blog/2017/06/05/artificial-intelligence-nano-degree/" title="Previous Post: Artificial Intelligence Nano Degree">&laquo; Artificial Intelligence Nano Degree</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2016/06/02/extend-and-include-in-ruby/" title="Next Post: Extend and Include in Ruby">Extend and Include in Ruby &raquo;</a>
       
     </p>
   </footer>
@@ -251,8 +312,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/';
-        var disqus_url = 'http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/';
+        var disqus_identifier = 'http://iacutone.github.io/blog/2017/08/11/python-first-thoughts/';
+        var disqus_url = 'http://iacutone.github.io/blog/2017/08/11/python-first-thoughts/';
         var disqus_script = 'embed.js';
       
     (function () {

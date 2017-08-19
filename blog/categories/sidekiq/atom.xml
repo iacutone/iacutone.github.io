@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Sidekiq | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/sidekiq/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-07-19T19:01:03-05:00</updated>
+  <updated>2017-08-19T13:48:51-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Sidekiq and Carrierwave, Part 3]]></title>
     <link href="http://iacutone.github.io/blog/2013/07/15/sidekiq-and-carrierwave/"/>
-    <updated>2013-07-15T20:44:00-05:00</updated>
+    <updated>2013-07-15T20:44:00-04:00</updated>
     <id>http://iacutone.github.io/blog/2013/07/15/sidekiq-and-carrierwave</id>
     <content type="html"><![CDATA[<p>I decided to use the <a href='https://github.com/lardawge/carrierwave_backgrounder'>Carrierwave Backgrounder Gem</a> in order to asynchronously upload photos to Amazon S3.  This is a different gem than the one Ryan Bates uses in his Railscast.  I was having difficulty implimenting the <a href='https://github.com/dwilkie/carrierwave_direct'>Carrierwave Direct Gem</a>  However, the Backgrounder Gem works great! This is the last installment of the three part series on uploading photos.</p>
 

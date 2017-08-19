@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vim | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/vim/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-07-19T19:01:03-05:00</updated>
+  <updated>2017-08-19T13:48:51-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Vim, Thoughts After Two Weeks]]></title>
     <link href="http://iacutone.github.io/blog/2016/10/31/vim/"/>
-    <updated>2016-10-31T15:31:06-05:00</updated>
+    <updated>2016-10-31T16:31:06-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/10/31/vim</id>
     <content type="html"><![CDATA[<p>Purposefully, I began using Vim during a non-strenuous work week which helped manage frustration. I have been using solely Vim as a text editor for two weeks and have experienced improved efficienies over my previous text editor, Sublime.</p>
 
@@ -37,7 +37,7 @@
   <entry>
     <title type="html"><![CDATA[Level Up With Vim]]></title>
     <link href="http://iacutone.github.io/blog/2016/10/11/level-up-with-vim/"/>
-    <updated>2016-10-11T12:02:35-05:00</updated>
+    <updated>2016-10-11T13:02:35-04:00</updated>
     <id>http://iacutone.github.io/blog/2016/10/11/level-up-with-vim</id>
     <content type="html"><![CDATA[<p>How much time do you spend in your text editor? We spend most of our time reading through text and jumping between files. My goal is to find a tool in order to help me do this more efficiently. I have found that learning Vim is not overwhelming or difficult if you break the units of work down into manageable pieces. The ultimate goal is to use Vim fulltime. Below are my curated steps:</p>
 

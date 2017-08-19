@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Regex | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/regex/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-07-19T19:01:03-05:00</updated>
+  <updated>2017-08-19T13:48:51-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Grep and Scan Methods With Regular Expressions in Ruby]]></title>
     <link href="http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/"/>
-    <updated>2013-08-22T18:56:00-05:00</updated>
+    <updated>2013-08-22T18:56:00-04:00</updated>
     <id>http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby</id>
     <content type="html"><![CDATA[<p>I am creating an app to provide food cart locations in Manhattan.  <a href='https://github.com/iacutone/food-truck'>Here</a> is the code.  Food carts generally post their locations on Twitter; in order to create latitude and longitude coordinates, I needed to parse tweets.  This is where scan and grep play their role, to match elements in a tweet string.  Let's say this is our tweet: "53rd and park. Ready by 11!"  This string is database column in my locations model.</p>
 

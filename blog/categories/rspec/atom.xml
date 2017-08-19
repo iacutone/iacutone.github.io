@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rspec | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-07-19T19:01:03-05:00</updated>
+  <updated>2017-08-19T13:48:51-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -242,7 +242,7 @@ end
   <entry>
     <title type="html"><![CDATA[Testing Your Way to Success]]></title>
     <link href="http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success/"/>
-    <updated>2013-10-22T21:36:00-05:00</updated>
+    <updated>2013-10-22T21:36:00-04:00</updated>
     <id>http://iacutone.github.io/blog/2013/10/22/testing-your-way-to-success</id>
     <content type="html"><![CDATA[<p>I have been immersed in production codebases for my <a href='fohrcard.com'>Fohr Card</a> and <a href='http://www.fracturedatlas.org/'>Fractured Atlas</a> projects.  At first, it feel initimidating trying to figure out all of the models and related associations.  I have found that a great way to wrap your head around the code base is to create a new branch and test the code.</p>
 
