@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-08-19T13:48:51-04:00</updated>
+  <updated>2017-10-30T12:12:41-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Understanding Test Doubles]]></title>
+    <link href="http://iacutone.github.io/blog/2017/10/24/understanding-test-doubles/"/>
+    <updated>2017-10-24T12:02:12-04:00</updated>
+    <id>http://iacutone.github.io/blog/2017/10/24/understanding-test-doubles</id>
+    <content type="html"><![CDATA[<p>I refactored credit card payments on an application that uses the <code>ActiveMerchant</code> gem. I was not confident in the test, so, I re-wrote the tests to verify responses from Braintree. Once I verified I did not break anything with my refactor, I decided the best next step was to remove the interaction with Braintree and replace it with stubbed responses. I always forget when and how to use RSpec <code>allow</code>, <code>spy</code> and <code>double</code> methods. This post is meant to help reinforce my knowledge of the aforementioned methods.</p>
+
+<pre><code class="ruby">describe CreditCardPayment do
+  let!(:payment) { build(:credit_card_payment) }
+
+  describe '#authorize' do
+    before { payment.authorize }
+
+    it 'records the GatewayTransaction' do
+      transaction = GatewayTransaction.last
+
+      expect(transaction.success).to eq true
+      expect(transaction.amount).to eq amount
+      expect(transaction.message).to eq '1000 Approved'
+      expect(transaction.response).to be_present
+      expect(transaction.service_fee).to eq service_fee[:service_fee]
+    end
+  end
+end
+</code></pre>
+
+<p>Authorize is a wrapper around the payment gateway #authorize method which returns a response from Braintree. I should have confidence that when sending Braintree arguments that the<code>#authorize</code> expects, the response will be successful. This is interaction is what needs to be stubbed in order to not call the Braintree API in the test environment. The benefits of this approach are that the test will be faster and more resilient because there is no communication with an external service. The negatives of this approach is that the API can change.</p>
+
+<p>Let&rsquo;s update the above codeblock to stub out the interaction with Braintree.</p>
+
+<pre><code class="ruby">describe CreditCardPayment do
+  let(:gateway_double) { double('ActiveMerchant::Billing::BraintreeGateway') }
+  let!(:payment) { build(:credit_card_payment, gateway: gateway_double) }
+
+  before { payment.gateway = gateway_double }
+
+  describe '#authorize' do
+    it 'sends a #authorize request to Braintree' do
+      expect(gateway_double).to receive(:authorize).exactly(1).times
+        .with(amount, payment.credit_card, payment.credit_card_descriptor)
+    .and_return(authorize_response_stub)
+
+      payment.authorize
+    end
+
+    it 'creates a GatewayTransaction' do
+      expect { payment.authorize }.to change(GatewayTransaction, :count).by(1)
+    end
+  end
+
+  def authorize_response_stub
+    params = { 'response_from_braintree' =&gt; 'yay' }
+
+     ActiveMerchant::Billing::Response.new(true, '1000 Approved', params, {authorization: '3e4r5q'})
+  end
+end
+</code></pre>
+
+<p>Notice that in the <code>it</code> block the expectation comes before the <code>#payment</code> method call. We could replace the <code>double</code> with a <code>spy</code>. The difference is a spy uses the <code>have_received</code> method. It is your preference to use either a <code>double</code> or a <code>spy</code>.</p>
+
+<pre><code class="ruby">  let(:gateway_double) { spy('ActiveMerchant::Billing::BraintreeGateway') }
+  let!(:payment) { build(:credit_card_payment, gateway: gateway_double) }
+
+  before { payment.gateway = gateway_double }
+
+  describe '#authorize' do
+    it 'sends a #authorize request to Braintree' do
+      payment.authorize
+
+      expect(gateway_double).to have_receive(:authorize).exactly(1).times
+        .with(amount, payment.credit_card, payment.credit_card_descriptor)
+    .and_return(authorize_response_stub)
+    end
+
+    it 'creates a GatewayTransaction' do
+      expect { payment.authorize }.to change(GatewayTransaction, :count).by(1)
+    end
+  end
+</code></pre>
+
+<h3>Helpful Links</h3>
+
+<p><a href="https://relishapp.com/rspec/rspec-mocks/v/3-6/docs/basics">RSpec Mocks 3.6</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rails `before_action` Method]]></title>
@@ -171,61 +257,6 @@ foo.number_to_currency 2
 <p>Helpful Links</p>
 
 <p><a href="https://www.relishapp.com/rspec/rspec-core/docs/hooks/filters">Hooks</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using Mocks to Test Mailers in RSpec]]></title>
-    <link href="http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec/"/>
-    <updated>2015-12-12T13:37:18-05:00</updated>
-    <id>http://iacutone.github.io/blog/2015/12/12/using-mocks-to-test-mailers-in-rspec</id>
-    <content type="html"><![CDATA[<p>I was in the situation where I needed to test the delivery of emails based on specific sets of events. I began testing by inspecting sent emails in ActionMailer::Base.deliveries. However, this method of testing felt verbose and sloppy.</p>
-
-<p>RSpec mocks is a great solution when you need to test that a specific method was called. In my case, I want a fundraiser to receive an email after a campaign goal is reached.</p>
-
-<pre><code class="ruby donation_funding.rb">
-class DonationFunding
-  attr_reader :donation
-
-  def initialize(donation)
-    @donation = donation
-  end
-
-  def fund
-    # do some work
-    CampaignMailer.notify_curator_campaign_goal_reached(donation)
-  end
-end
-</code></pre>
-
-<pre><code class="ruby donation_funding_spec.rb">
-  before do
-    donation.amount = campaign.goal_amount + 1
-    donation.save!
-  end
-
-  # Make a donation that exceeds the funding goal
-
-  let!(:funder) {
-    funder = DonationFunding.new donation
-    funder
-  }
-
-  # set up the donation for funding
-
-  it 'sends email goal amount reached email to the curator' do
-    expect(CampaignMailer).to receive(:notify_curator_campaign_goal_reached).and_call_original
-    funder.fund
-  end
-
-  # Expect a CampaignMailer.notify_curator_campaign_goal_reached email to be sent
-</code></pre>
-
-<p>The definition for the method and_call_original is, &ldquo;You can use and_call_original on the fluent interface to "pass through&rdquo; the received message to the original method.&ldquo; What exactly does this mean? It means that when I call funder.fund, I expect CampaignMailer.notify_curator_campaign_goal_reached to be called.</p>
-
-<p>Helpful Links</p>
-
-<p><a href="https://www.relishapp.com/rspec/rspec-mocks/v/2-14/docs/message-expectations/calling-the-original-method">Calling the original method</a></p>
 ]]></content>
   </entry>
   

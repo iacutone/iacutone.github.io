@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&rsquo;s say we need to do &hellip;">
+  <meta name="description" content="I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,6 +111,66 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/10/30/shell-function/">Shell Function</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-10-30T23:34:34-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:34 pm</span></time>
+        
+         | <a href="/blog/2015/10/30/shell-function/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have been using youtube-dl every week. The application is a &ldquo;Small command-line program to download videos from YouTube.com and other video sites.&rdquo; It&rsquo;s super useful. However, it default downloads to the current terminal directory. Let&rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.</p>
+
+<figure class='code'><figcaption><span>.zshrc</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">function</span> mp3 <span class="o">{</span>
+</span><span class='line'>  <span class="c"># Download all of the things to /Downloads</span>
+</span><span class='line'>
+</span><span class='line'>  youtube-dl --default-search<span class="o">=</span>ytsearch: <span class="se">\</span>
+</span><span class='line'>             --output<span class="o">=</span><span class="s2">&quot;Downloads/%(title)s.%(ext)s&quot;</span> <span class="s2">&quot;$*&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The &ldquo;$<em>&rdquo; signifies the string following mp3, the example below, &ldquo;$</em>&rdquo; is the URL arument.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  mp3 https://www.youtube.com/watch<span class="se">\?</span>v<span class="se">\=</span>9fYeiGeuTFA
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I can run the above script in order to download the video from the youtube URL.!</p>
+
+<p>Helpful Links</p>
+
+<p><a href="https://github.com/rg3/youtube-dl">youtube-dl</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1502,112 +1562,6 @@
 
 
 <p><p>The grep method takes an array as an input, so use the string split method to turn it into an array seperated by commas.  Also, the regular expression matches the entire string.  The grep method seems to be more suited as an alternative for the select and map methods.  <a href='http://zigzag.github.io/2010/03/31/grep-in-ruby----a-powerful-enumerable-method.html'>This</a> blog post goes into further detail explaining more cases to use the grep method over more familiar methods.<p></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/15/adventures-in-jquery/">Hiding Multiple Checkboxes With JQuery</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-08-15T21:09:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:09 pm</span></time>
-        
-         | <a href="/blog/2013/08/15/adventures-in-jquery/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I have been developing a <a href='https://github.com/iacutone/new-quiz'>quiz app</a> for practice with a more complex schema interface.  I wanted to dive deeper into CoffeScript and found the opportunity while trying to figure out how a student can add an answer to a given quiz.  If a checkbox for a given answer is checked, I wanted the remaining checkboxes to disappear.  Also, if the student checked the incorrect box, the browser should render all checkboxes again.  Here is my <a href='https://gist.github.com/iacutone/c28e8fa1324f82b508e0'>code.</a></p>
-
-
-
-
-<figure class='code'><figcaption><span>questions.js.coffee </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'>   <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;.checker&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>      <span class="nx">boxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:checked&quot;</span><span class="p">)</span>
-</span><span class='line'>      <span class="nx">nboxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:not(:checked)&quot;</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span>
-</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
-</span><span class='line'>          <span class="nx">nboxes</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>          <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
-</span><span class='line'>          <span class="nx">nboxes</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<p>... and the view</p>
-
-
-
-
-<figure class='code'><figcaption><span>_form.html.haml </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="ss">Quiz</span><span class="p">:</span>
-</span><span class='line'><span class="o">=</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">name</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">=</span> <span class="n">form_for</span> <span class="vi">@question</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">hidden_field</span> <span class="ss">:quiz_id</span><span class="p">,</span> <span class="ss">value</span><span class="p">:</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">id</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="s2">&quot;What is your question?&quot;</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
-</span><span class='line'>  <span class="o">%</span><span class="n">br</span>
-</span><span class='line'>  <span class="o">%</span><span class="n">fieldset</span>
-</span><span class='line'>      <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">fields_for</span> <span class="ss">:answers</span> <span class="k">do</span> <span class="o">|</span><span class="n">builder</span><span class="o">|</span>
-</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="ss">:content</span><span class="p">,</span> <span class="s2">&quot;Answer&quot;</span>
-</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
-</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="s2">&quot;Correct answer?&quot;</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span><span class="s1">&#39;checker_label&#39;</span>
-</span><span class='line'>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">check_box</span> <span class="ss">:is_correct</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s1">&#39;checker&#39;</span>
-</span><span class='line'>      <span class="o">%</span><span class="n">br</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">link_to_add_fields</span> <span class="s2">&quot;Add an answer choice&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="ss">:answers</span>
-</span><span class='line'>  <span class="o">%</span><span class="n">br</span>
-</span><span class='line'>  <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
 </div>
   
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-08-19T13:48:51-04:00</updated>
+  <updated>2017-10-30T12:12:41-04:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -128,12 +128,27 @@ two.py is being run directly
 
 <h3>Project 3, Implement a Planning Search</h3>
 
-<p>Using planning problems—states, actions, and goals for planning algorithms.</p>
+<p>Using planning problems—states, actions, and goals for planning algorithms. I enjoyed this unit of the course and it was interesting to study the development of Graph Plan algorithms since the 1970&rsquo;s.</p>
 
 <ul>
-<li><a href="https://www.youtube.com/watch?v=ySN5Wnu88nE">This</a> Computerphile video is a good reinforcement for A* search.</li>
+<li><a href="https://www.youtube.com/watch?v=ySN5Wnu88nE">This</a> Computerphile video is a good reinforcement for A-Star search.</li>
+<li><a href="http://aima.cs.berkeley.edu/2nd-ed/newchap11.pdf">Artificial Intelligence, A Modern Appoach</a> Chapter 11</li>
+<li><a href="https://github.com/iacutone/AIND-Planning">My Solution</a></li>
 </ul>
 
+
+<h3>Project 4, Hidden Markov Models</h3>
+
+<p>The objective of this unit is to create an algo that can correctly guess sign language words. Hidden Markov models are interesting and remind me of deep learning algos. They both seem to solve a similar problem set.</p>
+
+<ul>
+<li><a href="https://github.com/iacutone/AIND-Recognizer">My Solution</a></li>
+</ul>
+
+
+<h3>Overall Thoughts</h3>
+
+<p>I am not sure this course is worth the $800 price. The class was interesting, but very time consuming. The benefits to taking the Udacity course over self learning on the internet is the Slack channel, forum and project feedback. I used the forum when I was stuck on a problem. I did not take advantage of the Slack channel. The project feedback was helpful. I will not be taking the next unit in the Artifical Intelligence Nano Degree. Instead, I am progressing through the <a href="http://course.fast.ai/">Fast AI</a> classes. I plan on writing a post after I finish the course.</p>
 ]]></content>
   </entry>
   

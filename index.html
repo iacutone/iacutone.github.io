@@ -9,10 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="Debugging Write the following code to use an interactive debugger in Python. 1
-2
-import pdb
-pdb.set_trace() Self Passing a reference to self seems &hellip;">
+  <meta name="description" content="I refactored credit card payments on an application that uses the ActiveMerchant gem. I was not confident in the test, so, I re-wrote the tests to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,6 +111,179 @@ pdb.set_trace() Self Passing a reference to self seems &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/10/24/understanding-test-doubles/">Understanding Test Doubles</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-10-24T12:02:12-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>12:02 pm</span></time>
+        
+         | <a href="/blog/2017/10/24/understanding-test-doubles/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I refactored credit card payments on an application that uses the <code>ActiveMerchant</code> gem. I was not confident in the test, so, I re-wrote the tests to verify responses from Braintree. Once I verified I did not break anything with my refactor, I decided the best next step was to remove the interaction with Braintree and replace it with stubbed responses. I always forget when and how to use RSpec <code>allow</code>, <code>spy</code> and <code>double</code> methods. This post is meant to help reinforce my knowledge of the aforementioned methods.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">CreditCardPayment</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let!</span><span class="p">(</span><span class="ss">:payment</span><span class="p">)</span> <span class="p">{</span> <span class="n">build</span><span class="p">(</span><span class="ss">:credit_card_payment</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#authorize&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="n">payment</span><span class="o">.</span><span class="n">authorize</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;records the GatewayTransaction&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">transaction</span> <span class="o">=</span> <span class="no">GatewayTransaction</span><span class="o">.</span><span class="n">last</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">transaction</span><span class="o">.</span><span class="n">success</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">transaction</span><span class="o">.</span><span class="n">amount</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="n">amount</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">transaction</span><span class="o">.</span><span class="n">message</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="s1">&#39;1000 Approved&#39;</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">transaction</span><span class="o">.</span><span class="n">response</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_present</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">transaction</span><span class="o">.</span><span class="n">service_fee</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">eq</span> <span class="n">service_fee</span><span class="o">[</span><span class="ss">:service_fee</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Authorize is a wrapper around the payment gateway #authorize method which returns a response from Braintree. I should have confidence that when sending Braintree arguments that the<code>#authorize</code> expects, the response will be successful. This is interaction is what needs to be stubbed in order to not call the Braintree API in the test environment. The benefits of this approach are that the test will be faster and more resilient because there is no communication with an external service. The negatives of this approach is that the API can change.</p>
+
+<p>Let&rsquo;s update the above codeblock to stub out the interaction with Braintree.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="no">CreditCardPayment</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:gateway_double</span><span class="p">)</span> <span class="p">{</span> <span class="n">double</span><span class="p">(</span><span class="s1">&#39;ActiveMerchant::Billing::BraintreeGateway&#39;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let!</span><span class="p">(</span><span class="ss">:payment</span><span class="p">)</span> <span class="p">{</span> <span class="n">build</span><span class="p">(</span><span class="ss">:credit_card_payment</span><span class="p">,</span> <span class="ss">gateway</span><span class="p">:</span> <span class="n">gateway_double</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">before</span> <span class="p">{</span> <span class="n">payment</span><span class="o">.</span><span class="n">gateway</span> <span class="o">=</span> <span class="n">gateway_double</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#authorize&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;sends a #authorize request to Braintree&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">gateway_double</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:authorize</span><span class="p">)</span><span class="o">.</span><span class="n">exactly</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">times</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">payment</span><span class="o">.</span><span class="n">credit_card</span><span class="p">,</span> <span class="n">payment</span><span class="o">.</span><span class="n">credit_card_descriptor</span><span class="p">)</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">authorize_response_stub</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">payment</span><span class="o">.</span><span class="n">authorize</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;creates a GatewayTransaction&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span> <span class="p">{</span> <span class="n">payment</span><span class="o">.</span><span class="n">authorize</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">change</span><span class="p">(</span><span class="no">GatewayTransaction</span><span class="p">,</span> <span class="ss">:count</span><span class="p">)</span><span class="o">.</span><span class="n">by</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">authorize_response_stub</span>
+</span><span class='line'>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;response_from_braintree&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;yay&#39;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>     <span class="no">ActiveMerchant</span><span class="o">::</span><span class="no">Billing</span><span class="o">::</span><span class="no">Response</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="kp">true</span><span class="p">,</span> <span class="s1">&#39;1000 Approved&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="p">{</span><span class="ss">authorization</span><span class="p">:</span> <span class="s1">&#39;3e4r5q&#39;</span><span class="p">})</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that in the <code>it</code> block the expectation comes before the <code>#payment</code> method call. We could replace the <code>double</code> with a <code>spy</code>. The difference is a spy uses the <code>have_received</code> method. It is your preference to use either a <code>double</code> or a <code>spy</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:gateway_double</span><span class="p">)</span> <span class="p">{</span> <span class="n">spy</span><span class="p">(</span><span class="s1">&#39;ActiveMerchant::Billing::BraintreeGateway&#39;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">let!</span><span class="p">(</span><span class="ss">:payment</span><span class="p">)</span> <span class="p">{</span> <span class="n">build</span><span class="p">(</span><span class="ss">:credit_card_payment</span><span class="p">,</span> <span class="ss">gateway</span><span class="p">:</span> <span class="n">gateway_double</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">before</span> <span class="p">{</span> <span class="n">payment</span><span class="o">.</span><span class="n">gateway</span> <span class="o">=</span> <span class="n">gateway_double</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">describe</span> <span class="s1">&#39;#authorize&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;sends a #authorize request to Braintree&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">payment</span><span class="o">.</span><span class="n">authorize</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">expect</span><span class="p">(</span><span class="n">gateway_double</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">have_receive</span><span class="p">(</span><span class="ss">:authorize</span><span class="p">)</span><span class="o">.</span><span class="n">exactly</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">times</span>
+</span><span class='line'>        <span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">payment</span><span class="o">.</span><span class="n">credit_card</span><span class="p">,</span> <span class="n">payment</span><span class="o">.</span><span class="n">credit_card_descriptor</span><span class="p">)</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">authorize_response_stub</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;creates a GatewayTransaction&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span> <span class="p">{</span> <span class="n">payment</span><span class="o">.</span><span class="n">authorize</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">change</span><span class="p">(</span><span class="no">GatewayTransaction</span><span class="p">,</span> <span class="ss">:count</span><span class="p">)</span><span class="o">.</span><span class="n">by</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Helpful Links</h3>
+
+<p><a href="https://relishapp.com/rspec/rspec-mocks/v/3-6/docs/basics">RSpec Mocks 3.6</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -301,12 +471,27 @@ two.py is being run directly
 
 <h3>Project 3, Implement a Planning Search</h3>
 
-<p>Using planning problems—states, actions, and goals for planning algorithms.</p>
+<p>Using planning problems—states, actions, and goals for planning algorithms. I enjoyed this unit of the course and it was interesting to study the development of Graph Plan algorithms since the 1970&rsquo;s.</p>
 
 <ul>
-<li><a href="https://www.youtube.com/watch?v=ySN5Wnu88nE">This</a> Computerphile video is a good reinforcement for A* search.</li>
+<li><a href="https://www.youtube.com/watch?v=ySN5Wnu88nE">This</a> Computerphile video is a good reinforcement for A-Star search.</li>
+<li><a href="http://aima.cs.berkeley.edu/2nd-ed/newchap11.pdf">Artificial Intelligence, A Modern Appoach</a> Chapter 11</li>
+<li><a href="https://github.com/iacutone/AIND-Planning">My Solution</a></li>
 </ul>
 
+
+<h3>Project 4, Hidden Markov Models</h3>
+
+<p>The objective of this unit is to create an algo that can correctly guess sign language words. Hidden Markov models are interesting and remind me of deep learning algos. They both seem to solve a similar problem set.</p>
+
+<ul>
+<li><a href="https://github.com/iacutone/AIND-Recognizer">My Solution</a></li>
+</ul>
+
+
+<h3>Overall Thoughts</h3>
+
+<p>I am not sure this course is worth the $800 price. The class was interesting, but very time consuming. The benefits to taking the Udacity course over self learning on the internet is the Slack channel, forum and project feedback. I used the forum when I was stuck on a problem. I did not take advantage of the Slack channel. The project feedback was helpful. I will not be taking the next unit in the Artifical Intelligence Nano Degree. Instead, I am progressing through the <a href="http://course.fast.ai/">Fast AI</a> classes. I plan on writing a post after I finish the course.</p>
 </div>
   
   
@@ -927,80 +1112,6 @@ two.py is being run directly
 </span><span class='line'> <span class="o">=&gt;</span> <span class="s2">&quot;$2.00&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/05/15/find-and-replace-text/">Find and Replace Text</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-05-15T11:28:24-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>11:28 am</span></time>
-        
-         | <a href="/blog/2016/05/15/find-and-replace-text/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
-
-<p><code>ack pivotal_commentor -l | xargs sed -i '' 's/pivotal_commentor/commentor/g'</code></p>
-
-<p>Let&rsquo;s break this command down with a simple example.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir test
-</span><span class='line'>cd test
-</span><span class='line'>touch file1.txt
-</span><span class='line'>touch file2.txt</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And lets add the text &lsquo;hello&rsquo; to both text files.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l
-</span><span class='line'>file1.txt
-</span><span class='line'>file2.txt</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ack is like grep and found the files containing the string hello. The -l flag &ldquo;Only print filenames containing matches&rdquo;</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l | xargs
-</span><span class='line'>file1.txt file2.txt</span></code></pre></td></tr></table></div></figure>
-
-
-<p>xargs is a Unix utility that constructs argument lists and is smashing the filenames into one line.</p>
-
-<p>Finally, we pipe the arguments from xargs to sed.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ack hello -l | xargs sed -i '' 's/hello/bye/g'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The -i flag allows for in place editing on the file. In the regex, the s replaces hello with bye and the g indicates globally, in case hello is found more than once in the file. The &lsquo;&rsquo; is sending the change into the correct output file.</p>
 </div>
   
   
