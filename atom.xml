@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-01-10T12:04:23-05:00</updated>
+  <updated>2018-01-10T12:12:27-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -20,7 +20,7 @@
     <id>http://iacutone.github.io/blog/2018/01/10/pr-review-diagram</id>
     <content type="html"><![CDATA[<p>I thought I would share my diagram for how I think about PR review. The following diagram received good reception from my team.</p>
 
-<p><img src = "http://iacutone.github.io/images/pr_review.png" height = "600" width = "600"></p>
+<p><img src = "source/images/pr_review.png" height = "600" width = "600"></p>
 ]]></content>
   </entry>
   
