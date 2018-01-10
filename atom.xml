@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2017-10-30T12:12:41-04:00</updated>
+  <updated>2018-01-10T12:04:23-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[PR Review Diagram]]></title>
+    <link href="http://iacutone.github.io/blog/2018/01/10/pr-review-diagram/"/>
+    <updated>2018-01-10T11:59:11-05:00</updated>
+    <id>http://iacutone.github.io/blog/2018/01/10/pr-review-diagram</id>
+    <content type="html"><![CDATA[<p>I thought I would share my diagram for how I think about PR review. The following diagram received good reception from my team.</p>
+
+<p><img src = "http://iacutone.github.io/images/pr_review.png" height = "600" width = "600"></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Understanding Test Doubles]]></title>
@@ -1268,69 +1279,6 @@ two.py is being run directly
 <p>Helpful Links</p>
 
 <p><a href="https://github.com/codepath/ios_guides/wiki/Auto-Layout-Basics">Auto Layout Basics</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Prototypes and Constructors in Javascript]]></title>
-    <link href="http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript/"/>
-    <updated>2015-11-07T12:57:08-05:00</updated>
-    <id>http://iacutone.github.io/blog/2015/11/07/prototypes-and-constructors-in-javascript</id>
-    <content type="html"><![CDATA[<p>I usually do not need to write code using neither constructors nor prototypes in Javascript. So, I always forget how to write them when I need to use them.</p>
-
-<h2>Constructor</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="nx">Say</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
-</span><span class='line'>    <span class="k">this</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="s2">&quot;Hello&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">say</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Say</span><span class="p">();</span>
-</span><span class='line'>  <span class="nx">say</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// &quot;Hello&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Prototype</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="kd">function</span> <span class="nx">Say</span><span class="p">()</span> <span class="p">{}</span>
-</span><span class='line'>   <span class="nx">Say</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">hello</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;Hello&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">say</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Say</span><span class="p">();</span>
-</span><span class='line'>  <span class="nx">say</span><span class="p">.</span><span class="nx">hello</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// &quot;Hello&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Helpful Links</p>
-
-<p><a href="http://stackoverflow.com/questions/310870/use-of-prototype-vs-this-in-javascript">Use of &lsquo;prototype&rsquo; vs. &lsquo;this&rsquo; in JavaScript?</a></p>
-
-<p><a href="http://stackoverflow.com/questions/4508313/advantages-of-using-prototype-vs-defining-methods-straight-in-the-constructor">Advantages of using prototype, vs defining methods straight in the constructor?</a></p>
 ]]></content>
   </entry>
   
