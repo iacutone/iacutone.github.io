@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Grep | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/grep/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-01-10T12:23:28-05:00</updated>
+  <updated>2018-04-16T18:45:14-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Filtering Ack Results]]></title>
     <link href="http://iacutone.github.io/blog/2016/09/15/filtering-ack-results/"/>
-    <updated>2016-09-15T10:23:52-04:00</updated>
+    <updated>2016-09-15T09:23:52-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/09/15/filtering-ack-results</id>
     <content type="html"><![CDATA[<p>While setting up my VIM environment, I read a blogpost which states <code>ack</code> can ignore directories. For cleaner <code>ack</code> output you can setup the file below:</p>
 
@@ -31,7 +31,7 @@
   <entry>
     <title type="html"><![CDATA[Find and Replace Text]]></title>
     <link href="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/"/>
-    <updated>2016-05-15T11:28:24-04:00</updated>
+    <updated>2016-05-15T10:28:24-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/05/15/find-and-replace-text</id>
     <content type="html"><![CDATA[<p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
 
@@ -72,7 +72,7 @@ file1.txt file2.txt
   <entry>
     <title type="html"><![CDATA[Grep and Scan Methods With Regular Expressions in Ruby]]></title>
     <link href="http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby/"/>
-    <updated>2013-08-22T18:56:00-04:00</updated>
+    <updated>2013-08-22T18:56:00-05:00</updated>
     <id>http://iacutone.github.io/blog/2013/08/22/grep-and-scan-regular-expressions-in-ruby</id>
     <content type="html"><![CDATA[<p>I am creating an app to provide food cart locations in Manhattan.  <a href='https://github.com/iacutone/food-truck'>Here</a> is the code.  Food carts generally post their locations on Twitter; in order to create latitude and longitude coordinates, I needed to parse tweets.  This is where scan and grep play their role, to match elements in a tweet string.  Let's say this is our tweet: "53rd and park. Ready by 11!"  This string is database column in my locations model.</p>
 
@@ -82,75 +82,43 @@ file1.txt file2.txt
 <p>Code for scan method.</p>
 
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;tweet = &quot;53rd and park. Ready by 11!&quot;</span>
-</span><span class='line'><span class="sr">tweet.scan(/</span><span class="mi">53</span><span class="o">/</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># =&amp;gt; [&quot;53&quot;] </span>
-</span><span class='line'><span class="n">tweet</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># =&amp;gt; [&quot;park&quot;]</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:ruby %}</p>
+
+<pre><code>tweet = "53rd and park. Ready by 11!"
+tweet.scan(/53/)
+# =&gt; ["53"] 
+tweet.scan(/Park/i)
+# =&gt; ["park"]
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>The scan method takes a string as an input.  Also, the i is used in the regular expression in order to make it case insensitive.</p>
 
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;tweet.scan(/</span><span class="no">Park</span><span class="o">/</span><span class="p">)</span>
-</span><span class='line'><span class="c1">#  =&amp;gt; [] </span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:ruby %}</p>
+
+<pre><code>tweet.scan(/Park/)
+#  =&gt; [] 
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>Code for grep method.</p>
 
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;tweet = &quot;53rd and park. Ready by 11!&quot;</span>
-</span><span class='line'><span class="sr">tweet_array = tweet.split</span>
-</span><span class='line'><span class="sr"># =&amp;gt; [&quot;53rd&quot;, &quot;and&quot;, &quot;park.&quot;, &quot;Ready&quot;, &quot;by&quot;, &quot;11!&quot;] </span>
-</span><span class='line'><span class="sr">tweet_array.grep(/</span><span class="mi">53</span><span class="o">/</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># =&amp;gt; [&quot;53rd&quot;]</span>
-</span><span class='line'><span class="n">tweet_array</span><span class="o">.</span><span class="n">grep</span><span class="p">(</span><span class="sr">/Park/i</span><span class="p">)</span>
-</span><span class='line'><span class="c1"># =&amp;gt; [&quot;park.&quot;]</span>
-</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:ruby %}</p>
+
+<pre><code>tweet = "53rd and park. Ready by 11!"
+tweet_array = tweet.split
+# =&gt; ["53rd", "and", "park.", "Ready", "by", "11!"] 
+tweet_array.grep(/53/)
+# =&gt; ["53rd"]
+tweet_array.grep(/Park/i)
+# =&gt; ["park."]
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p><p>The grep method takes an array as an input, so use the string split method to turn it into an array seperated by commas.  Also, the regular expression matches the entire string.  The grep method seems to be more suited as an alternative for the select and map methods.  <a href='http://zigzag.github.io/2010/03/31/grep-in-ruby----a-powerful-enumerable-method.html'>This</a> blog post goes into further detail explaining more cases to use the grep method over more familiar methods.<p></p>
 ]]></content>

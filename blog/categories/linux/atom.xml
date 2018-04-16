@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-01-10T12:23:28-05:00</updated>
+  <updated>2018-04-16T18:45:14-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[My Photo Storage Solution]]></title>
     <link href="http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/"/>
-    <updated>2017-04-15T10:58:55-04:00</updated>
+    <updated>2017-04-15T09:58:55-05:00</updated>
     <id>http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution</id>
     <content type="html"><![CDATA[<p>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available <a href="http://github.com/iacutone/scripts">here</a>.</p>
 
@@ -62,21 +62,16 @@
 <li><code>touch /home/pi/sdcard/sdcard_added.sh</code></li>
 <li><code>chmod +x /home/pi/sdcard/sdcard_added.sh</code></li>
 <li>create the script
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;&lt;/li&gt;
-</span><span class='line'>&lt;/ul&gt;
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;echo <span class="p">&amp;</span>ldquo<span class="p">;</span>&lt;code&gt;date +%Y-%m-%d:%H:%M:%S&lt;/code&gt; SD card inserted<span class="p">&amp;</span>rdquo<span class="p">;</span> &gt;&gt; /home/pi/sdcard/output.log
-</span><span class='line'>mount /dev/sda1 /home/pi/SD_CARD
-</span><span class='line'>rsync -av /home/pi/SD_CARD/DCIM/100MSDCF/ /home/pi/external_hd/raw_photos
-</span></code></pre></td></tr></table></div></figure></p>
+```bash
+
+<h1>!/bin/bash</h1></li>
+</ul>
+
+
+<p>echo &ldquo;<code>date +%Y-%m-%d:%H:%M:%S</code> SD card inserted&rdquo; >> /home/pi/sdcard/output.log
+mount /dev/sda1 /home/pi/SD_CARD
+rsync -av /home/pi/SD_CARD/DCIM/100MSDCF/ /home/pi/external_hd/raw_photos
+```</p>
 
 <h5>Sync photos to cloud provider</h5>
 
@@ -85,13 +80,12 @@
 <li><code>sudo crontab -e</code></li>
 <li><code>00 4 * * * /home/pi/sd_card/rclone_cron.sh</code>, this runs the cron job at 4 am, daily</li>
 <li>create the bast script
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;h1&gt;!/bin/sh&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>/usr/sbin/rclone sync /home/pi/external_hd/raw_photos/ amazon:raw_photos <span class="p">&amp;</span>ndash<span class="p">;</span>config /home/pi/.rclone.conf -v
-</span></code></pre></td></tr></table></div></figure>
+```bash
+
+<h1>!/bin/sh</h1>
+
+/usr/sbin/rclone sync /home/pi/external_hd/raw_photos/ amazon:raw_photos &ndash;config /home/pi/.rclone.conf -v
+```
 
 <h5>Send Email Notification</h5></li>
 <li>I used <a href="https://rianjs.net/2013/08/send-email-from-linux-server-using-gmail-and-ubuntu-two-factor-authentication">this post</a> to easily add email notifications when the rsync process completes</li>
