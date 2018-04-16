@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Coffeescript | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/coffeescript/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-04-16T18:45:14-05:00</updated>
+  <updated>2018-04-16T18:48:35-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -21,46 +21,86 @@
     <content type="html"><![CDATA[<p>I have been developing a <a href='https://github.com/iacutone/new-quiz'>quiz app</a> for practice with a more complex schema interface.  I wanted to dive deeper into CoffeScript and found the opportunity while trying to figure out how a student can add an answer to a given quiz.  If a checkbox for a given answer is checked, I wanted the remaining checkboxes to disappear.  Also, if the student checked the incorrect box, the browser should render all checkboxes again.  Here is my <a href='https://gist.github.com/iacutone/c28e8fa1324f82b508e0'>code.</a></p>
 
 
-<p>{% codeblock questions.js.coffee lang:js %}</p>
-
-<pre><code>$('form').on 'click', '.checker', (event) -&gt;
-    boxes = $(":checkbox:checked")
-    nboxes = $(":checkbox:not(:checked)")
-    if boxes.length == 1
-        $('.checker_label').hide()
-        nboxes.hide()
-    if boxes.length == 0
-        $('.checker_label').show()
-        nboxes.show()
-</code></pre>
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>questions.js.coffee </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">on</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;.checker&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">-&amp;</span><span class="nx">gt</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">boxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:checked&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="nx">nboxes</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;:checkbox:not(:checked)&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">1</span>
+</span><span class='line'>        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
+</span><span class='line'>        <span class="nx">nboxes</span><span class="p">.</span><span class="nx">hide</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nx">boxes</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.checker_label&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
+</span><span class='line'>        <span class="nx">nboxes</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>... and the view</p>
 
 
-<p>{% codeblock _form.html.haml lang:ruby %}</p>
-
-<p>Quiz:
-= @quiz.name</p>
-
-<p>= form_for @question do |f|
-    = f.hidden_field :quiz_id, value: @quiz.id
-    = f.label &ldquo;What is your question?&rdquo;
-    = f.text_field :content
-    %br
-    %fieldset
-        = f.fields_for :answers do |builder|
-            = builder.label :content, &ldquo;Answer&rdquo;
-            = builder.text_field :content
-            = builder.label &ldquo;Correct answer?&rdquo;, class:&lsquo;checker_label&rsquo;
-            = builder.check_box :is_correct, class: &lsquo;checker&rsquo;
-        %br
-    = link_to_add_fields &ldquo;Add an answer choice&rdquo;, f, :answers
-    %br
-    = f.submit</p>
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>_form.html.haml </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;Quiz:</span>
+</span><span class='line'><span class="sr">= @quiz.name&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;=</span> <span class="n">form_for</span> <span class="vi">@question</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+</span><span class='line'>    <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">hidden_field</span> <span class="ss">:quiz_id</span><span class="p">,</span> <span class="ss">value</span><span class="p">:</span> <span class="vi">@quiz</span><span class="o">.</span><span class="n">id</span>
+</span><span class='line'>    <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">What</span> <span class="n">is</span> <span class="n">your</span> <span class="n">question?</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'>    <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
+</span><span class='line'>    <span class="o">%</span><span class="n">br</span>
+</span><span class='line'>    <span class="o">%</span><span class="n">fieldset</span>
+</span><span class='line'>        <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">fields_for</span> <span class="ss">:answers</span> <span class="k">do</span> <span class="o">|</span><span class="n">builder</span><span class="o">|</span>
+</span><span class='line'>            <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="ss">:content</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Answer</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'>            <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">text_field</span> <span class="ss">:content</span>
+</span><span class='line'>            <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">label</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Correct</span> <span class="n">answer?</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="ss">class</span><span class="p">:</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">checker_label</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'>            <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">check_box</span> <span class="ss">:is_correct</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">checker</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">%</span><span class="n">br</span>
+</span><span class='line'>    <span class="o">=</span> <span class="n">link_to_add_fields</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="no">Add</span> <span class="n">an</span> <span class="n">answer</span> <span class="n">choice</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">f</span><span class="p">,</span> <span class="ss">:answers</span>
+</span><span class='line'>    <span class="o">%</span><span class="n">br</span>
+</span><span class='line'>    <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">submit</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 ]]></content>
   </entry>
   

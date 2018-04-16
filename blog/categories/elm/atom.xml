@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Elm | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/elm/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-04-16T18:45:14-05:00</updated>
+  <updated>2018-04-16T18:48:35-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -22,7 +22,7 @@
 
 <h2>Elm Model</h2>
 
-<pre><code class="elm">-- BEFORE
+<pre><code class="haskell">-- BEFORE
 
 type Msg
     = DisplayHamburgerItems
@@ -48,7 +48,7 @@ type alias Model =
 
 <h2>Elm Update</h2>
 
-<pre><code class="elm">update : Msg -&gt; Model -&gt; ( Model, Cmd Msg )
+<pre><code class="haskell">update : Msg -&gt; Model -&gt; ( Model, Cmd Msg )
 update msg model =
 
     -- BEFORE
@@ -79,7 +79,7 @@ update msg model =
 
 <h2>Elm View</h2>
 
-<pre><code class="elm">view : Model -&gt; Html Msg
+<pre><code class="haskell">view : Model -&gt; Html Msg
 view model =
 
     -- BEFORE

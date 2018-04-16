@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="I thought I would share my diagram for how I think about PR review. The following diagram received good reception from my team. ">
+  <meta name="description" content="Watching Making Impossible States Impossible and reading Higher Level Coding with Elm Union Types were enlightening in my Elm development. Now, I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,6 +117,211 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2018/04/16/understanding-union-types-in-elm/">Understanding Union Types in Elm</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-04-16T18:19:13-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>6:19 pm</span></time>
+        
+         | <a href="/blog/2018/04/16/understanding-union-types-in-elm/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Watching <a href="https://www.youtube.com/watch?v=IcgmSRJHu_8">Making Impossible States Impossible</a> and reading <a href="https://becoming-functional.com/higher-level-coding-with-elm-union-types-2502d1f5a615">Higher Level Coding with Elm Union Types</a> were enlightening in my Elm development. Now, I look for places were I can refine my data model by using union types. Union types allow me to replace conditionals with pattern matching case statements. This pattern is much cleaner and easier to understand. The following is an example of how I used union types to refactor a hamburger.</p>
+
+<h2>Elm Model</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- BEFORE</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Msg</span>
+</span><span class='line'>    <span class="ow">=</span> <span class="kt">DisplayHamburgerItems</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="n">alias</span> <span class="kt">Model</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">hamburger_open</span> <span class="kt">:</span> <span class="kt">Bool</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- AFTER</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Msg</span>
+</span><span class='line'>    <span class="ow">=</span> <span class="kt">DisplayHamburgerItems</span> <span class="kt">Hamburger</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Hamburger</span>
+</span><span class='line'>    <span class="ow">=</span> <span class="kt">Open</span>
+</span><span class='line'>    <span class="o">|</span> <span class="kt">Closed</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="n">alias</span> <span class="kt">Model</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">hamburger</span> <span class="kt">:</span> <span class="kt">Hamburger</span>
+</span><span class='line'>    <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Elm Update</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">update</span> <span class="kt">:</span> <span class="kt">Msg</span> <span class="ow">-&gt;</span> <span class="kt">Model</span> <span class="ow">-&gt;</span> <span class="p">(</span> <span class="kt">Model</span><span class="p">,</span> <span class="kt">Cmd</span> <span class="kt">Msg</span> <span class="p">)</span>
+</span><span class='line'><span class="nf">update</span> <span class="n">msg</span> <span class="n">model</span> <span class="ow">=</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- BEFORE</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">case</span> <span class="n">msg</span> <span class="kr">of</span>
+</span><span class='line'>        <span class="kt">DisplayHamburgerItems</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="kr">if</span> <span class="n">model</span><span class="o">.</span><span class="n">hamburger_open</span> <span class="o">==</span> <span class="kt">True</span> <span class="kr">then</span>
+</span><span class='line'>                <span class="kr">let</span>
+</span><span class='line'>                    <span class="n">items</span> <span class="ow">=</span> <span class="kt">List</span><span class="o">.</span><span class="n">append</span> <span class="n">model</span><span class="o">.</span><span class="n">display_hamburger</span> <span class="p">[</span><span class="s">&quot;About&quot;</span><span class="p">,</span> <span class="s">&quot;Contact&quot;</span><span class="p">,</span> <span class="s">&quot;Menu&quot;</span><span class="p">]</span>
+</span><span class='line'>                <span class="kr">in</span>
+</span><span class='line'>                    <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">display_hamburger</span> <span class="ow">=</span> <span class="n">items</span><span class="p">,</span> <span class="n">hamburger_open</span> <span class="ow">=</span> <span class="kt">False</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span><span class='line'>            <span class="kr">else</span>
+</span><span class='line'>                <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">display_hamburger</span> <span class="ow">=</span> <span class="kt">[]</span><span class="p">,</span> <span class="n">hamburger_open</span> <span class="ow">=</span> <span class="kt">True</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- AFTER</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kt">DisplayHamburgerItems</span> <span class="n">msg</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="kr">case</span> <span class="n">msg</span> <span class="kr">of</span>
+</span><span class='line'>                <span class="kt">Open</span> <span class="ow">-&gt;</span>
+</span><span class='line'>                    <span class="kr">let</span>
+</span><span class='line'>                        <span class="n">items</span> <span class="ow">=</span> <span class="kt">List</span><span class="o">.</span><span class="n">append</span> <span class="n">model</span><span class="o">.</span><span class="n">display_hamburger</span> <span class="p">[</span><span class="s">&quot;About&quot;</span><span class="p">,</span> <span class="s">&quot;Contact&quot;</span><span class="p">,</span> <span class="s">&quot;Menu&quot;</span><span class="p">]</span>
+</span><span class='line'>                    <span class="kr">in</span>
+</span><span class='line'>                        <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">hamburger</span> <span class="ow">=</span> <span class="kt">Open</span><span class="p">,</span> <span class="n">display_hamburger</span> <span class="ow">=</span> <span class="n">items</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span><span class='line'>                <span class="kt">Closed</span> <span class="ow">-&gt;</span>
+</span><span class='line'>                    <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">hamburger</span> <span class="ow">=</span>  <span class="kt">Closed</span><span class="p">,</span> <span class="n">display_hamburger</span> <span class="ow">=</span> <span class="kt">[]</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Elm View</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">view</span> <span class="kt">:</span> <span class="kt">Model</span> <span class="ow">-&gt;</span> <span class="kt">Html</span> <span class="kt">Msg</span>
+</span><span class='line'><span class="nf">view</span> <span class="n">model</span> <span class="ow">=</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- BEFORE</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">i</span> <span class="p">[</span> <span class="n">onClick</span> <span class="p">(</span><span class="kt">DisplayHamburgerItems</span><span class="p">)</span> <span class="p">]</span> <span class="kt">[]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- AFTER</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">i</span> <span class="p">[</span> <span class="n">onClick</span> <span class="p">(</span><span class="kt">DisplayHamburgerItems</span> <span class="p">(</span><span class="n">toggleHamburger</span> <span class="n">model</span><span class="o">.</span><span class="n">hamburger</span><span class="p">))</span> <span class="p">]</span> <span class="kt">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">viewHamburgerItems</span> <span class="kt">:</span> <span class="kt">Model</span> <span class="ow">-&gt;</span> <span class="kt">Html</span> <span class="kt">Msg</span>
+</span><span class='line'><span class="nf">viewHamburgerItems</span> <span class="n">model</span> <span class="ow">=</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- BEFORE</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">if</span> <span class="n">model</span><span class="o">.</span><span class="n">hamburger_open</span> <span class="o">==</span> <span class="kt">False</span> <span class="kr">then</span>
+</span><span class='line'>        <span class="n">div</span> <span class="kt">[]</span> <span class="p">(</span><span class="kt">List</span><span class="o">.</span><span class="n">map</span> <span class="n">item</span> <span class="n">model</span><span class="o">.</span><span class="n">display_hamburger</span><span class="p">)</span>
+</span><span class='line'>    <span class="kr">else</span>
+</span><span class='line'>        <span class="n">div</span> <span class="kt">[]</span> <span class="kt">[]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- AFTER</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">case</span> <span class="n">model</span><span class="o">.</span><span class="n">hamburger</span> <span class="kr">of</span>
+</span><span class='line'>        <span class="kt">Open</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="n">div</span> <span class="kt">[]</span> <span class="p">(</span><span class="kt">List</span><span class="o">.</span><span class="n">map</span> <span class="n">item</span> <span class="n">model</span><span class="o">.</span><span class="n">display_hamburger</span><span class="p">)</span>
+</span><span class='line'>        <span class="kt">Closed</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="n">div</span> <span class="kt">[]</span> <span class="kt">[]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It is easier to reason about <code>Hamburger</code> with <code>Open</code> and <code>Closed</code> types than checking against a <code>Bool</code>. Pattern matching on the union type is expressive and is really helpful when the union types grow in complexity.</p>
+
+<p>Full code <a href="https://github.com/iacutone/menus">here</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2018/01/10/pr-review-diagram/">PR Review Diagram</a></h1>
     
     
@@ -160,7 +365,7 @@
 
 
 
-<time class='entry-date' datetime='2017-10-24T12:02:12-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>12:02 pm</span></time>
+<time class='entry-date' datetime='2017-10-24T11:02:12-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>11:02 am</span></time>
         
          | <a href="/blog/2017/10/24/understanding-test-doubles/#disqus_thread">Comments</a>
         
@@ -333,7 +538,7 @@
 
 
 
-<time class='entry-date' datetime='2017-08-11T19:39:12-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>7:39 pm</span></time>
+<time class='entry-date' datetime='2017-08-11T18:39:12-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>6:39 pm</span></time>
         
          | <a href="/blog/2017/08/11/python-first-thoughts/#disqus_thread">Comments</a>
         
@@ -467,7 +672,7 @@ two.py is being run directly
 
 
 
-<time class='entry-date' datetime='2017-06-05T17:33:41-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>5:33 pm</span></time>
+<time class='entry-date' datetime='2017-06-05T16:33:41-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>4:33 pm</span></time>
         
          | <a href="/blog/2017/06/05/artificial-intelligence-nano-degree/#disqus_thread">Comments</a>
         
@@ -547,7 +752,7 @@ two.py is being run directly
 
 
 
-<time class='entry-date' datetime='2017-04-15T10:58:55-04:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>10:58 am</span></time>
+<time class='entry-date' datetime='2017-04-15T09:58:55-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>9:58 am</span></time>
         
          | <a href="/blog/2017/04/15/my-photo-storage-solution/#disqus_thread">Comments</a>
         
@@ -793,7 +998,7 @@ two.py is being run directly
 
 
 
-<time class='entry-date' datetime='2016-10-31T16:31:06-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>4:31 pm</span></time>
+<time class='entry-date' datetime='2016-10-31T15:31:06-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>3:31 pm</span></time>
         
          | <a href="/blog/2016/10/31/vim/#disqus_thread">Comments</a>
         
@@ -837,7 +1042,7 @@ two.py is being run directly
 
 
 
-<time class='entry-date' datetime='2016-10-11T13:02:35-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:02 pm</span></time>
+<time class='entry-date' datetime='2016-10-11T12:02:35-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>12:02 pm</span></time>
         
          | <a href="/blog/2016/10/11/level-up-with-vim/#disqus_thread">Comments</a>
         
@@ -910,7 +1115,7 @@ two.py is being run directly
 
 
 
-<time class='entry-date' datetime='2016-09-15T10:23:52-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>10:23 am</span></time>
+<time class='entry-date' datetime='2016-09-15T09:23:52-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:23 am</span></time>
         
          | <a href="/blog/2016/09/15/filtering-ack-results/#disqus_thread">Comments</a>
         
@@ -930,137 +1135,6 @@ two.py is being run directly
 </span><span class='line'>--ignore-dir<span class="o">=</span>public/assets
 </span><span class='line'>--ignore-dir<span class="o">=</span>vendor/assets
 </span><span class='line'>--ignore-dir<span class="o">=</span>tmp/cache
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/07/13/rails-before-action-method/">Rails `before_action` Method</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-07-13T13:31:20-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:31 pm</span></time>
-        
-         | <a href="/blog/2016/07/13/rails-before-action-method/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I did not know you could give a <code>before_action</code> a block argument. This is a benefit because you do not have to create a ruby method and pass the method into the <code>before_action</code>.</p>
-
-<p>This got me thinking, what does <code>before_action</code> look like in Rails? The following is the source code from Rails 4.2.7, from <code>AbstractController::Callbacks::ClassMethods</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># :method: before_action</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># :call-seq: before_action(names, block)</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># Append a callback before actions. See _insert_callbacks for parameter details.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Take callback names and an optional callback proc, normalize them,</span>
-</span><span class='line'><span class="c1"># then call the block with each callback. This allows us to abstract</span>
-</span><span class='line'><span class="c1"># the normalization across several methods that use it.</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># ==== Parameters</span>
-</span><span class='line'><span class="c1"># * &lt;tt&gt;callbacks&lt;/tt&gt; - An array of callbacks, with an optional</span>
-</span><span class='line'><span class="c1">#   options hash as the last parameter.</span>
-</span><span class='line'><span class="c1"># * &lt;tt&gt;block&lt;/tt&gt;    - A proc that should be added to the callbacks.</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># ==== Block Parameters</span>
-</span><span class='line'><span class="c1"># * &lt;tt&gt;name&lt;/tt&gt;     - The callback to be added</span>
-</span><span class='line'><span class="c1"># * &lt;tt&gt;options&lt;/tt&gt;  - A hash of options to be used when adding the callback</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">_insert_callbacks</span><span class="p">(</span><span class="n">callbacks</span><span class="p">,</span> <span class="n">block</span> <span class="o">=</span> <span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">options</span> <span class="o">=</span> <span class="n">callbacks</span><span class="o">.</span><span class="n">extract_options!</span>
-</span><span class='line'>  <span class="n">_normalize_callback_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">callbacks</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="k">if</span> <span class="n">block</span>
-</span><span class='line'>  <span class="n">callbacks</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">callback</span><span class="o">|</span>
-</span><span class='line'>    <span class="k">yield</span> <span class="n">callback</span><span class="p">,</span> <span class="n">options</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">[</span><span class="ss">:before</span><span class="p">,</span> <span class="ss">:after</span><span class="p">,</span> <span class="ss">:around</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">callback</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">callback</span><span class="si">}</span><span class="s2">_action&quot;</span> <span class="k">do</span> <span class="o">|*</span><span class="n">names</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">blk</span><span class="o">|</span>
-</span><span class='line'>    <span class="n">_insert_callbacks</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">blk</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span> <span class="n">options</span><span class="o">|</span>
-</span><span class='line'>      <span class="n">set_callback</span><span class="p">(</span><span class="ss">:process_action</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And I can do cool things like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_action</span> <span class="o">-&gt;</span> <span class="p">{</span>
-</span><span class='line'>  <span class="vi">@foo</span> <span class="o">=</span> <span class="no">Model</span><span class="o">.</span><span class="n">find</span> <span class="n">params</span><span class="o">[</span><span class="ss">:bar</span><span class="o">]</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I would like to point out the <code>set_callback</code> method.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">before_action</span> <span class="ss">:authenticate</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># can also be called like this</span>
-</span><span class='line'><span class="n">set_callback</span> <span class="ss">:process_action</span><span class="p">,</span> <span class="ss">:before</span><span class="p">,</span> <span class="ss">:authenticate</span>
 </span></code></pre></td></tr></table></div></figure>
 
 </div>

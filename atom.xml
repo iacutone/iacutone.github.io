@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-01-10T12:23:28-05:00</updated>
+  <updated>2018-04-16T18:48:35-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,188 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Understanding Union Types in Elm]]></title>
+    <link href="http://iacutone.github.io/blog/2018/04/16/understanding-union-types-in-elm/"/>
+    <updated>2018-04-16T18:19:13-05:00</updated>
+    <id>http://iacutone.github.io/blog/2018/04/16/understanding-union-types-in-elm</id>
+    <content type="html"><![CDATA[<p>Watching <a href="https://www.youtube.com/watch?v=IcgmSRJHu_8">Making Impossible States Impossible</a> and reading <a href="https://becoming-functional.com/higher-level-coding-with-elm-union-types-2502d1f5a615">Higher Level Coding with Elm Union Types</a> were enlightening in my Elm development. Now, I look for places were I can refine my data model by using union types. Union types allow me to replace conditionals with pattern matching case statements. This pattern is much cleaner and easier to understand. The following is an example of how I used union types to refactor a hamburger.</p>
+
+<h2>Elm Model</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- BEFORE</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Msg</span>
+</span><span class='line'>    <span class="ow">=</span> <span class="kt">DisplayHamburgerItems</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="n">alias</span> <span class="kt">Model</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">hamburger_open</span> <span class="kt">:</span> <span class="kt">Bool</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- AFTER</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Msg</span>
+</span><span class='line'>    <span class="ow">=</span> <span class="kt">DisplayHamburgerItems</span> <span class="kt">Hamburger</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Hamburger</span>
+</span><span class='line'>    <span class="ow">=</span> <span class="kt">Open</span>
+</span><span class='line'>    <span class="o">|</span> <span class="kt">Closed</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="n">alias</span> <span class="kt">Model</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">hamburger</span> <span class="kt">:</span> <span class="kt">Hamburger</span>
+</span><span class='line'>    <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Elm Update</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">update</span> <span class="kt">:</span> <span class="kt">Msg</span> <span class="ow">-&gt;</span> <span class="kt">Model</span> <span class="ow">-&gt;</span> <span class="p">(</span> <span class="kt">Model</span><span class="p">,</span> <span class="kt">Cmd</span> <span class="kt">Msg</span> <span class="p">)</span>
+</span><span class='line'><span class="nf">update</span> <span class="n">msg</span> <span class="n">model</span> <span class="ow">=</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- BEFORE</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">case</span> <span class="n">msg</span> <span class="kr">of</span>
+</span><span class='line'>        <span class="kt">DisplayHamburgerItems</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="kr">if</span> <span class="n">model</span><span class="o">.</span><span class="n">hamburger_open</span> <span class="o">==</span> <span class="kt">True</span> <span class="kr">then</span>
+</span><span class='line'>                <span class="kr">let</span>
+</span><span class='line'>                    <span class="n">items</span> <span class="ow">=</span> <span class="kt">List</span><span class="o">.</span><span class="n">append</span> <span class="n">model</span><span class="o">.</span><span class="n">display_hamburger</span> <span class="p">[</span><span class="s">&quot;About&quot;</span><span class="p">,</span> <span class="s">&quot;Contact&quot;</span><span class="p">,</span> <span class="s">&quot;Menu&quot;</span><span class="p">]</span>
+</span><span class='line'>                <span class="kr">in</span>
+</span><span class='line'>                    <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">display_hamburger</span> <span class="ow">=</span> <span class="n">items</span><span class="p">,</span> <span class="n">hamburger_open</span> <span class="ow">=</span> <span class="kt">False</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span><span class='line'>            <span class="kr">else</span>
+</span><span class='line'>                <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">display_hamburger</span> <span class="ow">=</span> <span class="kt">[]</span><span class="p">,</span> <span class="n">hamburger_open</span> <span class="ow">=</span> <span class="kt">True</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- AFTER</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kt">DisplayHamburgerItems</span> <span class="n">msg</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="kr">case</span> <span class="n">msg</span> <span class="kr">of</span>
+</span><span class='line'>                <span class="kt">Open</span> <span class="ow">-&gt;</span>
+</span><span class='line'>                    <span class="kr">let</span>
+</span><span class='line'>                        <span class="n">items</span> <span class="ow">=</span> <span class="kt">List</span><span class="o">.</span><span class="n">append</span> <span class="n">model</span><span class="o">.</span><span class="n">display_hamburger</span> <span class="p">[</span><span class="s">&quot;About&quot;</span><span class="p">,</span> <span class="s">&quot;Contact&quot;</span><span class="p">,</span> <span class="s">&quot;Menu&quot;</span><span class="p">]</span>
+</span><span class='line'>                    <span class="kr">in</span>
+</span><span class='line'>                        <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">hamburger</span> <span class="ow">=</span> <span class="kt">Open</span><span class="p">,</span> <span class="n">display_hamburger</span> <span class="ow">=</span> <span class="n">items</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span><span class='line'>                <span class="kt">Closed</span> <span class="ow">-&gt;</span>
+</span><span class='line'>                    <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">hamburger</span> <span class="ow">=</span>  <span class="kt">Closed</span><span class="p">,</span> <span class="n">display_hamburger</span> <span class="ow">=</span> <span class="kt">[]</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Elm View</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">view</span> <span class="kt">:</span> <span class="kt">Model</span> <span class="ow">-&gt;</span> <span class="kt">Html</span> <span class="kt">Msg</span>
+</span><span class='line'><span class="nf">view</span> <span class="n">model</span> <span class="ow">=</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- BEFORE</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">i</span> <span class="p">[</span> <span class="n">onClick</span> <span class="p">(</span><span class="kt">DisplayHamburgerItems</span><span class="p">)</span> <span class="p">]</span> <span class="kt">[]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- AFTER</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">i</span> <span class="p">[</span> <span class="n">onClick</span> <span class="p">(</span><span class="kt">DisplayHamburgerItems</span> <span class="p">(</span><span class="n">toggleHamburger</span> <span class="n">model</span><span class="o">.</span><span class="n">hamburger</span><span class="p">))</span> <span class="p">]</span> <span class="kt">[]</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">viewHamburgerItems</span> <span class="kt">:</span> <span class="kt">Model</span> <span class="ow">-&gt;</span> <span class="kt">Html</span> <span class="kt">Msg</span>
+</span><span class='line'><span class="nf">viewHamburgerItems</span> <span class="n">model</span> <span class="ow">=</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- BEFORE</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">if</span> <span class="n">model</span><span class="o">.</span><span class="n">hamburger_open</span> <span class="o">==</span> <span class="kt">False</span> <span class="kr">then</span>
+</span><span class='line'>        <span class="n">div</span> <span class="kt">[]</span> <span class="p">(</span><span class="kt">List</span><span class="o">.</span><span class="n">map</span> <span class="n">item</span> <span class="n">model</span><span class="o">.</span><span class="n">display_hamburger</span><span class="p">)</span>
+</span><span class='line'>    <span class="kr">else</span>
+</span><span class='line'>        <span class="n">div</span> <span class="kt">[]</span> <span class="kt">[]</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">-- AFTER</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kr">case</span> <span class="n">model</span><span class="o">.</span><span class="n">hamburger</span> <span class="kr">of</span>
+</span><span class='line'>        <span class="kt">Open</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="n">div</span> <span class="kt">[]</span> <span class="p">(</span><span class="kt">List</span><span class="o">.</span><span class="n">map</span> <span class="n">item</span> <span class="n">model</span><span class="o">.</span><span class="n">display_hamburger</span><span class="p">)</span>
+</span><span class='line'>        <span class="kt">Closed</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="n">div</span> <span class="kt">[]</span> <span class="kt">[]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It is easier to reason about <code>Hamburger</code> with <code>Open</code> and <code>Closed</code> types than checking against a <code>Bool</code>. Pattern matching on the union type is expressive and is really helpful when the union types grow in complexity.</p>
+
+<p>Full code <a href="https://github.com/iacutone/menus">here</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[PR Review Diagram]]></title>
@@ -27,7 +209,7 @@
   <entry>
     <title type="html"><![CDATA[Understanding Test Doubles]]></title>
     <link href="http://iacutone.github.io/blog/2017/10/24/understanding-test-doubles/"/>
-    <updated>2017-10-24T12:02:12-04:00</updated>
+    <updated>2017-10-24T11:02:12-05:00</updated>
     <id>http://iacutone.github.io/blog/2017/10/24/understanding-test-doubles</id>
     <content type="html"><![CDATA[<p>I refactored credit card payments on an application that uses the <code>ActiveMerchant</code> gem. I was not confident in the test, so, I re-wrote the tests to verify responses from Braintree. Once I verified I did not break anything with my refactor, I decided the best next step was to remove the interaction with Braintree and replace it with stubbed responses. I always forget when and how to use RSpec <code>allow</code>, <code>spy</code> and <code>double</code> methods. This post is meant to help reinforce my knowledge of the aforementioned methods.</p>
 
@@ -177,7 +359,7 @@
   <entry>
     <title type="html"><![CDATA[Python, First Impressions]]></title>
     <link href="http://iacutone.github.io/blog/2017/08/11/python-first-thoughts/"/>
-    <updated>2017-08-11T19:39:12-04:00</updated>
+    <updated>2017-08-11T18:39:12-05:00</updated>
     <id>http://iacutone.github.io/blog/2017/08/11/python-first-thoughts</id>
     <content type="html"><![CDATA[<h4>Debugging</h4>
 
@@ -288,7 +470,7 @@ two.py is being run directly
   <entry>
     <title type="html"><![CDATA[Artificial Intelligence Nano Degree]]></title>
     <link href="http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree/"/>
-    <updated>2017-06-05T17:33:41-04:00</updated>
+    <updated>2017-06-05T16:33:41-05:00</updated>
     <id>http://iacutone.github.io/blog/2017/06/05/artificial-intelligence-nano-degree</id>
     <content type="html"><![CDATA[<p>I started the <a href="https://www.udacity.com/course/artificial-intelligence-nanodegree--nd889">Udacity</a> Artificial Intelligence Nano Degree last month.</p>
 
@@ -345,7 +527,7 @@ two.py is being run directly
   <entry>
     <title type="html"><![CDATA[My Photo Storage Solution]]></title>
     <link href="http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution/"/>
-    <updated>2017-04-15T10:58:55-04:00</updated>
+    <updated>2017-04-15T09:58:55-05:00</updated>
     <id>http://iacutone.github.io/blog/2017/04/15/my-photo-storage-solution</id>
     <content type="html"><![CDATA[<p>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available <a href="http://github.com/iacutone/scripts">here</a>.</p>
 
@@ -545,7 +727,7 @@ two.py is being run directly
   <entry>
     <title type="html"><![CDATA[Vim, Thoughts After Two Weeks]]></title>
     <link href="http://iacutone.github.io/blog/2016/10/31/vim/"/>
-    <updated>2016-10-31T16:31:06-04:00</updated>
+    <updated>2016-10-31T15:31:06-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/10/31/vim</id>
     <content type="html"><![CDATA[<p>Purposefully, I began using Vim during a non-strenuous work week which helped manage frustration. I have been using solely Vim as a text editor for two weeks and have experienced improved efficienies over my previous text editor, Sublime.</p>
 
@@ -566,7 +748,7 @@ two.py is being run directly
   <entry>
     <title type="html"><![CDATA[Level Up With Vim]]></title>
     <link href="http://iacutone.github.io/blog/2016/10/11/level-up-with-vim/"/>
-    <updated>2016-10-11T13:02:35-04:00</updated>
+    <updated>2016-10-11T12:02:35-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/10/11/level-up-with-vim</id>
     <content type="html"><![CDATA[<p>How much time do you spend in your text editor? We spend most of our time reading through text and jumping between files. My goal is to find a tool in order to help me do this more efficiently. I have found that learning Vim is not overwhelming or difficult if you break the units of work down into manageable pieces. The ultimate goal is to use Vim fulltime. Below are my curated steps:</p>
 
@@ -616,7 +798,7 @@ two.py is being run directly
   <entry>
     <title type="html"><![CDATA[Filtering Ack Results]]></title>
     <link href="http://iacutone.github.io/blog/2016/09/15/filtering-ack-results/"/>
-    <updated>2016-09-15T10:23:52-04:00</updated>
+    <updated>2016-09-15T09:23:52-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/09/15/filtering-ack-results</id>
     <content type="html"><![CDATA[<p>While setting up my VIM environment, I read a blogpost which states <code>ack</code> can ignore directories. For cleaner <code>ack</code> output you can setup the file below:</p>
 
@@ -636,7 +818,7 @@ two.py is being run directly
   <entry>
     <title type="html"><![CDATA[Rails `before_action` Method]]></title>
     <link href="http://iacutone.github.io/blog/2016/07/13/rails-before-action-method/"/>
-    <updated>2016-07-13T13:31:20-04:00</updated>
+    <updated>2016-07-13T12:31:20-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/07/13/rails-before-action-method</id>
     <content type="html"><![CDATA[<p>I did not know you could give a <code>before_action</code> a block argument. This is a benefit because you do not have to create a ruby method and pass the method into the <code>before_action</code>.</p>
 
@@ -744,7 +926,7 @@ two.py is being run directly
   <entry>
     <title type="html"><![CDATA[Extend and Include in Ruby]]></title>
     <link href="http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby/"/>
-    <updated>2016-06-02T16:25:45-04:00</updated>
+    <updated>2016-06-02T15:25:45-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/06/02/extend-and-include-in-ruby</id>
     <content type="html"><![CDATA[<p>I have been trying to clean up some old code with Ruby modules. This post is to help me remember the differences between <code>include</code> and <code>extend</code> in Ruby.</p>
 
@@ -804,7 +986,7 @@ two.py is being run directly
   <entry>
     <title type="html"><![CDATA[Find and Replace Text]]></title>
     <link href="http://iacutone.github.io/blog/2016/05/15/find-and-replace-text/"/>
-    <updated>2016-05-15T11:28:24-04:00</updated>
+    <updated>2016-05-15T10:28:24-05:00</updated>
     <id>http://iacutone.github.io/blog/2016/05/15/find-and-replace-text</id>
     <content type="html"><![CDATA[<p>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.</p>
 
@@ -1251,34 +1433,6 @@ two.py is being run directly
 
 
 <p>I especially like the shared context approach because you can have shared context and redefine attributes as needed in specs.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Auto Layout Xcode for Navigation Bar]]></title>
-    <link href="http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar/"/>
-    <updated>2015-11-13T19:03:02-05:00</updated>
-    <id>http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar</id>
-    <content type="html"><![CDATA[<p>Finding auto layout information is difficult. The steps below pin a navigation bar to the top of the screen for all iOS devices.</p>
-
-<p><img class="center" src="http://iacutone.github.io/images/constraints.gif" title="" ></p>
-
-<h3>Steps</h3>
-
-<ul>
-<li>Make sure &ldquo;Navigation Bar&rdquo; is selected on the left menu</li>
-<li>Click the &ldquo;Pin&rdquo; button on the bottom right corner</li>
-<li>Click the top, left and right constraints</li>
-<li>Click the Height constraint</li>
-<li>Add the 4 contraints</li>
-</ul>
-
-
-<p>The above steps &ldquo;pin&rdquo; the navigation bar object to the top of the view and stretch the navigation bar to the sides of the view. The height constraint keeps a static height for the navigation bar.</p>
-
-<p>Helpful Links</p>
-
-<p><a href="https://github.com/codepath/ios_guides/wiki/Auto-Layout-Basics">Auto Layout Basics</a></p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Testing | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-04-16T18:45:14-05:00</updated>
+  <updated>2018-04-16T18:48:35-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -31,22 +31,40 @@
 <h3>Relational Databases</h3>
 
 
-<p>{% codeblock Gemfile lang:ruby %}</p>
-
-<pre><code>group :development do
-  gem 'guard-rspec', require: false
-end
-
-group :test do
-   gem 'rspec-rails'
-   gem 'factory_girl_rails'
-   gem 'faker'
-   gem 'shoulda-matchers'
-   gem 'terminal-notifier-guard' 
-end
-</code></pre>
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;group :development do</span>
+</span><span class='line'><span class="sr">  gem &#39;guard-rspec&#39;, require: false</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">group :test do</span>
+</span><span class='line'><span class="sr">   gem &#39;rspec-rails&#39;</span>
+</span><span class='line'><span class="sr">   gem &#39;factory_girl_rails&#39;</span>
+</span><span class='line'><span class="sr">   gem &#39;faker&#39;</span>
+</span><span class='line'><span class="sr">   gem &#39;shoulda-matchers&#39;</span>
+</span><span class='line'><span class="sr">   gem &#39;terminal-notifier-guard&#39; </span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <ul>
     <li>Guard RSpec waits for you to save your files and automatically runs your tests, thereby reducing the time needed to run tests.</li>
@@ -63,22 +81,40 @@ end
 <h3>Mongoid</h3>
 
 
-<p>{% codeblock Gemfile lang:ruby %}</p>
-
-<pre><code>group :development do
-  gem 'guard-rspec', require: false
-end
-
-group :test do
-  gem 'fabrication'
-  gem 'faker'
-  gem 'rspec-rails'
-  gem 'mongoid-rspec'
-  gem 'terminal-notifier-guard' 
-end
-</code></pre>
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;group :development do</span>
+</span><span class='line'><span class="sr">  gem &#39;guard-rspec&#39;, require: false</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">group :test do</span>
+</span><span class='line'><span class="sr">  gem &#39;fabrication&#39;</span>
+</span><span class='line'><span class="sr">  gem &#39;faker&#39;</span>
+</span><span class='line'><span class="sr">  gem &#39;rspec-rails&#39;</span>
+</span><span class='line'><span class="sr">  gem &#39;mongoid-rspec&#39;</span>
+</span><span class='line'><span class="sr">  gem &#39;terminal-notifier-guard&#39; </span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p><p>The gems for Mongoid testing are similar to those used in testing with a relational database.<p>
 <ul>

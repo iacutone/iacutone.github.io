@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Swift | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/swift/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-04-16T18:45:14-05:00</updated>
+  <updated>2018-04-16T18:48:35-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -20,10 +20,10 @@
     <id>http://iacutone.github.io/blog/2015/12/03/env-variables-in-xcode</id>
     <content type="html"><![CDATA[<p>Setting ENV variables in XCode in not straighforward. I have broken down how to accomplish setting up an ENV variable in the following videos and code example.</p>
 
-<p>{% youtube r5HZwbkA52I %}
+<p><div class="embed-video-container"><iframe src="//www.youtube.com/embed/r5HZwbkA52I" allowfullscreen></iframe></div>
 Make a new conifuration file and set any ENV variables you need.</p>
 
-<p>{% youtube jwuQgWb58Xs %}
+<p><div class="embed-video-container"><iframe src="//www.youtube.com/embed/jwuQgWb58Xs" allowfullscreen></iframe></div>
 In the debug environment, use the debug.xcconfig file. Then, assign the value to something, in this case, SignUpUrl corresponds with the SIGN_UP_URL, which is set to localhost:4567/sign_up.</p>
 
 <pre><code class="swift SignUpController.swift">  var info:[NSObject:AnyObject] = NSBundle.mainBundle().infoDictionary!
@@ -45,7 +45,7 @@ In the debug environment, use the debug.xcconfig file. Then, assign the value to
     <id>http://iacutone.github.io/blog/2015/11/13/auto-layout-xcode-for-navigation-bar</id>
     <content type="html"><![CDATA[<p>Finding auto layout information is difficult. The steps below pin a navigation bar to the top of the screen for all iOS devices.</p>
 
-<p>{% img center /images/constraints.gif  %}</p>
+<p><img class="center" src="/images/constraints.gif" title="" ></p>
 
 <h3>Steps</h3>
 
