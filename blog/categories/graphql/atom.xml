@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Elm | Iacutone.rb]]></title>
-  <link href="http://iacutone.github.io/blog/categories/elm/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Graphql | Iacutone.rb]]></title>
+  <link href="http://iacutone.github.io/blog/categories/graphql/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
   <updated>2018-04-23T12:32:18-05:00</updated>
   <id>http://iacutone.github.io/</id>
@@ -125,108 +125,6 @@ view model =
 </code></pre>
 
 <p>The code above will display a stringfied version of our query. In Part 2, we will transform the Elm <code>String</code> data object into something more useful with Elm decoders.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Understanding Union Types in Elm]]></title>
-    <link href="http://iacutone.github.io/blog/2018/04/16/understanding-union-types-in-elm/"/>
-    <updated>2018-04-16T18:19:13-05:00</updated>
-    <id>http://iacutone.github.io/blog/2018/04/16/understanding-union-types-in-elm</id>
-    <content type="html"><![CDATA[<p>Watching <a href="https://www.youtube.com/watch?v=IcgmSRJHu_8">Making Impossible States Impossible</a> and reading <a href="https://becoming-functional.com/higher-level-coding-with-elm-union-types-2502d1f5a615">Higher Level Coding with Elm Union Types</a> were enlightening in my Elm development. Now, I look for places were I can refine my data model by using union types. Union types allow me to replace conditionals with pattern matching case statements. This pattern is much cleaner and easier to understand. The following is an example of how I used union types to refactor a hamburger.</p>
-
-<h2>Elm Model</h2>
-
-<pre><code class="haskell">-- BEFORE
-
-type Msg
-    = DisplayHamburgerItems
-
-type alias Model = 
-    { hamburger_open : Bool
-    }
-
--- AFTER
-
-type Msg
-    = DisplayHamburgerItems Hamburger
-
-type Hamburger
-    = Open
-    | Closed
-
-
-type alias Model = 
-    { hamburger : Hamburger
-    }
-</code></pre>
-
-<h2>Elm Update</h2>
-
-<pre><code class="haskell">update : Msg -&gt; Model -&gt; ( Model, Cmd Msg )
-update msg model =
-
-    -- BEFORE
-
-    case msg of
-        DisplayHamburgerItems -&gt;
-            if model.hamburger_open == True then
-                let
-                    items = List.append model.display_hamburger ["About", "Contact", "Menu"]
-                in
-                    ( { model | display_hamburger = items, hamburger_open = False }, Cmd.none )
-            else
-                ( { model | display_hamburger = [], hamburger_open = True }, Cmd.none 
-
-
-    -- AFTER
-
-        DisplayHamburgerItems msg -&gt;
-            case msg of
-                Open -&gt;
-                    let
-                        items = List.append model.display_hamburger ["About", "Contact", "Menu"]
-                    in
-                        ( { model | hamburger = Open, display_hamburger = items }, Cmd.none )
-                Closed -&gt;
-                    ( { model | hamburger =  Closed, display_hamburger = [] }, Cmd.none )
-</code></pre>
-
-<h2>Elm View</h2>
-
-<pre><code class="haskell">view : Model -&gt; Html Msg
-view model =
-
-    -- BEFORE
-
-    i [ onClick (DisplayHamburgerItems) ] []
-
-    -- AFTER
-
-    i [ onClick (DisplayHamburgerItems (toggleHamburger model.hamburger)) ] []
-
-viewHamburgerItems : Model -&gt; Html Msg
-viewHamburgerItems model =
-
-    -- BEFORE
-
-    if model.hamburger_open == False then
-        div [] (List.map item model.display_hamburger)
-    else
-        div [] []
-
-    -- AFTER
-
-    case model.hamburger of
-        Open -&gt;
-            div [] (List.map item model.display_hamburger)
-        Closed -&gt;
-            div [] []
-</code></pre>
-
-<p>It is easier to reason about <code>Hamburger</code> with <code>Open</code> and <code>Closed</code> types than checking against a <code>Bool</code>. Pattern matching on the union type is expressive and is really helpful when the union types grow in complexity.</p>
-
-<p>Full code <a href="https://github.com/iacutone/menus">here</a>.</p>
 ]]></content>
   </entry>
   

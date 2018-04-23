@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-04-23T12:30:58-05:00</updated>
+  <updated>2018-04-23T12:32:18-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -14,9 +14,9 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Graphql With Elm Part 1 Communicating With Github]]></title>
+    <title type="html"><![CDATA[GraphQL With Elm Part 1, Communicating With GitHub]]></title>
     <link href="http://iacutone.github.io/blog/2018/04/23/graphql-with-elm-part-1-communicating-with-github/"/>
-    <updated>2018-04-23T00:00:00-05:00</updated>
+    <updated>2018-04-23T10:40:40-05:00</updated>
     <id>http://iacutone.github.io/blog/2018/04/23/graphql-with-elm-part-1-communicating-with-github</id>
     <content type="html"><![CDATA[<p>A co-worker and are using GitHub&rsquo;s GraphQL API for a side project. I am writing a series of posts around what we learned from creating the application entitled &lsquo;GraghQL and Elm&rsquo;. This post will detail how to communicate with the Github GraphQL API with Elm. All code related to these posts can be found <a href="https://github.com/iacutone/github-elm">here</a>.</p>
 
