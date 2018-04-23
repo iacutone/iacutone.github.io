@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Elm | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/elm/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-04-23T12:32:18-05:00</updated>
+  <updated>2018-04-23T13:03:22-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -37,7 +37,7 @@
 query =
     """
     query {
-    {
+        {
       user(login:"iacutone") {
         id
       }
@@ -121,7 +121,7 @@ main =
 
 view : Model -&gt; Html Msg
 view model =
-    div [] [ text model.resposne]
+    div [] [ text model.response ]
 </code></pre>
 
 <p>The code above will display a stringfied version of our query. In Part 2, we will transform the Elm <code>String</code> data object into something more useful with Elm decoders.</p>
