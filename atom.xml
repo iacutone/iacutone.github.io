@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-04-16T18:48:35-05:00</updated>
+  <updated>2018-04-23T12:30:58-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,211 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Graphql With Elm Part 1 Communicating With Github]]></title>
+    <link href="http://iacutone.github.io/blog/2018/04/23/graphql-with-elm-part-1-communicating-with-github/"/>
+    <updated>2018-04-23T00:00:00-05:00</updated>
+    <id>http://iacutone.github.io/blog/2018/04/23/graphql-with-elm-part-1-communicating-with-github</id>
+    <content type="html"><![CDATA[<p>A co-worker and are using GitHub&rsquo;s GraphQL API for a side project. I am writing a series of posts around what we learned from creating the application entitled &lsquo;GraghQL and Elm&rsquo;. This post will detail how to communicate with the Github GraphQL API with Elm. All code related to these posts can be found <a href="https://github.com/iacutone/github-elm">here</a>.</p>
+
+<p>GitHub has extensive <a href="https://developer.github.com/v4/">documentation</a> on communicating with their GraphQL server. In this post we will write a simple query and display the JSON from Github. In the next post, we will use Elm Decoders in order to turn the JSON into Elm data.</p>
+
+<p>The <a href="https://developer.github.com/v4/explorer/">GitHub GraphQL Explorer</a> is useful for crafting queries. Let&rsquo;s write a query that fetches a user&rsquo;s id:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="err">user(login:</span><span class="nt">&quot;iacutone&quot;</span><span class="err">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">id</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With the aforementioned JSON, let&rsquo;s contruct a request to GitHub in Elm!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">query</span> <span class="kt">:</span> <span class="kt">String</span>
+</span><span class='line'><span class="nf">query</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="s">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="s">    query {</span>
+</span><span class='line'><span class="s">  {</span>
+</span><span class='line'><span class="s">    user(login:&quot;</span><span class="n">iacutone</span><span class="s">&quot;) {</span>
+</span><span class='line'><span class="s">      id</span>
+</span><span class='line'><span class="s">    }</span>
+</span><span class='line'><span class="s">  }</span>
+</span><span class='line'><span class="s">    }</span>
+</span><span class='line'><span class="s">    &quot;&quot;&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">baseUrl</span> <span class="kt">:</span> <span class="kt">String</span>
+</span><span class='line'><span class="nf">baseUrl</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="s">&quot;https://api.github.com/graphql&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">bearerToken</span> <span class="kt">:</span> <span class="kt">String</span>
+</span><span class='line'><span class="nf">bearerToken</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="s">&quot;Bearer &lt;your GitHub token here&gt;&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">request</span> <span class="kt">:</span> <span class="kt">Http</span><span class="o">.</span><span class="kt">Request</span> <span class="kt">String</span>
+</span><span class='line'><span class="nf">request</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="kt">Http</span><span class="o">.</span><span class="n">request</span>
+</span><span class='line'>  <span class="p">{</span> <span class="n">method</span> <span class="ow">=</span> <span class="s">&quot;POST&quot;</span>
+</span><span class='line'>  <span class="p">,</span> <span class="n">headers</span> <span class="ow">=</span> <span class="p">[</span><span class="kt">Http</span><span class="o">.</span><span class="n">header</span> <span class="s">&quot;Authorization&quot;</span> <span class="n">bearerToken</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">,</span> <span class="n">url</span> <span class="ow">=</span> <span class="n">baseUrl</span>
+</span><span class='line'>  <span class="p">,</span> <span class="n">body</span> <span class="ow">=</span> <span class="kt">Http</span><span class="o">.</span><span class="n">jsonBody</span> <span class="p">(</span><span class="kt">Encode</span><span class="o">.</span><span class="n">object</span> <span class="p">[(</span><span class="s">&quot;query&quot;</span><span class="p">,</span> <span class="kt">Encode</span><span class="o">.</span><span class="n">string</span> <span class="n">query</span><span class="p">)])</span>
+</span><span class='line'>  <span class="p">,</span> <span class="n">expect</span> <span class="ow">=</span> <span class="kt">Http</span><span class="o">.</span><span class="n">expectString</span>
+</span><span class='line'>  <span class="p">,</span> <span class="n">timeout</span> <span class="ow">=</span> <span class="kt">Nothing</span>
+</span><span class='line'>  <span class="p">,</span> <span class="n">withCredentials</span> <span class="ow">=</span> <span class="kt">False</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After posting the query to GitHub, your Elm update function will receive the following response:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;MDQ6VXNlcjE1NjMyMDE=&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I find it helpful to define this response as an Elm <code>String</code> type and view it in the browser. If there is an error with the query, you can see the results in the browser.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="c1">-- MODEL</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="n">alias</span> <span class="kt">Model</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">response</span> <span class="kt">:</span> <span class="kt">String</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- UPDATE</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="kt">Msg</span>
+</span><span class='line'>    <span class="ow">=</span> <span class="kt">GraphQLQuery</span> <span class="p">(</span><span class="kt">Result</span> <span class="kt">Http</span><span class="o">.</span><span class="kt">Error</span> <span class="kt">String</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">update</span> <span class="kt">:</span> <span class="kt">Msg</span> <span class="ow">-&gt;</span> <span class="kt">Model</span> <span class="ow">-&gt;</span> <span class="p">(</span> <span class="kt">Model</span><span class="p">,</span> <span class="kt">Cmd</span> <span class="kt">Msg</span> <span class="p">)</span>
+</span><span class='line'><span class="nf">update</span> <span class="n">msg</span> <span class="n">model</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="kr">case</span> <span class="n">msg</span> <span class="kr">of</span>
+</span><span class='line'>        <span class="kt">GraphQLQuery</span> <span class="p">(</span><span class="kt">Ok</span> <span class="n">res</span><span class="p">)</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">response</span> <span class="ow">=</span> <span class="n">res</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kt">GraphQLQuery</span> <span class="p">(</span><span class="kt">Err</span> <span class="n">res</span><span class="p">)</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">response</span> <span class="ow">=</span> <span class="n">toString</span> <span class="n">res</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">initialModel</span> <span class="kt">:</span> <span class="kt">Model</span>
+</span><span class='line'><span class="nf">initialModel</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">response</span> <span class="ow">=</span> <span class="s">&quot;&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">init</span> <span class="kt">:</span> <span class="p">(</span><span class="kt">Model</span><span class="p">,</span> <span class="kt">Cmd</span> <span class="kt">Msg</span><span class="p">)</span>
+</span><span class='line'><span class="nf">init</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">(</span> <span class="n">initialModel</span><span class="p">,</span> <span class="kt">Http</span><span class="o">.</span><span class="n">send</span> <span class="kt">GraphQLQuery</span> <span class="n">request</span> <span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">main</span> <span class="kt">:</span> <span class="kt">Program</span> <span class="kt">Never</span> <span class="kt">Model</span> <span class="kt">Msg</span>
+</span><span class='line'><span class="nf">main</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="kt">Html</span><span class="o">.</span><span class="n">program</span>
+</span><span class='line'>        <span class="p">{</span> <span class="n">init</span> <span class="ow">=</span> <span class="n">init</span>
+</span><span class='line'>        <span class="p">,</span> <span class="n">view</span> <span class="ow">=</span> <span class="n">view</span>
+</span><span class='line'>        <span class="p">,</span> <span class="n">update</span> <span class="ow">=</span> <span class="n">update</span>
+</span><span class='line'>        <span class="p">,</span> <span class="n">subscriptions</span> <span class="ow">=</span> <span class="nf">\</span><span class="kr">_</span> <span class="ow">-&gt;</span> <span class="kt">Sub</span><span class="o">.</span><span class="n">none</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- VIEW</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">view</span> <span class="kt">:</span> <span class="kt">Model</span> <span class="ow">-&gt;</span> <span class="kt">Html</span> <span class="kt">Msg</span>
+</span><span class='line'><span class="nf">view</span> <span class="n">model</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="n">div</span> <span class="kt">[]</span> <span class="p">[</span> <span class="n">text</span> <span class="n">model</span><span class="o">.</span><span class="n">resposne</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The code above will display a stringfied version of our query. In Part 2, we will transform the Elm <code>String</code> data object into something more useful with Elm decoders.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Understanding Union Types in Elm]]></title>
@@ -1312,127 +1517,6 @@ two.py is being run directly
 <p>Helpful Links</p>
 
 <p><a href="http://bogardon.github.io/xcode/environment-variables/2013/05/20/configuring-env-variables-in-xcode.html">Configuring ENV Variables in XCode</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Shared Contexts With RSpec]]></title>
-    <link href="http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec/"/>
-    <updated>2015-11-20T16:45:46-05:00</updated>
-    <id>http://iacutone.github.io/blog/2015/11/20/shared-contexts-with-rspec</id>
-    <content type="html"><![CDATA[<p>In the past, I used traits with my factories. Below is a simple example of defining a trait:</p>
-
-<h3>Using traits</h3>
-
-<figure class='code'><figcaption><span>donations_factories.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">factory</span> <span class="ss">:donation</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">trait</span> <span class="ss">:with_amount</span> <span class="k">do</span>
-</span><span class='line'>        <span class="n">amount</span> <span class="mi">10</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">trait</span> <span class="ss">:no_amount</span> <span class="k">do</span>
-</span><span class='line'>        <span class="n">amount</span> <span class="mi">0</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>An example spec:</p>
-
-<figure class='code'><figcaption><span>donation_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="s1">&#39;Donation Matching&#39;</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="ss">:model</span> <span class="k">do</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with an amount&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:donation</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:donation</span><span class="p">,</span> <span class="ss">:with_amount</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with no amount&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:donation</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:donation</span><span class="p">,</span> <span class="ss">:no_amount</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>However, I believe that using a shared context is a clearer approach. Defining the amount in a shared context and overriding the amount allows more control over testing use cases.</p>
-
-<h3>Using a shared context</h3>
-
-<figure class='code'><figcaption><span>donation_spec.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;support/shared_contexts/donor_with_donation_context&#39;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">describe</span> <span class="s1">&#39;Donation Matching&#39;</span><span class="p">,</span> <span class="ss">:type</span> <span class="o">=&gt;</span> <span class="ss">:model</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">include_context</span> <span class="s1">&#39;a donor with a donation&#39;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with an amount&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="sr">//</span> <span class="n">donation</span><span class="o">.</span><span class="n">amount</span> <span class="o">==</span> <span class="mi">10</span> <span class="p">(</span><span class="n">defined</span> <span class="k">in</span> <span class="n">the</span> <span class="n">shared</span> <span class="n">context</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with no amount&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:amount</span><span class="p">)</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">}</span>
-</span><span class='line'>      <span class="sr">//</span> <span class="n">donation</span><span class="o">.</span><span class="n">amount</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;with a gnarly&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="n">let</span><span class="p">(</span><span class="ss">:amount</span><span class="p">)</span> <span class="p">{</span> <span class="mi">09709780</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>spec/support/shared_contexts/donor_with_donation_context.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="no">RSpec</span><span class="o">.</span><span class="n">shared_context</span> <span class="s1">&#39;a donor with a donation&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:amount</span><span class="p">)</span> <span class="p">{</span> <span class="mi">10</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">let</span><span class="p">(</span><span class="ss">:donation</span><span class="p">)</span> <span class="p">{</span> <span class="n">create</span><span class="p">(</span><span class="ss">:donation</span><span class="p">,</span> <span class="ss">amount</span><span class="p">:</span> <span class="n">amount</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I especially like the shared context approach because you can have shared context and redefine attributes as needed in specs.</p>
 ]]></content>
   </entry>
   
