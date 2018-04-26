@@ -9,7 +9,7 @@
   <meta name="author" content="">
 
   
-  <meta name="description" content="A co-worker and are using GitHub&rsquo;s GraphQL API for a side project. I am writing a series of posts around what we learned from creating the &hellip;">
+  <meta name="description" content="In this post we will discuss how to turn nested JSON into Elm data types. This post uses a thin Elm.Http wrapper. Using this library helps us &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,6 +111,189 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2018/04/25/graphql-with-elm-part-2/">GraphQL With Elm Part 2, Parsing Nested JSON</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-04-25T14:17:04-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>2:17 pm</span></time>
+        
+         | <a href="/blog/2018/04/25/graphql-with-elm-part-2/#disqus_thread">Comments</a>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In this post we will discuss how to turn nested JSON into Elm data types. This post uses a thin <code>Elm.Http</code> <a href="https://github.com/NoRedInk/elm-decode-pipeline">wrapper</a>. Using this library helps us concentrate on contructing the necessary Decoders. We will also contruct a more complex query in order to explain how to contruct complex data types. The following query returns JSON for the first two team members of FracturedAtlas.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">query</span> <span class="kt">:</span> <span class="kt">String</span>
+</span><span class='line'><span class="nf">query</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="s">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="s">    query {</span>
+</span><span class='line'><span class="s">      organization(login: &quot;</span><span class="kt">FracturedAtlas</span><span class="s">&quot;) {</span>
+</span><span class='line'><span class="s">        team(slug: &quot;</span><span class="n">fa</span><span class="o">-</span><span class="n">dev</span><span class="s">&quot;) {</span>
+</span><span class='line'><span class="s">          members(first:2) {</span>
+</span><span class='line'><span class="s">            edges {</span>
+</span><span class='line'><span class="s">              node {</span>
+</span><span class='line'><span class="s">                id</span>
+</span><span class='line'><span class="s">                login</span>
+</span><span class='line'><span class="s">              }</span>
+</span><span class='line'><span class="s">            }</span>
+</span><span class='line'><span class="s">          }</span>
+</span><span class='line'><span class="s">        }</span>
+</span><span class='line'><span class="s">      }</span>
+</span><span class='line'><span class="s">    }</span>
+</span><span class='line'><span class="s">    &quot;&quot;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Swapping out our query will return the following JSON.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span><span class="nt">&quot;data&quot;</span><span class="p">:{</span><span class="nt">&quot;organization&quot;</span><span class="p">:{</span><span class="nt">&quot;team&quot;</span><span class="p">:{</span><span class="nt">&quot;members&quot;</span><span class="p">:{</span><span class="nt">&quot;edges&quot;</span><span class="p">:[{</span><span class="nt">&quot;node&quot;</span><span class="p">:{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="s2">&quot;&lt;user id&gt;&quot;</span><span class="p">,</span><span class="nt">&quot;login&quot;</span><span class="p">:</span><span class="s2">&quot;&lt;user name&gt;&quot;</span><span class="p">}},{</span><span class="nt">&quot;node&quot;</span><span class="p">:{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="s2">&quot;&lt;another user id&gt;&quot;</span><span class="p">,</span><span class="nt">&quot;login&quot;</span><span class="p">:</span><span class="s2">&quot;&lt;user name&gt;&quot;</span><span class="p">}}]}}}}}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The following part took me a long time to grok. The issues I had difficulty resolving are:
+1. How do I grab the list of nodes?
+1. How to I change my stringified JSON output into Elm data types?</p>
+
+<p>The rest of this post tackles these two issues.</p>
+
+<p>The <code>requiredAt</code> function from Elm Decode Pipeline solves the first problem.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">decodeLogin</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="n">decode</span> <span class="kt">Users</span>
+</span><span class='line'>            <span class="o">|&gt;</span> <span class="n">requiredAt</span> <span class="p">[</span><span class="s">&quot;data&quot;</span><span class="p">,</span> <span class="s">&quot;organization&quot;</span><span class="p">,</span> <span class="s">&quot;team&quot;</span><span class="p">,</span> <span class="s">&quot;members&quot;</span><span class="p">,</span> <span class="s">&quot;edges&quot;</span><span class="p">]</span> <span class="p">(</span><span class="kt">Json</span><span class="o">.</span><span class="kt">Decode</span><span class="o">.</span><span class="n">list</span> <span class="n">decodeNode</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1">-- &#39;dig&#39; into the JSON and extract the node list</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">decodeNode</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="n">decode</span> <span class="kt">Node</span>
+</span><span class='line'>        <span class="o">|&gt;</span> <span class="n">required</span> <span class="s">&quot;node&quot;</span> <span class="n">decodeUser</span>
+</span><span class='line'>
+</span><span class='line'><span class="nf">decodeUser</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="n">decode</span> <span class="kt">User</span>
+</span><span class='line'>        <span class="o">|&gt;</span> <span class="n">required</span> <span class="s">&quot;id&quot;</span> <span class="n">string</span>
+</span><span class='line'>        <span class="o">|&gt;</span> <span class="n">required</span> <span class="s">&quot;login&quot;</span> <span class="n">string</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s construct our Elm datatypes based on the JSON response.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="kr">type</span> <span class="n">alias</span> <span class="kt">Model</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">message</span> <span class="kt">:</span> <span class="kt">String</span>
+</span><span class='line'>    <span class="p">,</span> <span class="n">users</span> <span class="kt">:</span> <span class="kt">Maybe</span> <span class="kt">Users</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="n">alias</span> <span class="kt">Users</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">edges</span> <span class="kt">:</span> <span class="kt">List</span> <span class="kt">Node</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="n">alias</span> <span class="kt">Node</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">node</span><span class="kt">:</span> <span class="kt">User</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">type</span> <span class="n">alias</span> <span class="kt">User</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="p">{</span> <span class="n">id</span><span class="kt">:</span>  <span class="kt">String</span>
+</span><span class='line'>    <span class="p">,</span> <span class="n">login</span> <span class="kt">:</span> <span class="kt">String</span>
+</span><span class='line'>    <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now to handle the update function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='haskell'><span class='line'><span class="nf">update</span> <span class="kt">:</span> <span class="kt">Msg</span> <span class="ow">-&gt;</span> <span class="kt">Model</span> <span class="ow">-&gt;</span> <span class="p">(</span> <span class="kt">Model</span><span class="p">,</span> <span class="kt">Cmd</span> <span class="kt">Msg</span> <span class="p">)</span>
+</span><span class='line'><span class="nf">update</span> <span class="n">msg</span> <span class="n">model</span> <span class="ow">=</span>
+</span><span class='line'>    <span class="kr">case</span> <span class="n">msg</span> <span class="kr">of</span>
+</span><span class='line'>        <span class="kt">GraphQLQuery</span> <span class="p">(</span><span class="kt">Ok</span> <span class="n">res</span><span class="p">)</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="kr">case</span> <span class="n">decodeString</span> <span class="n">decodeLogin</span> <span class="n">res</span> <span class="kr">of</span>
+</span><span class='line'>                <span class="kt">Ok</span> <span class="n">res</span> <span class="ow">-&gt;</span>
+</span><span class='line'>                    <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">users</span> <span class="ow">=</span> <span class="kt">Just</span> <span class="n">res</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span><span class='line'>                <span class="kt">Err</span> <span class="ne">error</span> <span class="ow">-&gt;</span>
+</span><span class='line'>                    <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">message</span> <span class="ow">=</span> <span class="ne">error</span><span class="p">,</span> <span class="n">users</span> <span class="ow">=</span> <span class="kt">Nothing</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kt">GraphQLQuery</span> <span class="p">(</span><span class="kt">Err</span> <span class="n">res</span><span class="p">)</span> <span class="ow">-&gt;</span>
+</span><span class='line'>            <span class="p">(</span> <span class="p">{</span> <span class="n">model</span> <span class="o">|</span> <span class="n">users</span> <span class="ow">=</span> <span class="kt">Nothing</span> <span class="p">},</span> <span class="kt">Cmd</span><span class="o">.</span><span class="n">none</span> <span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I spent numerous hours figuring out how to map the Elm data types to the decoders. In Part 3, we will learn how to display the <code>User</code> data type in the browser.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1249,79 +1432,6 @@ two.py is being run directly
 <h5>More Resources</h5>
 
 <p><a href="http://vimawesome.com">Vim Awesome</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/10/11/level-up-with-vim/">Level Up With Vim</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-10-11T12:02:35-05:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>12:02 pm</span></time>
-        
-         | <a href="/blog/2016/10/11/level-up-with-vim/#disqus_thread">Comments</a>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>How much time do you spend in your text editor? We spend most of our time reading through text and jumping between files. My goal is to find a tool in order to help me do this more efficiently. I have found that learning Vim is not overwhelming or difficult if you break the units of work down into manageable pieces. The ultimate goal is to use Vim fulltime. Below are my curated steps:</p>
-
-<h5>Intro Video</h5>
-
-<ul>
-<li><a href="https://www.youtube.com/watch?v=_NUO4JEtkDw">Learning Vim in a Week</a></li>
-</ul>
-
-
-<h5>Vimtutor</h5>
-
-<ul>
-<li>Comprehensive introduction to Vim</li>
-<li>Type <code>vimtutor</code> in a Terminal session</li>
-<li>Complete a few sections per day</li>
-</ul>
-
-
-<h5>Screencasts</h5>
-
-<ul>
-<li><a href="http://derekwyatt.org/vim/tutorials/novice/">Derek Wyatt Novice</a></li>
-<li>Watch one of these videos everyday</li>
-</ul>
-
-
-<h5>Advanced</h5>
-
-<ul>
-<li><a href="http://derekwyatt.org/vim/tutorials/intermediate/">Derek Wyatt Intermediate</a></li>
-<li><a href="http://vimcasts.org/blog/2011/05/the-fugitive-series/">Vimcasts</a>, this series focuses on Vim-Fugitive, a GitHub plugin.</li>
-</ul>
-
-
-<h5>Helpful Links</h5>
-
-<ul>
-<li><a href="https://github.com/iacutone/dotfiles">Dotfiles</a></li>
-<li>Slowly build and customize your vimrc</li>
-<li>I find these plugins useful <a href="https://github.com/kien/ctrlp.vim">Ctrl-P</a> and <a href="https://github.com/tpope/vim-rails">Vim Rails</a></li>
-</ul>
-
 </div>
   
   

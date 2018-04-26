@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Json | Iacutone.rb]]></title>
+  <link href="http://iacutone.github.io/blog/categories/json/atom.xml" rel="self"/>
+  <link href="http://iacutone.github.io/"/>
+  <updated>2018-04-26T16:58:32-05:00</updated>
+  <id>http://iacutone.github.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[GraphQL With Elm Part 2, Parsing Nested JSON]]></title>
+    <link href="http://iacutone.github.io/blog/2018/04/25/graphql-with-elm-part-2/"/>
+    <updated>2018-04-25T14:17:04-05:00</updated>
+    <id>http://iacutone.github.io/blog/2018/04/25/graphql-with-elm-part-2</id>
+    <content type="html"><![CDATA[<p>In this post we will discuss how to turn nested JSON into Elm data types. This post uses a thin <code>Elm.Http</code> <a href="https://github.com/NoRedInk/elm-decode-pipeline">wrapper</a>. Using this library helps us concentrate on contructing the necessary Decoders. We will also contruct a more complex query in order to explain how to contruct complex data types. The following query returns JSON for the first two team members of FracturedAtlas.</p>
+
+<pre><code class="haskell">query : String
+query =
+    """
+    query {
+      organization(login: "FracturedAtlas") {
+        team(slug: "fa-dev") {
+          members(first:2) {
+            edges {
+              node {
+                id
+                login
+              }
+            }
+          }
+        }
+      }
+    }
+    """
+</code></pre>
+
+<p>Swapping out our query will return the following JSON.</p>
+
+<pre><code class="json">{"data":{"organization":{"team":{"members":{"edges":[{"node":{"id":"&lt;user id&gt;","login":"&lt;user name&gt;"}},{"node":{"id":"&lt;another user id&gt;","login":"&lt;user name&gt;"}}]}}}}}
+</code></pre>
+
+<p>The following part took me a long time to grok. The issues I had difficulty resolving are:
+1. How do I grab the list of nodes?
+1. How to I change my stringified JSON output into Elm data types?</p>
+
+<p>The rest of this post tackles these two issues.</p>
+
+<p>The <code>requiredAt</code> function from Elm Decode Pipeline solves the first problem.</p>
+
+<pre><code class="haskell">decodeLogin =
+    decode Users
+            |&gt; requiredAt ["data", "organization", "team", "members", "edges"] (Json.Decode.list decodeNode)
+        -- 'dig' into the JSON and extract the node list
+
+decodeNode =
+    decode Node
+        |&gt; required "node" decodeUser
+
+decodeUser =
+    decode User
+        |&gt; required "id" string
+        |&gt; required "login" string
+</code></pre>
+
+<p>Let&rsquo;s construct our Elm datatypes based on the JSON response.</p>
+
+<pre><code class="haskell">type alias Model =
+    { message : String
+    , users : Maybe Users
+    }
+
+type alias Users =
+    { edges : List Node }
+
+type alias Node =
+    { node: User
+    }
+
+type alias User =
+    { id:  String
+    , login : String
+    }
+</code></pre>
+
+<p>Now to handle the update function.</p>
+
+<pre><code class="haskell">update : Msg -&gt; Model -&gt; ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        GraphQLQuery (Ok res) -&gt;
+            case decodeString decodeLogin res of
+                Ok res -&gt;
+                    ( { model | users = Just res }, Cmd.none )
+                Err error -&gt;
+                    ( { model | message = error, users = Nothing }, Cmd.none )
+
+        GraphQLQuery (Err res) -&gt;
+            ( { model | users = Nothing }, Cmd.none )
+</code></pre>
+
+<p>I spent numerous hours figuring out how to map the Elm data types to the decoders. In Part 3, we will learn how to display the <code>User</code> data type in the browser.</p>
+]]></content>
+  </entry>
+  
+</feed>
