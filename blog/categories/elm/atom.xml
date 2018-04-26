@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Elm | Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/blog/categories/elm/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-04-26T16:58:32-05:00</updated>
+  <updated>2018-04-26T17:02:30-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -132,13 +132,13 @@ update msg model =
 query =
     """
     query {
-        {
-      user(login:"iacutone") {
-        id
+      {
+        user(login:"iacutone") {
+          id
+        }
       }
     }
-    }
-    """
+"""
 
 baseUrl : String
 baseUrl =

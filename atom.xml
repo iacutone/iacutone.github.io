@@ -4,7 +4,7 @@
   <title><![CDATA[Iacutone.rb]]></title>
   <link href="http://iacutone.github.io/atom.xml" rel="self"/>
   <link href="http://iacutone.github.io/"/>
-  <updated>2018-04-26T16:58:32-05:00</updated>
+  <updated>2018-04-26T17:02:30-05:00</updated>
   <id>http://iacutone.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -234,13 +234,13 @@
 </span><span class='line'><span class="nf">query</span> <span class="ow">=</span>
 </span><span class='line'>    <span class="s">&quot;&quot;&quot;</span>
 </span><span class='line'><span class="s">    query {</span>
-</span><span class='line'><span class="s">        {</span>
-</span><span class='line'><span class="s">    user(login:&quot;</span><span class="n">iacutone</span><span class="s">&quot;) {</span>
-</span><span class='line'><span class="s">      id</span>
+</span><span class='line'><span class="s">      {</span>
+</span><span class='line'><span class="s">        user(login:&quot;</span><span class="n">iacutone</span><span class="s">&quot;) {</span>
+</span><span class='line'><span class="s">          id</span>
+</span><span class='line'><span class="s">        }</span>
+</span><span class='line'><span class="s">      }</span>
 </span><span class='line'><span class="s">    }</span>
-</span><span class='line'><span class="s">  }</span>
-</span><span class='line'><span class="s">    }</span>
-</span><span class='line'><span class="s">    &quot;&quot;&quot;</span>
+</span><span class='line'><span class="s">&quot;&quot;&quot;</span>
 </span><span class='line'>
 </span><span class='line'><span class="nf">baseUrl</span> <span class="kt">:</span> <span class="kt">String</span>
 </span><span class='line'><span class="nf">baseUrl</span> <span class="ow">=</span>
