@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>graphql with elm part 2 &middot; Title</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">graphql with elm part 2</h1>
+        <div class="post-meta">
+            <time datetime="25 April 2018">
+                25 April 2018
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p>In this post we will discuss how to turn nested JSON into Elm data types. This post uses a thin <code>Elm.Http</code> <a href="https://github.com/NoRedInk/elm-decode-pipeline">wrapper</a>. Using this library helps us concentrate on contructing the necessary Decoders. We will also contruct a more complex query in order to explain how to contruct complex data types. The following query returns JSON for the first two team members of FracturedAtlas.</p>
+
+<pre><code class="language-haskell">query : String
+query =
+    &quot;&quot;&quot;
+    query {
+      organization(login: &quot;FracturedAtlas&quot;) {
+          members(first:2) {
+            edges {
+              node {
+                id
+                login
+              }
+            }
+          }
+        }
+      }
+    }
+    &quot;&quot;&quot;
+</code></pre>
+
+<p>Swapping out our query will return the following JSON.</p>
+
+<pre><code class="language-json">{&quot;data&quot;:{&quot;organization&quot;:{&quot;team&quot;:{&quot;members&quot;:{&quot;edges&quot;:[{&quot;node&quot;:{&quot;id&quot;:&quot;&lt;user id&gt;&quot;,&quot;login&quot;:&quot;&lt;user name&gt;&quot;}},{&quot;node&quot;:{&quot;id&quot;:&quot;&lt;another user id&gt;&quot;,&quot;login&quot;:&quot;&lt;user name&gt;&quot;}}]}}}}}
+</code></pre>
+
+<p>The following part took me a long time to grok. The issues I had difficulty resolving are:
+1. How do I grab the list of nodes?
+1. How to I change my stringified JSON output into Elm data types?</p>
+
+<p>The rest of this post tackles these two issues.</p>
+
+<p>The <code>requiredAt</code> function from Elm Decode Pipeline solves the first problem.</p>
+
+<pre><code class="language-haskell">decodeLogin =
+    decode Users
+            |&gt; requiredAt [&quot;data&quot;, &quot;organization&quot;, &quot;team&quot;, &quot;members&quot;, &quot;edges&quot;] (Json.Decode.list decodeNode)
+	    -- 'dig' into the JSON and extract the node list
+
+decodeNode =
+    decode Node
+        |&gt; required &quot;node&quot; decodeUser
+
+decodeUser =
+    decode User
+        |&gt; required &quot;id&quot; string
+        |&gt; required &quot;login&quot; string
+</code></pre>
+
+<p>Let&rsquo;s construct our Elm datatypes based on the JSON response.</p>
+
+<pre><code class="language-haskell">type alias Model =
+    { message : String
+    , users : Maybe Users
+    }
+
+type alias Users =
+    { edges : List Node }
+
+type alias Node =
+    { node: User
+    }
+
+type alias User =
+    { id:  String
+    , login : String
+    }
+</code></pre>
+
+<p>Now to handle the update function.</p>
+
+<pre><code class="language-haskell">update : Msg -&gt; Model -&gt; ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        GraphQLQuery (Ok res) -&gt;
+            case decodeString decodeLogin res of
+                Ok res -&gt;
+                    ( { model | users = Just res }, Cmd.none )
+                Err error -&gt;
+                    ( { model | message = error, users = Nothing }, Cmd.none )
+
+        GraphQLQuery (Err res) -&gt;
+            ( { model | users = Nothing }, Cmd.none )
+</code></pre>
+
+<p>I spent numerous hours figuring out how to map the Elm data types to the decoders. In Part 3, we will learn how to display the <code>User</code> data type in the browser.</p>
+
+    </section>
+
+    
+    <section class="post-tags" style="padding-bottom:60px;">
+        <div class="post-meta tags">
+            <i class="fa fa-fw fa-tag"></i>
+            
+        </div>
+    </section>
+    
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "iacutone" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    <section class="share">
+    <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
+    <p class="info prompt">Share</p>
+    <a href="http://twitter.com/share?text=graphql%20with%20elm%20part%202&url=http%3a%2f%2fiacutone.github.io%2fpost%2f2018%2f04%2f25%2fgraphql-with-elm-part-2%2f" title="Share on Twitter"
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fiacutone.github.io%2fpost%2f2018%2f04%2f25%2fgraphql-with-elm-part-2%2f" title="Share on Facebook"
+        onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
+    </a>
+    <a href="https://plus.google.com/share?url=http%3a%2f%2fiacutone.github.io%2fpost%2f2018%2f04%2f25%2fgraphql-with-elm-part-2%2f" title="Share on Google+"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
+    </a>
+</section>
+
+    <footer class="post-footer">
+        <section class="author">
+    <div class="authorimage" style="background: url(http://iacutone.github.io/img/avatar.jpg)"></div>
+    <h4>Eric Iacutone</h4>
+    <p class="bio">Ruby dev</p>
+    <p class="meta">
+      <i class="fa fa-fw fa-map-marker"></i> Peru
+    </p>
+</section>
+    </footer>
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>
