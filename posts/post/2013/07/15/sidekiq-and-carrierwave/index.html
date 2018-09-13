@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>sidekiq and carrierwave &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">sidekiq and carrierwave</h1>
+        <div class="post-meta">
+            <time datetime="15 July 2013">
+                15 July 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p>I decided to use the <a href='https://github.com/lardawge/carrierwave_backgrounder'>Carrierwave Backgrounder Gem</a> in order to asynchronously upload photos to Amazon S3.  This is a different gem than the one Ryan Bates uses in his Railscast.  I was having difficulty implimenting the <a href='https://github.com/dwilkie/carrierwave_direct'>Carrierwave Direct Gem</a>  However, the Backgrounder Gem works great! This is the last installment of the three part series on uploading photos.</p>
+
+<p>This is the final version of the avatar_uploader.rb file.  Just add line 3, which is in the Backgrounder documentaion.</p>
+
+<p>{% codeblock avatar_uploader.rb lang: ruby %}</p>
+
+<p>class AvatarUploader &lt; CarrierWave::Uploader::Base
+  # include CarrierWaveDirect::Uploader
+  include ::CarrierWave::Backgrounder::Delay</p>
+
+<p># Include RMagick or MiniMagick support:
+  include CarrierWave::RMagick
+  # include CarrierWave::MiniMagick</p>
+
+<p># Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
+  include Sprockets::Helpers::RailsHelper
+  include Sprockets::Helpers::IsolatedHelper</p>
+
+<p># Choose what kind of storage to use for this uploader:
+  # storage :file
+  storage :fog</p>
+
+<p>include CarrierWave::MimeTypes
+  process :set_content_type</p>
+
+<p># Override the directory where uploaded files will be stored.
+  # This is a sensible default for uploaders that are meant to be mounted:
+  # def store_dir
+  #   &ldquo;uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}&rdquo;
+  # end</p>
+
+<p># Provide a default URL as a default if there hasn&rsquo;t been a file uploaded:
+  # def default_url
+  #   # For Rails 3.1+ asset pipeline compatibility:
+  #   # asset_path(&ldquo;fallback/&rdquo; + [version<em>name, &ldquo;default.png&rdquo;].compact.join(&rsquo;</em>&rsquo;))
+  #
+  #   &ldquo;/images/fallback/&rdquo; + [version<em>name, &ldquo;default.png&rdquo;].compact.join(&rsquo;</em>&rsquo;)
+  # end</p>
+
+<p># Process files as they are uploaded:
+  # process :scale =&gt; [200, 300]
+  #
+  # def scale(width, height)
+  #   # do something
+  # end</p>
+
+<p># Create different versions of your uploaded files:
+  version :thumb do
+    process :resize_to_limit =&gt; [150, 150]
+  end</p>
+
+<p>version :profile do
+    process :resize_to_limit =&gt; [200, 200]
+  end</p>
+
+<p># Add a white list of extensions which are allowed to be uploaded.
+  # For images you might use something like this:
+  # def extension_white_list
+  #   %w(jpg jpeg gif png)
+  # end</p>
+
+<p># Override the filename of the uploaded files:
+  # Avoid using model.id or version_name here, see uploader/store.rb for details.
+  # def filename
+  #   &ldquo;something.jpg&rdquo; if original_filename
+  # end
+  end</p>
+
+<p>{% endcodeblock %}</p>
+
+<p>Also, add this code to your model.<p>
+
+{% codeblock profile.rb lang:ruby %}
+
+    mount_uploader :avatar, AvatarUploader
+  process_in_background :avatar
+
+{% endcodeblock %}
+
+<p>Following the install instructions, this file is created in the initializers directory.<p>
+
+{% codeblock initializers/carrierwave_backgrounder.rb lang:ruby %}
+
+    CarrierWave::Backgrounder.configure do |c|
+      # c.backend :delayed_job, queue: :carrierwave
+      # c.backend :resque, queue: :carrierwave
+      c.backend :sidekiq, queue: :carrierwave
+      # c.backend :girl_friday, queue: :carrierwave
+      # c.backend :qu, queue: :carrierwave
+      # c.backend :qc
+    end
+
+{% endcodeblock %}
+
+<p>Then boot up Sidekiq to listen for jobs with sidekiq -q carrierwave command in your terminal.  You might need to start your Redis server with the command redis-server.  Your background worker should now asynchronously process background jobs!</p>
+
+<p>Sidekiq also has a cool interface to show what workers are up, how many successes and failures there have been and some other neat features.  It is real easy to set up.  First add the following code to your Gemfile.</p>
+
+<p>{% codeblock Gemfile lang:ruby %}</p>
+
+<pre><code>gem 'slim', '&gt;= 1.1.0'
+gem 'sinatra', '&gt;= 1.3.0', :require =&gt; nil
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p>Then create this route with the require line before the beginning of the block.</p>
+
+<p>{% codeblock routes.rb lang:ruby %}</p>
+
+<pre><code>require 'sidekiq/web'
+
+mount Sidekiq::Web =&gt; '/sidekiq'
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p>I really like this gem and recommend it to anyone trying to run background processes to upload pictures via Carrierwave.</p>
+
+<p>h/t Blake Johnson</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

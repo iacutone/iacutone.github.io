@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>client side validations &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">client side validations</h1>
+        <div class="post-meta">
+            <time datetime="18 June 2013">
+                18 June 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<p>The <a href='http://railscasts.com/episodes/263-client-side-validations'>Railscast</a> for the <a href='https://github.com/bcardarella/client_side_validations'>Client Side Validations Gem</a> is very outdated and does not function.  Furthermore, the documentation for the gem did not completely work with my version of Rails, 3.2.13.  The point of this post is to get front end validations to work with Rails 3.2.13.</p>
+
+<p><code>gem &lsquo;client_side_validations&rsquo;</code></p>
+
+<p><code>$ rails g client_side_validations:install</code></p>
+
+<p>The file below is created, but you must uncomment lines 10 through 16 in order to get it to work.</p>
+
+<p>{% codeblock config/initializers/client_side_validations.rb lang:ruby %}</p>
+
+<h1 id="clientsidevalidations-initializer">ClientSideValidations Initializer</h1>
+
+<h1 id="uncomment-to-disable-uniqueness-validator-possible-security-issue">Uncomment to disable uniqueness validator, possible security issue</h1>
+
+<h1 id="clientsidevalidations-config-disabled-validators-uniqueness">ClientSideValidations::Config.disabled_validators = [:uniqueness]</h1>
+
+<h1 id="uncomment-to-validate-number-format-with-current-i18n-locale">Uncomment to validate number format with current I18n locale</h1>
+
+<h1 id="clientsidevalidations-config-number-format-with-locale-true">ClientSideValidations::Config.number_format_with_locale = true</h1>
+
+<h1 id="uncomment-the-following-block-if-you-want-each-input-field-to-have-the-validation-messages-attached">Uncomment the following block if you want each input field to have the validation messages attached.</h1>
+
+<p>ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
+  unless html_tag =~ /^<label/
+    %{<div class="field_with_errors">#{html_tag}<label for="#{instance.send(:tag_id)}" class="message">#{instance.error_message.first}</label></div>}.html_safe
+  else
+    %{<div class="field_with_errors">#{html_tag}</div>}.html_safe
+  end
+end</p>
+
+<p>{% endcodeblock %}</p>
+
+<p><code>//= require rails.validations</code><br />...in applications.js<br />...and the following to your form.</p>
+
+<p>{% codeblock _form.html.erb lang:ruby %}
+&lt;%= form_for @user, :validate =&gt; true do |f| %&gt;
+{% endcodeblock %}
+<br /></p>
+
+<p>And a little CSS...</p><br />
+
+{% codeblock application.css lang:css %}
+.field_with_errors .message {
+    color: #FFC200;
+    padding-left: 10px;
+    display: inline;
+}
+{% endcodeblock %}
+
+<p>Your app should now be able to display Rails error messages in line with your form fields.  This is where I began to run into problems, creating a custom validator.</p><br />
+<p>The Github Documentation says to put the following code into app/validators/email_validator.rb</p><br />
+
+{% codeblock initializers/email_validator.rb lang:ruby %}
+class EmailValidator < ActiveModel::EachValidator
+  def validate_each(record, attr_name, value)
+    unless value =~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+      record.errors.add(attr_name, :email, options.merge(:value => value))
+    end
+  end
+end
+
+# This allows us to assign the validator in the model
+module ActiveModel::Validations::HelperMethods
+  def validates_email(*attr_names)
+    validates_with EmailValidator, _merge_attributes(attr_names)
+  end
+end
+{% endcodeblock %}
+
+<p>This did not work for me.  However, creating the email_validator.rb file under the initializers directory did the trick.  I need to ask a Flatiron School compadre why this is.  Follow the rest of the custom validator documentation for awesome validations.  I hope this saves people time while implenting this gem.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>my photo storage solution &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">my photo storage solution</h1>
+        <div class="post-meta">
+            <time datetime="15 April 2017">
+                15 April 2017
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<p>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available <a href="http://github.com/iacutone/scripts">here</a>.</p>
+
+<p>I like this solution because the entire process is automatic. You are notified when the photo transfer has finished with an email. Also, for redundancy, I created a cron job that syncs all of the photos on my hard drive to Amazon photos. I use <a href="https://rclone.org/">this service</a> to sync the photos in the cloud.</p>
+
+<h3 id="steps">Steps</h3>
+
+<h5 id="mount-the-external-hard-drive-to-a-folder-on-your-pi">Mount the external hard drive to a folder on your pi.</h5>
+
+<ul>
+<li><code>sudo fdisk -l</code> take note of the Device, something like <code>/dev/sdb1</code></li>
+<li>I like to mount the drive under the home dir, <code>sudo mount /dev/sdb1 ~/external_hd/</code></li>
+<li>Run <code>lsblk -f</code>  to know here files are mounted</li>
+</ul>
+
+<h5 id="create-a-udev-rule">Create a <code>udev</code> rule</h5>
+
+<ul>
+<li><code>udev</code> rules live here: <code>/etc/udev/rules.d</code></li>
+<li><code>cd /etc/udev/rules.d</code></li>
+<li><code>touch 50-sdcard.rules</code></li>
+<li><code>chmod +x 50-sdcard.rules</code></li>
+<li><code>sudo fdisk -l</code> again to find the sd card device name, in this instance &lsquo;sda1&rsquo;</li>
+<li><code>echo 'KERNEL==&quot;sda1&quot;, ACTION==&quot;add&quot;, RUN+=&quot;/home/pi/sdcard/sdcard_added.sh&quot;' &lt; 50-sdcard.rules</code></li>
+<li><code>tail -f /var/log/syslog</code> is extremely useful for debugging udev rules</li>
+</ul>
+
+<h5 id="create-an-fstab-privilege">Create an fstab privilege</h5>
+
+<ul>
+<li><code>vi /etc/fstab</code></li>
+<li>Find device uuid with <code>blkid</code></li>
+<li>Add <code>UUID=&lt;your-uuid&gt; /home/pi/SD_CARD auto rw,users,noauto      0       0</code></li>
+<li>Uncomment out &lsquo;user_allow_other&rsquo; in <code>/etc/fuse.conf</code></li>
+</ul>
+
+<h5 id="rsync-when-an-sd-card-is-added"><code>rsync</code> when an sd card is added</h5>
+
+<ul>
+<li><code>touch /home/pi/sdcard/sdcard_added.sh</code></li>
+<li><code>chmod +x /home/pi/sdcard/sdcard_added.sh</code></li>
+<li>create the script
+```bash
+#!/bin/bash</li>
+</ul>
+
+<p>echo &ldquo;<code>date +%Y-%m-%d:%H:%M:%S</code> SD card inserted&rdquo; &gt;&gt; /home/pi/sdcard/output.log
+mount /dev/sda1 /home/pi/SD_CARD
+rsync -av /home/pi/SD_CARD/DCIM/100MSDCF/ /home/pi/external_hd/raw_photos</p>
+
+<pre><code>##### Sync photos to cloud provider
+* Set up cron job
+* `sudo crontab -e`
+* `00 4 * * * /home/pi/sd_card/rclone_cron.sh`, this runs the cron job at 4 am, daily
+* create the bast script
+```bash
+#!/bin/sh
+/usr/sbin/rclone sync /home/pi/external_hd/raw_photos/ amazon:raw_photos --config /home/pi/.rclone.conf -v
+</code></pre>
+
+<h5 id="send-email-notification">Send Email Notification</h5>
+
+<ul>
+<li>I used <a href="https://rianjs.net/2013/08/send-email-from-linux-server-using-gmail-and-ubuntu-two-factor-authentication">this post</a> to easily add email notifications when the rsync process completes</li>
+</ul>
+
+<h5 id="tips-since-creating-my-photo-process">Tips Since Creating My Photo Process</h5>
+
+<ul>
+<li>I could not get the above code to work with Debian due to permission issues</li>
+<li>It is better to identify from UUID instead of KERNEL for setting up udev rules, run <code>ls -l /dev/disk/by-uuid</code> to discover device UUID&rsquo;s</li>
+</ul>
+
+<h5 id="rclone">RClone</h5>
+
+<ul>
+<li>Amazon has blocked all thrid party applications from pushing to Amazon Drive. For more information see <a href="https://forum.rclone.org/t/rclone-has-been-banned-from-amazon-drive/2314">this</a></li>
+<li>I am going to implement <a href="https://github.com/duplicati/duplicati">Duplicati</a> as a solution to sync my photos to Amazon Drive</li>
+<li>Another potential solution is to continute to use rclone, but host the files on Google Drive</li>
+</ul>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

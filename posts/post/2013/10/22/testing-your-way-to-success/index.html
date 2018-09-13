@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>testing your way to success &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">testing your way to success</h1>
+        <div class="post-meta">
+            <time datetime="22 October 2013">
+                22 October 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p>I have been immersed in production codebases for my <a href='fohrcard.com'>Fohr Card</a> and <a href='http://www.fracturedatlas.org/'>Fractured Atlas</a> projects.  At first, it feel initimidating trying to figure out all of the models and related associations.  I have found that a great way to wrap your head around the code base is to create a new branch and test the code.</p>
+
+<p>A good basic set-up is to start unit testing the models.  In order to do this depends on if your codebase is using a relational database or something like Mongoid.</p>
+
+<p><h3>Relational Databases</h3>
+{% codeblock Gemfile lang:ruby %}</p>
+
+<pre><code>group :development do
+  gem 'guard-rspec', require: false
+end
+
+group :test do
+   gem 'rspec-rails'
+   gem 'factory_girl_rails'
+   gem 'faker'
+   gem 'shoulda-matchers'
+   gem 'terminal-notifier-guard' 
+end
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<ul>
+    <li>Guard RSpec waits for you to save your files and automatically runs your tests, thereby reducing the time needed to run tests.</li>
+    <li>I like the RSpec syntax over Unit Test and Mini Test.</li>
+    <li>Factory Girl Rails creates objects for your tests.  This gem deserves its own blog post. </li>
+    <li>The Faker Gem is used in conjunction with Factory Girl Rails to create fake data.</li>
+    <li>I like to use Shoulda Matchers to test validaitons and associations in the code.  This gem and firing up Rails Console to play with the objects in my testing is the crux to learning a new codebase.</li>
+    <li>Some people find Terminal Notifier annoying, but it helps me know if my tests pass when I have Sublime maximized on my 11 inch MacBook Air screen.</li>
+</ul>  
+
+<p><h3>Mongoid</h3>
+{% codeblock Gemfile lang:ruby %}</p>
+
+<pre><code>group :development do
+  gem 'guard-rspec', require: false
+end
+
+group :test do
+  gem 'fabrication'
+  gem 'faker'
+  gem 'rspec-rails'
+  gem 'mongoid-rspec'
+  gem 'terminal-notifier-guard' 
+end
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p>The gems for Mongoid testing are similar to those used in testing with a relational database.<p>
+<ul>
+    <li>The Fabrication gem is similar to building objects with Factory Girl, except the documentation website <a href='http://www.fabricationgem.org/'>rocks.</a></li>
+    <li>The Mongoid RSpec gem is similar to Shoulda-Matchers</li>
+</ul>
+
+<h3>Gems</h3>
+<a href='https://github.com/guard/guard-rspec'>Guard RSpec</a></br>
+<a href='https://github.com/rspec/rspec-rails'>RSpec Rails</a></br>
+<a href='https://github.com/thoughtbot/factory_girl_rails'>Factory Girl Rails</a></br>
+<a href='https://github.com/btelles/faker'>Faker</a></br>
+<a href='https://github.com/thoughtbot/shoulda-matchers'>Shoulda Matchers</a></br>
+<a href='https://github.com/Springest/terminal-notifier-guard'>Terminal Notifier Guard</a></br>
+<a href='https://github.com/paulelliott/fabrication'>Fabrication</a></br>
+<a href='https://github.com/evansagge/mongoid-rspec'>Mongoid RSpec</a></br></br>
+
+<h3>Other Resources</h3>
+<p>I found this book invaluable in learning best practices in testing: <a href='https://leanpub.com/everydayrailsrspec'>Everday RSpec</a></br>h/t Victoria Friedman</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

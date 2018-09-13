@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>amazon s3 &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">amazon s3</h1>
+        <div class="post-meta">
+            <time datetime="10 June 2013">
+                10 June 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<p>So we have Carrierwave uploading pictures to our local server.  Perhaps we want the pictures stored on a third party cloud provider.  Amazon S3 and Carrierwave work very well together.  This blog post describes how to upload your pictures to the Amazon S3 cloud.  Again, thanks to Ryan Bates and Railscasts for the great information.</p>
+
+<p>In order to upload files to Amazon S3, we will be using the <a href='https://github.com/fog/fog'>Fog Gem.</a>  The Carrierwave gem handles the Fog interaction with Amazon S3 behind the scenes.</p>
+
+<ul>
+    <li>Sign up for an Amazon AWS account.</li>
+    <li>Create a S3 bucket to store your files (photos)</li>
+    <li>Input your credentials in:</li>
+</ul>
+
+<p>{% codeblock initializers/carrierwave.rb lang:ruby %}
+CarrierWave.configure do |config|
+  config.fog_credentials = {
+    :provider               =&gt; &lsquo;AWS&rsquo;,
+    :aws_access_key_id      =&gt; ENV[&lsquo;AWS_ACCESS_KEY_ID&rsquo;],
+    :aws_secret_access_key  =&gt; ENV[&lsquo;AWS_SECRET_ACCESS_KEY&rsquo;]
+  }
+  config.fog_directory  = ENV[&lsquo;AWS_S3_BUCKET&rsquo;]
+end</p>
+
+<p>{% endcodeblock %}</p>
+
+<p>I put my ENV variables in the <a href='https://github.com/laserlemon/figaro'>Figaro Gem.</a></p>
+
+<p>You also need to modify your code in the avatar_uploader we created in the last blog post to :</p>
+
+<p>{% codeblock avatar_uploader.rb lang:ruby %}</p>
+
+<h1 id="encoding-utf-8">encoding: utf-8</h1>
+
+<p>class AvatarUploader &lt; CarrierWave::Uploader::Base
+  # include CarrierWaveDirect::Uploader</p>
+
+<p># Include RMagick or MiniMagick support:
+  include CarrierWave::RMagick
+  # include CarrierWave::MiniMagick</p>
+
+<p># Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
+  include Sprockets::Helpers::RailsHelper
+  include Sprockets::Helpers::IsolatedHelper</p>
+
+<p># Choose what kind of storage to use for this uploader:
+  # storage :file
+  storage :fog</p>
+
+<p>include CarrierWave::MimeTypes
+  process :set_content_type</p>
+
+<p># Override the directory where uploaded files will be stored.
+  # This is a sensible default for uploaders that are meant to be mounted:
+  def store_dir
+    &ldquo;uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}&rdquo;
+  end</p>
+
+<p># Provide a default URL as a default if there hasn&rsquo;t been a file uploaded:
+  # def default_url
+  #   # For Rails 3.1+ asset pipeline compatibility:
+  #   # asset_path(&ldquo;fallback/&rdquo; + [version<em>name, &ldquo;default.png&rdquo;].compact.join(&rsquo;</em>&rsquo;))
+  #
+  #   &ldquo;/images/fallback/&rdquo; + [version<em>name, &ldquo;default.png&rdquo;].compact.join(&rsquo;</em>&rsquo;)
+  # end</p>
+
+<p># Process files as they are uploaded:
+  # process :scale =&gt; [200, 300]
+  #
+  # def scale(width, height)
+  #   # do something
+  # end</p>
+
+<p># Create different versions of your uploaded files:
+  version :thumb do
+    process :resize_to_limit =&gt; [150, 150]
+  end</p>
+
+<p>version :profile do
+    process :resize_to_limit =&gt; [350, 350]
+  end</p>
+
+<p># Add a white list of extensions which are allowed to be uploaded.
+  # For images you might use something like this:
+  # def extension_white_list
+  #   %w(jpg jpeg gif png)
+  # end</p>
+
+<p># Override the filename of the uploaded files:
+  # Avoid using model.id or version_name here, see uploader/store.rb for details.
+  # def filename
+  #   &ldquo;something.jpg&rdquo; if original_filename
+  # end</p>
+
+<p>end</p>
+
+<p>{% endcodeblock %}</p>
+
+<p>That is it.  Your photos are now added to your Amazon S3 bucket!  Just be careful, you only get so much space on the cloud for free.  In the next blog post, I will explain how to increase efficiency with a background task via Sidekiq.</p>
+
+<p><a href='http://railscasts.com/episodes/253-carrierwave-file-uploads'>Carrierwave Railscast</a><br />
+<a href='http://railscasts.com/episodes/383-uploading-to-amazon-s3'>Uploading to Amazon S3 Railscast</a><br />
+<a href='http://railscasts.com/episodes/366-sidekiq'>Sidekiq Railscast</a></p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

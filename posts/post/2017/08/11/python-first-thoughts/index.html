@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>python first thoughts &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">python first thoughts</h1>
+        <div class="post-meta">
+            <time datetime="11 August 2017">
+                11 August 2017
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<h4 id="debugging">Debugging</h4>
+
+<ul>
+<li>Write the following code to use an interactive debugger in Python.</li>
+</ul>
+
+<pre><code class="language-python">import pdb
+pdb.set_trace()
+</code></pre>
+
+<h4 id="self">Self</h4>
+
+<ul>
+<li>Passing a reference to <code>self</code> seems repetitive.</li>
+</ul>
+
+<pre><code class="language-python">class Foo:
+  def bar(self)
+    print('Hello')
+</code></pre>
+
+<h4 id="testing">Testing</h4>
+
+<ul>
+<li>You need to pass in the -s to <code>print</code> test output. I expected <code>print</code> to log output regardless.</li>
+</ul>
+
+<h4 id="modules">Modules</h4>
+
+<ul>
+<li>You can conditionally implement different behavior when importing modules in Python.</li>
+<li>Taken from <a href="https://stackoverflow.com/questions/419163/what-does-if-name-main-do">this</a> StackOverflow example.</li>
+</ul>
+
+<pre><code class="language-python">def func():
+    print(&quot;func() in one.py&quot;)
+
+print(&quot;top-level in one.py&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    print(&quot;one.py is being run directly&quot;)
+else:
+    print(&quot;one.py is being imported into another module&quot;)
+</code></pre>
+
+<pre><code class="language-python">import one
+
+print(&quot;top-level in two.py&quot;)
+one.func()
+
+if __name__ == &quot;__main__&quot;:
+    print(&quot;two.py is being run directly&quot;)
+else:
+    print(&quot;two.py is being imported into another module&quot;)
+</code></pre>
+
+<p>Running <code>python one.py</code> returns:
+<code>
+top-level in one.py
+one.py is being run directly
+</code></p>
+
+<p>While running <code>python two.py</code> returns:
+<code>
+top-level in one.py
+one.py is being imported into another module
+top-level in two.py
+func() in one.py
+two.py is being run directly
+</code></p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

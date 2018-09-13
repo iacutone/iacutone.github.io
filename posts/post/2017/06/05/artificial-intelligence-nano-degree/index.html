@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>artificial intelligence nano degree &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">artificial intelligence nano degree</h1>
+        <div class="post-meta">
+            <time datetime="05 June 2017">
+                05 June 2017
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<p>I started the <a href="https://www.udacity.com/course/artificial-intelligence-nanodegree--nd889">Udacity</a> Artificial Intelligence Nano Degree last month.</p>
+
+<h3 id="project-1-sudoku-solver">Project 1, Sudoku Solver</h3>
+
+<ul>
+<li><a href="http://norvig.com/sudoku.html">This</a> post helpful for building a sudoku solver.</li>
+<li><a href="https://github.com/iacutone/AIND-Sudoku">My Solution</a></li>
+</ul>
+
+<p>The Sudoku Solver was a fun project. I enjoy learning by writing code to make tests pass, like Ruby Katas.</p>
+
+<h3 id="project-2-isolation-game">Project 2, Isolation Game</h3>
+
+<ul>
+<li><a href="http://inst.eecs.berkeley.edu/~cs61b/fa14/ta-materials/apps/ab_tree_practice/">This</a> application is useful for visualizing alpha beta pruning.</li>
+<li><a href="https://www.youtube.com/watch?v=STjW3eH0Cik">This</a> is a good introduction to the minimax function and alphabeta pruning.</li>
+<li><a href="http://stpk.cs.rtu.lv/sites/all/files/stpk/materiali/mi/artificial%20intelligence%20a%20modern%20approach.pdf">Artificial Intelligence, A Modern Appoach</a> chapter 5 helped clarify ideas expressed in the Udacity videos.</li>
+<li><a href="https://github.com/iacutone/AIND-Isolation">My Solution</a></li>
+</ul>
+
+<p>Creating an algo to play an Isolation Game is much more complicated than the first project and was very frustrating to build. Unlike the first project, there is barely a test framework to follow. You push your methods to a remote Udacity server which gives feedback about test failures. This development cycle is difficult to debug because you can neither use a debugger nor get <code>print</code> output. After the minimax and alphabeta functions pass the remote tests, things get interesting. You are asked to write custom heuristics in order to decide the best move for your player. I wish Udacity gave more hints as to game heuristics.</p>
+
+<p>Writing a synopsis for a research paper is also required for the project. I chose to write about <a href="https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf">AlphaGo</a>. Due to my lack of knowledge reading math proofs, it took several attempts to understand the paper.</p>
+
+<h3 id="project-3-implement-a-planning-search">Project 3, Implement a Planning Search</h3>
+
+<p>Using planning problems—states, actions, and goals for planning algorithms. I enjoyed this unit of the course and it was interesting to study the development of Graph Plan algorithms since the 1970&rsquo;s.</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=ySN5Wnu88nE">This</a> Computerphile video is a good reinforcement for A-Star search.</li>
+<li><a href="http://aima.cs.berkeley.edu/2nd-ed/newchap11.pdf">Artificial Intelligence, A Modern Appoach</a> Chapter 11</li>
+<li><a href="https://github.com/iacutone/AIND-Planning">My Solution</a></li>
+</ul>
+
+<h3 id="project-4-hidden-markov-models">Project 4, Hidden Markov Models</h3>
+
+<p>The objective of this unit is to create an algo that can correctly guess sign language words. Hidden Markov models are interesting and remind me of deep learning algos. They both seem to solve a similar problem set.</p>
+
+<ul>
+<li><a href="https://github.com/iacutone/AIND-Recognizer">My Solution</a></li>
+</ul>
+
+<h3 id="overall-thoughts">Overall Thoughts</h3>
+
+<p>I am not sure this course is worth the $800 price. The class was interesting, but very time consuming. The benefits to taking the Udacity course over self learning on the internet is the Slack channel, forum and project feedback. I used the forum when I was stuck on a problem. I did not take advantage of the Slack channel. The project feedback was helpful. I will not be taking the next unit in the Artifical Intelligence Nano Degree. Instead, I am progressing through the <a href="http://course.fast.ai/">Fast AI</a> classes. I plan on writing a post after I finish the course.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

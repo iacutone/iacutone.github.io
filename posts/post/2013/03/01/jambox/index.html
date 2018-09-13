@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>jambox &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">jambox</h1>
+        <div class="post-meta">
+            <time datetime="01 March 2013">
+                01 March 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <h2>AirPlay</h2>
+
+<p>Learning how Airplay works: it allows wireless streaming of audio, video and photos. </p> 
+
+<p> My original idea was to rip the music information going onto the Flatiron AirPlay, then automatically tweet this information via Twitter.  I liked this idea because we play so much cool and unfamiliar music.  It would be great to keep track of what is playing.  Over time, I opened a myriad of tabs and discovered many interesting API's.  These include a few API's which mirror AirPlay on a laptop (<a href="http://airparrot.com/">AirParrot.</a> and <a href="http://www.airserverapp.com/">AirServer.</a>).  Also, many music API's were discovered.  These include <a href="http://echonest.com/">Echonest</a>, <a href="http://developers.soundcloud.com/">Soundcloud</a> and many others. </p>
+
+<p> The original idea went down in flames when I learned how difficult it is to hack the AirPlay.  <a href="http://www.aorensoftware.com/blog/2011/08/20/exploring-airplay-mirroring-internals/">This</a> blog post illustrated how this hacker tried to gain access to the AirPlay from WiFi packets via KisMAC, a derivative of WireShark.  Also, there are problems jailbreaking the DRM encryption.  The idea is possible, but a crazy task.  Idea aborted...</p>
+
+<p><a href="https://github.com/play/play/tree/master/app/api ">GitHub Play</a> deserves some special recognition.  It allows the GitHub offices to wirelessly create playlists synchronously in all of their offices around the globe.  The next iteration of our goal was to get the GitHub Play to work locally.  You can clone it at the link above.  However, GitHub Play relies on an old version of iTunes which includes iTunes DJ.  Also, Play ran on Ruby 1.8.7, and the dependencies were a mess.  So, our group threw this idea of out the window.  </p>
+
+<p><h2> GitHub Play </h2>
+<p><img src = "/images/play.png" height = "500" width = "500"></p></p>
+
+<p>Our groups next iteration is to simplify the GitHub Play.  Currently we are setting up a server where people can upload their mp3's.  Directions to create your own streaming music player in Ruby can be found <a href="http://net.tutsplus.com/tutorials/create-a-simple-music-streaming-app-with-ruby-on-rails/ ">here.</a>  The goal of this project is to eventually create a service where a group of people can all upload their songs onto a server and they will be played in sequence on a playlist.  For example, if you are at a party, everyone can put songs on a playlist, so that no one person will have complete control of the music.  We also want to implement a Reddit-esque leaderboard so people on the server can upvote/downvote songs.  If a song gets too many downvotes, it will be erased from the playlist.  </p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

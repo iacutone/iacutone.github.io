@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>refactoring client side validations &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">refactoring client side validations</h1>
+        <div class="post-meta">
+            <time datetime="21 January 2014">
+                21 January 2014
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p> I have been working on refactoring my client side JavaScript validations on an application.  My tech lead gave me some illuminating tips on how to refactor my non-DRY code.  Here is an example of the pre-refactored code.</p>
+
+<p>{% codeblock _form.html.erb lang:erb %}
+&lt;%= form_for(@order) do |f| %&gt;
+  <div class='your_info'>
+    <h3>2. Your Information</h3>
+    <div class="clearfix">
+      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %&gt;
+      <div class="input">
+        &lt;%= f.text_field :first_name %&gt;
+        <span id="first_name_error"></span>
+      </div>
+      <div class="input">
+        &lt;%#= f.hidden_field :customer_id, value: current_user.id unless current_user.id == nil %&gt;
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %&gt;
+      <div class="input">
+        &lt;%= f.text_field :last_name %&gt;
+        <span id="last_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :email, &lsquo;Email*&rsquo; %&gt;
+      <div class="input">
+        &lt;%= f.text_field :email %&gt;
+        <span id="email_error"></span>
+      </div>
+    </div>
+  </div>
+  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %&gt;
+&lt;% end %&gt;
+{% endcodeblock %}</p>
+
+<p>So, let's start with this basic form and sprinkle it with some JQuery and Javascript for client side validations.</p>
+
+<p>{% codeblock users.js lang:js %}
+// Initial State for Form
+$(&lsquo;.your_info&rsquo;).hide();</p>
+
+<p>// validations
+var first_name = $(&lsquo;input#order_first_name&rsquo;);
+var last_name = $(&lsquo;input#order_last_name&rsquo;);
+var email = $(&lsquo;input#order_email&rsquo;);</p>
+
+<p>// event listeners
+first_name.keyup(function(){
+  validateFirstName();
+});</p>
+
+<p>last_name.keyup(function(){
+  validateLastName();
+});</p>
+
+<p>email.keyup(function(){
+  validateEmail();
+});</p>
+
+<p>function validateFirstName(){
+  var first_name_val = first_name.val();
+  if(first_name_val.length == 0) {
+    first_name_error.show().text(&ldquo;First name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    first_name_error.hide();
+    return true;
+  }
+}</p>
+
+<p>function validateLastName(){
+  var last_name_val = last_name.val();
+  if(last_name_val.length == 0) {
+    last_name_error.show().text(&ldquo;Last name needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    last_name_error.hide();
+    return true;
+  }
+}</p>
+
+<p>function validateEmail(){
+  var email_val = email.val();
+  if(email_val.length == 0) {
+    email_error.show().text(&ldquo;Email needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+    return false;
+  }
+  else {
+    email_error.hide();
+    return true;
+  }
+}
+{% endcodeblock %}</p>
+
+<p>Clearly, this is not DRY and will easily get out of comtrol.  However, using HTML data attributes solves this problem.  Here is a good <a href='http://ejohn.org/blog/html-5-data-attributes/'>summary</a> about data attributes by John Resig.</p>
+
+<p>{% codeblock _form.html.erb lang:erb %}
+&lt;%= form_for(@order) do |f| %&gt;
+  <div class='your_info'>
+    <h3>2. Your Information</h3>
+    <div class="clearfix">
+      &lt;%= f.label :first_name, &lsquo;First name<em>&rsquo; %&gt;
+      <div class="input">
+        &lt;%= f.text_field :first_name, :data =&gt; {:error =&gt; &lsquo;First name&rsquo;} %&gt;
+        <span id="first_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :last_name, &lsquo;Last name</em>&rsquo; %&gt;
+      <div class="input">
+        &lt;%= f.text_field :last_name, :data =&gt; {:error =&gt; &lsquo;Last name&rsquo;} %&gt;
+        <span id="last_name_error"></span>
+      </div>
+    </div>
+    <div class="clearfix">
+      &lt;%= f.label :email, &lsquo;Email*&rsquo; %&gt;
+      <div class="input">
+        &lt;%= f.text_field :email, :data =&gt; {:error =&gt; &lsquo;Email&rsquo;} %&gt;
+        <span id="email_error"></span>
+      </div>
+    </div>
+  &lt;%= f.submit &ldquo;Submit your Order&rdquo;, class: &lsquo;btn btn-primary btn-lg&rsquo;, id: &lsquo;button&rsquo;, data: { confirm: &ldquo;Place order?&rdquo; } %&gt;
+&lt;% end %&gt;
+{% endcodeblock %}</p>
+
+<p>{% codeblock users.js lang:js %}
+$(&lsquo;input&rsquo;).keyup(function(){
+  blankValidation.call(this);
+});</p>
+
+<p>function blankValidation(){
+  var error_name = $(this).data(&lsquo;error&rsquo;);
+  console.log(error_name);
+  var value = $(this).val();
+  console.log(value);
+  if(error_name !== undefined){
+    var error_id = (&lsquo;#&rsquo; + error<em>name.toLowerCase().replace(&rsquo; &lsquo;, &lsquo;</em>&rsquo;) + (&rsquo;_error&rsquo;));
+    var error_message = $(error_id);
+    if(value.length === 0) {
+      error_message.show().text(error_name + &ldquo; needed.&rdquo;).addClass(&lsquo;error_class&rsquo;);
+      return false;
+    }
+    else {
+      error_message.hide();
+      return true;
+    }
+  }
+}
+{% endcodeblock %}</p>
+
+<p>We can dynamically call the data attribute for each element.  For example, the error_name value the keyup event(m) will console.log (=> First name, m). The call method allows us to refactor all of our keyup event listeners into one method.  The call method as defined by the Mozilla guide "calls a function with a given this value and arguments provided individually."</p>
+<p>h/t Dan Porter</p>
+
+<p><p>Reference</p>
+<ul>
+  <li><a href='http://yehudakatz.com/2011/08/11/understanding-JavaScript-function-invocation-and-this/'>Understanding JavaScript Function Invocation and this</a></li>
+  <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call'>Function.prototype.call()</a></li>
+  <li><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply'>Function.prototype.apply()</a></li>
+</ul></p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

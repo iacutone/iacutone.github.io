@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>grep and scan regular expressions in ruby &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">grep and scan regular expressions in ruby</h1>
+        <div class="post-meta">
+            <time datetime="22 August 2013">
+                22 August 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p>I am creating an app to provide food cart locations in Manhattan.  <a href='https://github.com/iacutone/food-truck'>Here</a> is the code.  Food carts generally post their locations on Twitter; in order to create latitude and longitude coordinates, I needed to parse tweets.  This is where scan and grep play their role, to match elements in a tweet string.  Let's say this is our tweet: "53rd and park. Ready by 11!"  This string is database column in my locations model.</p>
+
+<p><p>Code for scan method.</p>
+{% codeblock lang:ruby %}</p>
+
+<pre><code>tweet = &quot;53rd and park. Ready by 11!&quot;
+tweet.scan(/53/)
+# =&gt; [&quot;53&quot;] 
+tweet.scan(/Park/i)
+# =&gt; [&quot;park&quot;]
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p><p>The scan method takes a string as an input.  Also, the i is used in the regular expression in order to make it case insensitive.</p>
+{% codeblock lang:ruby %}</p>
+
+<pre><code>tweet.scan(/Park/)
+#  =&gt; [] 
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p><p>Code for grep method.</p>
+{% codeblock lang:ruby %}</p>
+
+<pre><code>tweet = &quot;53rd and park. Ready by 11!&quot;
+tweet_array = tweet.split
+# =&gt; [&quot;53rd&quot;, &quot;and&quot;, &quot;park.&quot;, &quot;Ready&quot;, &quot;by&quot;, &quot;11!&quot;] 
+tweet_array.grep(/53/)
+# =&gt; [&quot;53rd&quot;]
+tweet_array.grep(/Park/i)
+# =&gt; [&quot;park.&quot;]
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p><p>The grep method takes an array as an input, so use the string split method to turn it into an array seperated by commas.  Also, the regular expression matches the entire string.  The grep method seems to be more suited as an alternative for the select and map methods.  <a href='http://zigzag.github.io/2010/03/31/grep-in-ruby----a-powerful-enumerable-method.html'>This</a> blog post goes into further detail explaining more cases to use the grep method over more familiar methods.<p></p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>pluck method in active record &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">pluck method in active record</h1>
+        <div class="post-meta">
+            <time datetime="23 June 2013">
+                23 June 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p>The past few days, I have been building a database to store some information for my friend Shari, a Peace Corps recruiter.  The database includes, a name, email and phone number.  Things got tricky building a date/time models and validations.  Every given time has six time slots for a user to sign up.  My conclusion to this problem was to create a different database column for every given time slot.  Then, I used the <a href='http://apidock.com/rails/ActiveRecord/Calculations/pluck'>pluck method</a> on my Active Record database in order to turn all of my time columns into strings in an array.  However, in Rails 3, pluck only excepts one column to turn into an array.  This feature is being changed in Rails 4 according to <a href ='http://meltingice.net/2013/06/11/pluck-multiple-columns-rails/'>this</a> blog post where he describes how to tamper with the the Active Record library or create a module to provide a pluck_all method for a Rails 3 application.  I implemented this code, and was returned an array of hashes which did not help my cause.  But this is an interesting concept and it was fun and insightful reading the source code.</p>
+
+<p>{% codeblock users_controller.rb lang:rb %}</p>
+
+<p>def create
+    @user = User.new(params[:user])</p>
+
+<pre><code>if @user.save
+
+  @day_one_counter = []
+  @day_one_counter = User.pluck(:time1)
+
+  @day_two_counter = []
+  @day_two_counter = User.pluck(:time2)
+
+  b = Hash.new(0)
+  c = Hash.new(0)
+
+  @day_one_counter.each do |v|
+    b[v] += 1
+  end
+
+  @day_two_counter.each do |v|
+    c[v] += 1
+  end
+
+  @time1 = b[&quot;11:30&quot;] 
+  @time2 = b[&quot;11:45&quot;] 
+  @time3 = b[&quot;12:00&quot;] 
+  @time4 = b[&quot;12:15&quot;] 
+  @time5 = b[&quot;12:30&quot;] 
+  @time6 = b[&quot;12:45&quot;]
+  @time7 = b[&quot;1:00&quot;] 
+  @time8 = b[&quot;1:15&quot;] 
+  @time9 = b[&quot;1:30&quot;]
+  @time10 = b[&quot;1:45&quot;] 
+  @time11 = b[&quot;5:00&quot;] 
+  @time12 = b[&quot;5:15&quot;]
+  @time13 = b[&quot;5:30&quot;] 
+  @time14 = b[&quot;5:45&quot;]
+  @time15 = b[&quot;6:00&quot;] 
+  @time16 = b[&quot;6:15&quot;]
+  @time17 = b[&quot;6:30&quot;] 
+  @time18 = b[&quot;6:45&quot;] 
+  @time19 = b[&quot;7:00&quot;]
+  @time20 = b[&quot;7:15&quot;]
+
+  @time21 = c[&quot;11:30&quot;] 
+  @time22 = c[&quot;11:45&quot;] 
+  @time23 = c[&quot;12:00&quot;] 
+  @time24 = c[&quot;12:15&quot;] 
+  @time25 = c[&quot;12:30&quot;] 
+  @time26 = c[&quot;12:45&quot;]
+  @time27 = c[&quot;1:00&quot;] 
+  @time28 = c[&quot;1:15&quot;] 
+  @time29 = c[&quot;1:30&quot;]
+  @time30 = c[&quot;1:45&quot;] 
+  @time31 = c[&quot;5:00&quot;] 
+  @time32 = c[&quot;5:15&quot;]
+  @time33 = c[&quot;5:30&quot;] 
+  @time34 = c[&quot;5:45&quot;]
+  @time35 = c[&quot;6:00&quot;] 
+  @time36 = c[&quot;6:15&quot;]
+  @time37 = c[&quot;6:30&quot;] 
+  @time38 = c[&quot;6:45&quot;] 
+  @time39 = c[&quot;7:00&quot;]
+  @time40 = c[&quot;7:15&quot;]
+
+  # respond_to do |format|
+  #   format.html
+  #   format.js
+  # end   
+
+  render :time
+else
+  render :new
+end
+</code></pre>
+
+<p>end</p>
+
+<p>{% endcodeblock %}</p>
+
+<p>This code gets really cumbersome the more time columns I add, so my next step is to DRY this shit up.  But hell, it works and is going to make my friend's life easier, yay! for technology.</p>  
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

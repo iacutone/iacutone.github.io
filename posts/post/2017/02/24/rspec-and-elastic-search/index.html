@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>rspec and elastic search &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">rspec and elastic search</h1>
+        <div class="post-meta">
+            <time datetime="24 February 2017">
+                24 February 2017
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p>I had a difficult time setting up  ElasticSearch on both RSpec (CircleCI) and Heroku. The ElasticSearch test cluster was not working on the CircleCI Docker image. Fortunately, one can configure the Circle environment to start with an ElasticSearch process. So, instead of using the test cluster, both my local testing environment and Circle environment use a real ElasticSearch process.</p>
+
+<pre><code class="language-ruby">#
+# ElasticSearch
+#
+
+config.before :all, elasticsearch: true do
+  port = ENV['CIRCLE_CI_ES_URL'].present? ? 9200 : 9250
+  Elasticsearch::Model.client = Elasticsearch::Client.new(port: port)
+end
+
+config.before :each, elasticsearch: true do
+  Campaign.__elasticsearch__.create_index!(force: true)
+end
+
+config.after :each, elasticsearch: true do
+  Campaign.__elasticsearch__.delete_index!
+end
+</code></pre>
+
+<p>When a test needs to use ElasticSearch:</p>
+
+<pre><code class="language-ruby">before { Campaign.__elasticsearch__.refresh_index! }
+
+describe '#search', elasticsearch: true do
+  expect(search.results).to be_present
+end
+</code></pre>
+
+<p>I ran into issues using ElasticSearch on Heroku when creating an index. Heroku review apps are configurable by defining an <code>app.json</code>. In the json file, Heroku can spin up an ElasticSearch process.</p>
+
+<pre><code>&quot;scripts&quot;: {
+  &quot;postdeploy&quot;: &quot;bundle exec rake db:schema:load db:seed&quot;
+},
+&quot;formation&quot;: {
+  &quot;web&quot;: {
+    &quot;size&quot;: &quot;free&quot;,
+    &quot;quantity&quot;: 1
+  },
+  &quot;elasticsearch&quot;: {
+    &quot;size&quot;: &quot;free&quot;,
+    &quot;quantity&quot;: 1
+  }
+}
+</code></pre>
+
+<p>The process is running before any Ruby code is executed. The next step is to create the index using <code>postdeploy</code>. Before creating ActiveRecord objects in the <code>seed.rb</code> file, create an index with <code>Model.index(force: true)</code>.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

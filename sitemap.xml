@@ -3,232 +3,237 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://iacutone.github.io/post/2018/04/25/graphql-with-elm-part-2/</loc>
+    <loc>http://iacutone.github.io/posts/post/rails-helper-method/</loc>
+    <lastmod>2018-09-13T10:51:44-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://iacutone.github.io/posts/post/2018/04/25/graphql-with-elm-part-2/</loc>
     <lastmod>2018-04-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2018/04/23/graphql-with-elm-part-1-communicating-with-github/</loc>
+    <loc>http://iacutone.github.io/posts/post/2018/04/23/graphql-with-elm-part-1-communicating-with-github/</loc>
     <lastmod>2018-04-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2018/04/16/understanding-union-types-in-elm/</loc>
+    <loc>http://iacutone.github.io/posts/post/2018/04/16/understanding-union-types-in-elm/</loc>
     <lastmod>2018-04-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2018/01/10/pr-review-diagram/</loc>
+    <loc>http://iacutone.github.io/posts/post/2018/01/10/pr-review-diagram/</loc>
     <lastmod>2018-01-10T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2017/10/24/understanding-test-doubles/</loc>
+    <loc>http://iacutone.github.io/posts/post/2017/10/24/understanding-test-doubles/</loc>
     <lastmod>2017-10-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2017/08/11/python-first-thoughts/</loc>
+    <loc>http://iacutone.github.io/posts/post/2017/08/11/python-first-thoughts/</loc>
     <lastmod>2017-08-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2017/06/05/artificial-intelligence-nano-degree/</loc>
+    <loc>http://iacutone.github.io/posts/post/2017/06/05/artificial-intelligence-nano-degree/</loc>
     <lastmod>2017-06-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2017/04/15/my-photo-storage-solution/</loc>
+    <loc>http://iacutone.github.io/posts/post/2017/04/15/my-photo-storage-solution/</loc>
     <lastmod>2017-04-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2017/02/24/rspec-and-elastic-search/</loc>
+    <loc>http://iacutone.github.io/posts/post/2017/02/24/rspec-and-elastic-search/</loc>
     <lastmod>2017-02-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/10/31/vim/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/10/31/vim/</loc>
     <lastmod>2016-10-31T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/10/11/level-up-with-vim/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/10/11/level-up-with-vim/</loc>
     <lastmod>2016-10-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/09/15/filtering-ack-results/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/09/15/filtering-ack-results/</loc>
     <lastmod>2016-09-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/07/13/rails-before-action-method/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/07/13/rails-before-action-method/</loc>
     <lastmod>2016-07-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/06/02/extend-and-include-in-ruby/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/06/02/extend-and-include-in-ruby/</loc>
     <lastmod>2016-06-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/05/15/find-and-replace-text/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/05/15/find-and-replace-text/</loc>
     <lastmod>2016-05-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/03/12/jquery-beforesend/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/03/12/jquery-beforesend/</loc>
     <lastmod>2016-03-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/03/04/activerecord-none/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/03/04/activerecord-none/</loc>
     <lastmod>2016-03-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/02/05/submitting-a-get-request-in-rails/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/02/05/submitting-a-get-request-in-rails/</loc>
     <lastmod>2016-02-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2016/01/11/rspec-example-blocks/</loc>
+    <loc>http://iacutone.github.io/posts/post/2016/01/11/rspec-example-blocks/</loc>
     <lastmod>2016-01-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/12/12/using-mocks-to-test-mailers-in-rspec/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/12/12/using-mocks-to-test-mailers-in-rspec/</loc>
     <lastmod>2015-12-12T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/12/03/env-variables-in-xcode/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/12/03/env-variables-in-xcode/</loc>
     <lastmod>2015-12-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/11/20/shared-contexts-with-rspec/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/11/20/shared-contexts-with-rspec/</loc>
     <lastmod>2015-11-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/11/13/auto-layout-xcode-for-navigation-bar/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/11/13/auto-layout-xcode-for-navigation-bar/</loc>
     <lastmod>2015-11-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/11/07/prototypes-and-constructors-in-javascript/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/11/07/prototypes-and-constructors-in-javascript/</loc>
     <lastmod>2015-11-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/10/30/shell-function/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/10/30/shell-function/</loc>
     <lastmod>2015-10-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/10/23/the-setter-method-in-a-rails-model/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/10/23/the-setter-method-in-a-rails-model/</loc>
     <lastmod>2015-10-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/09/18/rubys-fetch-method/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/09/18/rubys-fetch-method/</loc>
     <lastmod>2015-09-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/09/09/swift-basics/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/09/09/swift-basics/</loc>
     <lastmod>2015-09-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2015/09/04/my-return-to-blogging/</loc>
+    <loc>http://iacutone.github.io/posts/post/2015/09/04/my-return-to-blogging/</loc>
     <lastmod>2015-09-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2014/02/16/exceptions-in-ruby/</loc>
+    <loc>http://iacutone.github.io/posts/post/2014/02/16/exceptions-in-ruby/</loc>
     <lastmod>2014-02-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2014/01/21/refactoring-client-side-validations/</loc>
+    <loc>http://iacutone.github.io/posts/post/2014/01/21/refactoring-client-side-validations/</loc>
     <lastmod>2014-01-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/10/22/testing-your-way-to-success/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/10/22/testing-your-way-to-success/</loc>
     <lastmod>2013-10-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/09/07/changing-your-password-from-scratch/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/09/07/changing-your-password-from-scratch/</loc>
     <lastmod>2013-09-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/08/22/grep-and-scan-regular-expressions-in-ruby/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/08/22/grep-and-scan-regular-expressions-in-ruby/</loc>
     <lastmod>2013-08-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/08/15/adventures-in-jquery/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/08/15/adventures-in-jquery/</loc>
     <lastmod>2013-08-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/07/15/sidekiq-and-carrierwave/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/07/15/sidekiq-and-carrierwave/</loc>
     <lastmod>2013-07-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/06/30/gon-gem/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/06/30/gon-gem/</loc>
     <lastmod>2013-06-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/06/23/pluck-method-in-active-record/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/06/23/pluck-method-in-active-record/</loc>
     <lastmod>2013-06-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/06/21/using-impress-dot-js-with-rails/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/06/21/using-impress-dot-js-with-rails/</loc>
     <lastmod>2013-06-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/06/18/client-side-validations/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/06/18/client-side-validations/</loc>
     <lastmod>2013-06-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/06/10/amazon-s3/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/06/10/amazon-s3/</loc>
     <lastmod>2013-06-10T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/04/22/binary-search-trees/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/04/22/binary-search-trees/</loc>
     <lastmod>2013-04-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/04/16/the-yipit-api-and-whenever-gem/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/04/16/the-yipit-api-and-whenever-gem/</loc>
     <lastmod>2013-04-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/03/01/jambox/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/03/01/jambox/</loc>
     <lastmod>2013-03-01T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/02/20/adventures-in-code/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/02/20/adventures-in-code/</loc>
     <lastmod>2013-02-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/2013/02/13/git-commandments/</loc>
+    <loc>http://iacutone.github.io/posts/post/2013/02/13/git-commandments/</loc>
     <lastmod>2013-02-13T00:00:00+00:00</lastmod>
   </url>
   
@@ -238,19 +243,32 @@
   </url>
   
   <url>
-    <loc>http://iacutone.github.io/post/</loc>
-    <lastmod>2018-04-25T00:00:00+00:00</lastmod>
+    <loc>http://iacutone.github.io/</loc>
+    <lastmod>2018-09-13T10:51:44-04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://iacutone.github.io/posts/</loc>
+    <lastmod>2018-09-13T10:51:44-04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://iacutone.github.io/tags/rails/</loc>
+    <lastmod>2018-09-13T10:51:44-04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://iacutone.github.io/tags/ruby/</loc>
+    <lastmod>2018-09-13T10:51:44-04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://iacutone.github.io/tags/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://iacutone.github.io/</loc>
-    <lastmod>2018-04-25T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-13T10:51:44-04:00</lastmod>
     <priority>0</priority>
   </url>
   

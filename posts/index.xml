@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Iacutone Dev Blog</title>
+    <link>http://iacutone.github.io/posts/</link>
+    <description>Recent content in Posts on Iacutone Dev Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 13 Sep 2018 10:51:44 -0400</lastBuildDate>
+    
+	<atom:link href="http://iacutone.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Rails Helper Method</title>
+      <link>http://iacutone.github.io/posts/post/rails-helper-method/</link>
+      <pubDate>Thu, 13 Sep 2018 10:51:44 -0400</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/rails-helper-method/</guid>
+      <description>Helper methods allow controller methods to be called in the associated layout code.
+# UserController helper_method def current_user @current_user ||= User.find(params[:id]) end  # User Show Page &amp;lt;h1&amp;gt;Hello, &amp;lt;%= current_user %&amp;gt;&amp;lt;/h1&amp;gt;  Why use a helper_method? A helper method is advantageous to use over an instance variable in a variety of ways.
+ Instance variable value is set to nil which can lead to unexpected results  def test @test end # test == nil   Instance variables are more difficult to maintain due to tracking of read and write, especially when @object is used in many places</description>
+    </item>
+    
+    <item>
+      <title>graphql with elm part 2</title>
+      <link>http://iacutone.github.io/posts/post/2018/04/25/graphql-with-elm-part-2/</link>
+      <pubDate>Wed, 25 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2018/04/25/graphql-with-elm-part-2/</guid>
+      <description>In this post we will discuss how to turn nested JSON into Elm data types. This post uses a thin Elm.Http wrapper. Using this library helps us concentrate on contructing the necessary Decoders. We will also contruct a more complex query in order to explain how to contruct complex data types. The following query returns JSON for the first two team members of FracturedAtlas.
+query : String query = &amp;quot;&amp;quot;&amp;quot; query { organization(login: &amp;quot;FracturedAtlas&amp;quot;) { members(first:2) { edges { node { id login } } } } } } &amp;quot;&amp;quot;&amp;quot;  Swapping out our query will return the following JSON.</description>
+    </item>
+    
+    <item>
+      <title>graphql with elm part 1 communicating with github</title>
+      <link>http://iacutone.github.io/posts/post/2018/04/23/graphql-with-elm-part-1-communicating-with-github/</link>
+      <pubDate>Mon, 23 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2018/04/23/graphql-with-elm-part-1-communicating-with-github/</guid>
+      <description>A co-worker and are using GitHub&amp;rsquo;s GraphQL API for a side project. I am writing a series of posts around what we learned from creating the application entitled &amp;lsquo;GraghQL and Elm&amp;rsquo;. This post will detail how to communicate with the Github GraphQL API with Elm. All code related to these posts can be found here.
+GitHub has extensive documentation on communicating with their GraphQL server. In this post we will write a simple query and display the JSON from Github.</description>
+    </item>
+    
+    <item>
+      <title>understanding union types in elm</title>
+      <link>http://iacutone.github.io/posts/post/2018/04/16/understanding-union-types-in-elm/</link>
+      <pubDate>Mon, 16 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2018/04/16/understanding-union-types-in-elm/</guid>
+      <description>Watching Making Impossible States Impossible and reading Higher Level Coding with Elm Union Types were enlightening in my Elm development. Now, I look for places were I can refine my data model by using union types. Union types allow me to replace conditionals with pattern matching case statements. This pattern is much cleaner and easier to understand. The following is an example of how I used union types to refactor a hamburger.</description>
+    </item>
+    
+    <item>
+      <title>pr review diagram</title>
+      <link>http://iacutone.github.io/posts/post/2018/01/10/pr-review-diagram/</link>
+      <pubDate>Wed, 10 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2018/01/10/pr-review-diagram/</guid>
+      <description>I thought I would share my diagram for how I think about PR review. The following diagram received good reception from my team.
+{% img images/pr_review.jpg %}</description>
+    </item>
+    
+    <item>
+      <title>understanding test doubles</title>
+      <link>http://iacutone.github.io/posts/post/2017/10/24/understanding-test-doubles/</link>
+      <pubDate>Tue, 24 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2017/10/24/understanding-test-doubles/</guid>
+      <description>I refactored credit card payments on an application that uses the ActiveMerchant gem. I was not confident in the test, so, I re-wrote the tests to verify responses from Braintree. Once I verified I did not break anything with my refactor, I decided the best next step was to remove the interaction with Braintree and replace it with stubbed responses. I always forget when and how to use RSpec allow, spy and double methods.</description>
+    </item>
+    
+    <item>
+      <title>python first thoughts</title>
+      <link>http://iacutone.github.io/posts/post/2017/08/11/python-first-thoughts/</link>
+      <pubDate>Fri, 11 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2017/08/11/python-first-thoughts/</guid>
+      <description>Debugging  Write the following code to use an interactive debugger in Python.  import pdb pdb.set_trace()  Self  Passing a reference to self seems repetitive.  class Foo: def bar(self) print(&#39;Hello&#39;)  Testing  You need to pass in the -s to print test output. I expected print to log output regardless.  Modules  You can conditionally implement different behavior when importing modules in Python. Taken from this StackOverflow example.</description>
+    </item>
+    
+    <item>
+      <title>artificial intelligence nano degree</title>
+      <link>http://iacutone.github.io/posts/post/2017/06/05/artificial-intelligence-nano-degree/</link>
+      <pubDate>Mon, 05 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2017/06/05/artificial-intelligence-nano-degree/</guid>
+      <description>I started the Udacity Artificial Intelligence Nano Degree last month.
+Project 1, Sudoku Solver  This post helpful for building a sudoku solver. My Solution  The Sudoku Solver was a fun project. I enjoy learning by writing code to make tests pass, like Ruby Katas.
+Project 2, Isolation Game  This application is useful for visualizing alpha beta pruning. This is a good introduction to the minimax function and alphabeta pruning.</description>
+    </item>
+    
+    <item>
+      <title>my photo storage solution</title>
+      <link>http://iacutone.github.io/posts/post/2017/04/15/my-photo-storage-solution/</link>
+      <pubDate>Sat, 15 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2017/04/15/my-photo-storage-solution/</guid>
+      <description>I have been searching for a photo storage solution. My solution only involves two devices, a raspberry pi and an external hard drive. This post will explain how to set up your pi in order to automatically transfer RAW and JPG photos from an SD card to the hard drive connected to the pi. The scripts I used are available here.
+I like this solution because the entire process is automatic.</description>
+    </item>
+    
+    <item>
+      <title>rspec and elastic search</title>
+      <link>http://iacutone.github.io/posts/post/2017/02/24/rspec-and-elastic-search/</link>
+      <pubDate>Fri, 24 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2017/02/24/rspec-and-elastic-search/</guid>
+      <description>I had a difficult time setting up ElasticSearch on both RSpec (CircleCI) and Heroku. The ElasticSearch test cluster was not working on the CircleCI Docker image. Fortunately, one can configure the Circle environment to start with an ElasticSearch process. So, instead of using the test cluster, both my local testing environment and Circle environment use a real ElasticSearch process.
+# # ElasticSearch # config.before :all, elasticsearch: true do port = ENV[&#39;CIRCLE_CI_ES_URL&#39;].</description>
+    </item>
+    
+    <item>
+      <title>vim</title>
+      <link>http://iacutone.github.io/posts/post/2016/10/31/vim/</link>
+      <pubDate>Mon, 31 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/10/31/vim/</guid>
+      <description>Purposefully, I began using Vim during a non-strenuous work week which helped manage frustration. I have been using solely Vim as a text editor for two weeks and have experienced improved efficienies over my previous text editor, Sublime.
+Improvments The ability to change between files quickly using the Ctrl-P plugin is the biggest quality of life increase. Commands such as / and ? make finding word matches in a file easy.</description>
+    </item>
+    
+    <item>
+      <title>level up with vim</title>
+      <link>http://iacutone.github.io/posts/post/2016/10/11/level-up-with-vim/</link>
+      <pubDate>Tue, 11 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/10/11/level-up-with-vim/</guid>
+      <description>How much time do you spend in your text editor? We spend most of our time reading through text and jumping between files. My goal is to find a tool in order to help me do this more efficiently. I have found that learning Vim is not overwhelming or difficult if you break the units of work down into manageable pieces. The ultimate goal is to use Vim fulltime. Below are my curated steps:</description>
+    </item>
+    
+    <item>
+      <title>filtering ack results</title>
+      <link>http://iacutone.github.io/posts/post/2016/09/15/filtering-ack-results/</link>
+      <pubDate>Thu, 15 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/09/15/filtering-ack-results/</guid>
+      <description>While setting up my VIM environment, I read a blogpost which states ack can ignore directories. For cleaner ack output you can setup the file below:
+--ignore-dir=log --ignore-dir=public/assets --ignore-dir=vendor/assets --ignore-dir=tmp/cache  </description>
+    </item>
+    
+    <item>
+      <title>rails before action method</title>
+      <link>http://iacutone.github.io/posts/post/2016/07/13/rails-before-action-method/</link>
+      <pubDate>Wed, 13 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/07/13/rails-before-action-method/</guid>
+      <description>I did not know you could give a before_action a block argument. This is a benefit because you do not have to create a ruby method and pass the method into the before_action.
+This got me thinking, what does before_action look like in Rails? The following is the source code from Rails 4.2.7, from AbstractController::Callbacks::ClassMethods.
+# :method: before_action # # :call-seq: before_action(names, block) # # Append a callback before actions. See _insert_callbacks for parameter details.</description>
+    </item>
+    
+    <item>
+      <title>extend and include in ruby</title>
+      <link>http://iacutone.github.io/posts/post/2016/06/02/extend-and-include-in-ruby/</link>
+      <pubDate>Thu, 02 Jun 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/06/02/extend-and-include-in-ruby/</guid>
+      <description>I have been trying to clean up some old code with Ruby modules. This post is to help me remember the differences between include and extend in Ruby.
+class Foo extend ActionView::Helpers::NumberHelper end  module Foo extend ActionView::Helpers::NumberHelper end  Foo.number_to_currency 2 =&amp;gt; &amp;quot;$2.00&amp;quot;  class Foo include ActionView::Helpers::NumberHelper end  foo = Foo.new foo.number_to_currency 2 =&amp;gt; &amp;quot;$2.00&amp;quot;  </description>
+    </item>
+    
+    <item>
+      <title>find and replace text</title>
+      <link>http://iacutone.github.io/posts/post/2016/05/15/find-and-replace-text/</link>
+      <pubDate>Sun, 15 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/05/15/find-and-replace-text/</guid>
+      <description>If you find yourself in the situation of needing to find and replace text in multiple files, use the Command Line Interface. I wanted to rename a Phoenix application and ran the below command.
+ack pivotal_commentor -l | xargs sed -i &#39;&#39; &#39;s/pivotal_commentor/commentor/g&#39;
+Let&amp;rsquo;s break this command down with a simple example.
+mkdir test cd test touch file1.txt touch file2.txt  And lets add the text &amp;lsquo;hello&amp;rsquo; to both text files.</description>
+    </item>
+    
+    <item>
+      <title>jquery beforesend</title>
+      <link>http://iacutone.github.io/posts/post/2016/03/12/jquery-beforesend/</link>
+      <pubDate>Sat, 12 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/03/12/jquery-beforesend/</guid>
+      <description>I have a form which submits a comment via AJAX. The app was throwing validation errors if there was no value in the comment field. My initial solution was to disable the submit button if the comment is blank. However, using the beforeSend function provides a cleaner solution.
+comment = (&#39;.form-field-comment&#39;).val() $.ajax type: &#39;POST&#39; dataType: &#39;script&#39; url: comment_form.attr(&#39;action&#39;) data: comment: body: comment beforeSend: () -&amp;gt; if comment is &#39;&#39; return false; # do this instead of disabling the submit button  With the above code, the comment form is never posted if the comment is blank.</description>
+    </item>
+    
+    <item>
+      <title>activerecord none</title>
+      <link>http://iacutone.github.io/posts/post/2016/03/04/activerecord-none/</link>
+      <pubDate>Fri, 04 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/03/04/activerecord-none/</guid>
+      <description>The .none class method was introduced in Rails 4.0.2 and is helpful when returning a blank array will break.
+Organization.none.paginate(page: &#39;1&#39;) =&amp;gt; #&amp;lt;ActiveRecord::Relation []&amp;gt; [].paginate(page: &#39;1&#39;) =&amp;gt; NoMethodError: undefined method `paginate&#39; for []:Array  Helpful Links none</description>
+    </item>
+    
+    <item>
+      <title>submitting a get request in rails</title>
+      <link>http://iacutone.github.io/posts/post/2016/02/05/submitting-a-get-request-in-rails/</link>
+      <pubDate>Fri, 05 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/02/05/submitting-a-get-request-in-rails/</guid>
+      <description>For the error &amp;ldquo;WARNING: Can&amp;rsquo;t verify CSRF token authenticity&amp;rdquo;, add a CSRF token.
+= form_tag some_path(@organization), method: :get do = hidden_field_tag :authenticity_token, form_authenticity_token # this needs to be added! = submit_tag &amp;quot;View&amp;quot; = link_to_function &#39;Export&#39;, &amp;quot;Javascript function which posts to another route&amp;quot;  The top-level block contains method: :get which doesn&amp;rsquo;t auto-add the needed authenticity_token.
+Helpful Links Understanding the Rails Authenticity Token</description>
+    </item>
+    
+    <item>
+      <title>rspec example blocks</title>
+      <link>http://iacutone.github.io/posts/post/2016/01/11/rspec-example-blocks/</link>
+      <pubDate>Mon, 11 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2016/01/11/rspec-example-blocks/</guid>
+      <description>I recently discovered an interesting test pattern; defining variables in before and after hooks in the rails helper.
+config.before(:example, hook: true) do @hook = &#39;before hook&#39; end  RSpec.describe &amp;quot;some variable I need&amp;quot; do describe &#39;my hook&#39;, hook: true do it &#39;runs the hook&#39; do expect(@hook).to eq &#39;before hook&#39; # returns true end end end  A Real Example Let&amp;rsquo;s say we are testing a controller and want to make sure only an admin has access to specific views.</description>
+    </item>
+    
+    <item>
+      <title>using mocks to test mailers in rspec</title>
+      <link>http://iacutone.github.io/posts/post/2015/12/12/using-mocks-to-test-mailers-in-rspec/</link>
+      <pubDate>Sat, 12 Dec 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/12/12/using-mocks-to-test-mailers-in-rspec/</guid>
+      <description>I was in the situation where I needed to test the delivery of emails based on specific sets of events. I began testing by inspecting sent emails in ActionMailer::Base.deliveries. However, this method of testing felt verbose and sloppy.
+RSpec mocks is a great solution when you need to test that a specific method was called. In my case, I want a fundraiser to receive an email after a campaign goal is reached.</description>
+    </item>
+    
+    <item>
+      <title>env variables in xcode</title>
+      <link>http://iacutone.github.io/posts/post/2015/12/03/env-variables-in-xcode/</link>
+      <pubDate>Thu, 03 Dec 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/12/03/env-variables-in-xcode/</guid>
+      <description>Setting ENV variables in XCode in not straighforward. I have broken down how to accomplish setting up an ENV variable in the following videos and code example.
+{% youtube r5HZwbkA52I %} Make a new conifuration file and set any ENV variables you need.
+{% youtube jwuQgWb58Xs %} In the debug environment, use the debug.xcconfig file. Then, assign the value to something, in this case, SignUpUrl corresponds with the SIGN_UP_URL, which is set to localhost:4567/sign_up.</description>
+    </item>
+    
+    <item>
+      <title>shared contexts with rspec</title>
+      <link>http://iacutone.github.io/posts/post/2015/11/20/shared-contexts-with-rspec/</link>
+      <pubDate>Fri, 20 Nov 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/11/20/shared-contexts-with-rspec/</guid>
+      <description>In the past, I used traits with my factories. Below is a simple example of defining a trait:
+Using traits FactoryGirl.define do factory :donation do trait :with_amount do amount 10 end trait :no_amount do amount 0 end end end  An example spec:
+RSpec.describe &#39;Donation Matching&#39;, :type =&amp;gt; :model do context &#39;with an amount&#39; do let(:donation) { create(:donation, :with_amount) } end context &#39;with no amount&#39; do let(:donation) { create(:donation, :no_amount) } end end  However, I believe that using a shared context is a clearer approach.</description>
+    </item>
+    
+    <item>
+      <title>auto layout xcode for navigation bar</title>
+      <link>http://iacutone.github.io/posts/post/2015/11/13/auto-layout-xcode-for-navigation-bar/</link>
+      <pubDate>Fri, 13 Nov 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/11/13/auto-layout-xcode-for-navigation-bar/</guid>
+      <description>Finding auto layout information is difficult. The steps below pin a navigation bar to the top of the screen for all iOS devices.
+{% img center /images/constraints.gif %}
+Steps  Make sure &amp;ldquo;Navigation Bar&amp;rdquo; is selected on the left menu Click the &amp;ldquo;Pin&amp;rdquo; button on the bottom right corner Click the top, left and right constraints Click the Height constraint Add the 4 contraints  The above steps &amp;ldquo;pin&amp;rdquo; the navigation bar object to the top of the view and stretch the navigation bar to the sides of the view.</description>
+    </item>
+    
+    <item>
+      <title>prototypes and constructors in javascript</title>
+      <link>http://iacutone.github.io/posts/post/2015/11/07/prototypes-and-constructors-in-javascript/</link>
+      <pubDate>Sat, 07 Nov 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/11/07/prototypes-and-constructors-in-javascript/</guid>
+      <description>I usually do not need to write code using neither constructors nor prototypes in Javascript. So, I always forget how to write them when I need to use them.
+Constructor Say = function(){ this.hello = function() { return &amp;quot;Hello&amp;quot;; } } var say = new Say(); say.hello() // &amp;quot;Hello&amp;quot;  Prototype function Say() {} Say.prototype.hello = function() { return &amp;quot;Hello&amp;quot;; } var say = new Say(); say.hello() // &amp;quot;Hello&amp;quot;  Helpful Links</description>
+    </item>
+    
+    <item>
+      <title>shell function</title>
+      <link>http://iacutone.github.io/posts/post/2015/10/30/shell-function/</link>
+      <pubDate>Fri, 30 Oct 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/10/30/shell-function/</guid>
+      <description>I have been using youtube-dl every week. The application is a &amp;ldquo;Small command-line program to download videos from YouTube.com and other video sites.&amp;rdquo; It&amp;rsquo;s super useful. However, it default downloads to the current terminal directory. Let&amp;rsquo;s write a simple shell script in order to place all downloaded files from youtube-dl in the same directory.
+function mp3 { # Download all of the things to /Downloads youtube-dl --default-search=ytsearch: \ --output=&amp;quot;Downloads/%(title)s.%(ext)s&amp;quot; &amp;quot;$*&amp;quot; }  The &amp;ldquo;$&amp;rdquo; signifies the string following mp3, the example below, &amp;ldquo;$&amp;rdquo; is the URL arument.</description>
+    </item>
+    
+    <item>
+      <title>the setter method in a rails model</title>
+      <link>http://iacutone.github.io/posts/post/2015/10/23/the-setter-method-in-a-rails-model/</link>
+      <pubDate>Fri, 23 Oct 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/10/23/the-setter-method-in-a-rails-model/</guid>
+      <description>At Fractured Atlas, we are trying to move away from the additional complexity of using callbacks. For example, let&amp;rsquo;s say we need to do something in a before_save callback such as lowercase a user&amp;rsquo;s email.
+before_save: lowercase_email def lowercase_email self.email = self.email.downcase end  How is this code implemented without using before_save? One method would be overriding the setter accessor.
+def email=(value) email = value.downcase super(email) end  Now, when the email attribute is updated, my email setter method is called.</description>
+    </item>
+    
+    <item>
+      <title>rubys fetch method</title>
+      <link>http://iacutone.github.io/posts/post/2015/09/18/rubys-fetch-method/</link>
+      <pubDate>Fri, 18 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/09/18/rubys-fetch-method/</guid>
+      <description>Checking for values in a Rails params hash is complicated. In this post we will use the #fetch method to ensure nil is not called on a params hash.
+if params[:search][:organization_id].present? # do things end  The code above will call #present? on nil if params[:search][:organization_id] does not exist.
+A better way to write the conditional:
+if params[:search].present and params[:search][:organization_id].present? # do things end  Writing a similar conditional with #fetch:</description>
+    </item>
+    
+    <item>
+      <title>swift basics</title>
+      <link>http://iacutone.github.io/posts/post/2015/09/09/swift-basics/</link>
+      <pubDate>Wed, 09 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/09/09/swift-basics/</guid>
+      <description>String Interpolation var name = &amp;quot;Eric&amp;quot; println(&amp;quot;Hello, \(name)&amp;quot;) // &amp;quot;Hello, Eric&amp;quot;  Dictionaries var response = [&amp;quot;id&amp;quot;:14,&amp;quot;email&amp;quot;:&amp;quot;test@email.com&amp;quot;] let id = response[&amp;quot;id&amp;quot;] // 14 let email = response[&amp;quot;email&amp;quot;] // &amp;quot;test@email.com&amp;quot;  Tuples Unnamed Tuples var coordinates = (100, 999) let (lat, lon) = coordinates println(&amp;quot;Latitude is \(lat)&amp;quot;) // &amp;quot;Latitude is 100&amp;quot; println(&amp;quot;Longtitude is \(lon)&amp;quot;) // Longitude is 999  Named Tuples var response = (code: 200, message: &amp;quot;All good&amp;quot;) response.0 // 200 response.</description>
+    </item>
+    
+    <item>
+      <title>my return to blogging</title>
+      <link>http://iacutone.github.io/posts/post/2015/09/04/my-return-to-blogging/</link>
+      <pubDate>Fri, 04 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2015/09/04/my-return-to-blogging/</guid>
+      <description>The goal of this blog is to refine my writing skills. In order to fulfill this goal I will write about something interesting I learned on a weekly basis. I find that if I do not get into a routine, I will not fulfill my goal. So, every Friday after work I will post on this blog. I have no goals about the legth of posts, but to write something with clarity and thoughfulness.</description>
+    </item>
+    
+    <item>
+      <title>exceptions in ruby</title>
+      <link>http://iacutone.github.io/posts/post/2014/02/16/exceptions-in-ruby/</link>
+      <pubDate>Sun, 16 Feb 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2014/02/16/exceptions-in-ruby/</guid>
+      <description>I inherited some interesting code last week. A user has the ability to sign into the website with omniauth.
+{% codeblock lang:ruby %} def num puts &amp;ldquo;Enter a number&amp;rdquo; num = gets.chomp.to_i
+if num == 3 puts &amp;quot;It&#39;s a 3!&amp;quot; else raise &amp;quot;Wrong number, you entered a #{num}&amp;quot; end  end
+def num2 num end
+begin num2 rescue Exception =&amp;gt; ex puts ex end {% endcodeblock %}
+Reference
+Ruby Exception Class</description>
+    </item>
+    
+    <item>
+      <title>refactoring client side validations</title>
+      <link>http://iacutone.github.io/posts/post/2014/01/21/refactoring-client-side-validations/</link>
+      <pubDate>Tue, 21 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2014/01/21/refactoring-client-side-validations/</guid>
+      <description>I have been working on refactoring my client side JavaScript validations on an application. My tech lead gave me some illuminating tips on how to refactor my non-DRY code. Here is an example of the pre-refactored code.
+{% codeblock _form.html.erb lang:erb %} &amp;lt;%= form_for(@order) do |f| %&amp;gt; 2. Your Information &amp;lt;%= f.label :first_name, &amp;lsquo;First name&amp;rsquo; %&amp;gt; &amp;lt;%= f.text_field :first_name %&amp;gt;   &amp;lt;%#= f.hidden_field :customer_id, value: current_user.id unless current_user.id == nil %&amp;gt;   &amp;lt;%= f.</description>
+    </item>
+    
+    <item>
+      <title>testing your way to success</title>
+      <link>http://iacutone.github.io/posts/post/2013/10/22/testing-your-way-to-success/</link>
+      <pubDate>Tue, 22 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/10/22/testing-your-way-to-success/</guid>
+      <description>I have been immersed in production codebases for my Fohr Card and Fractured Atlas projects. At first, it feel initimidating trying to figure out all of the models and related associations. I have found that a great way to wrap your head around the code base is to create a new branch and test the code.
+A good basic set-up is to start unit testing the models. In order to do this depends on if your codebase is using a relational database or something like Mongoid.</description>
+    </item>
+    
+    <item>
+      <title>changing your password from scratch</title>
+      <link>http://iacutone.github.io/posts/post/2013/09/07/changing-your-password-from-scratch/</link>
+      <pubDate>Sat, 07 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/09/07/changing-your-password-from-scratch/</guid>
+      <description>So say you are using devise and have none of the has_secure_password medthod available to you. One should learn the bcrypt gem... and needs to abstract some methods in order to parse an encrypted password. Cool, Bcrypt can do that, as located here. Here is my modified code in order to confirm if a new password in order to apply a boolean value to an inputed password.
+{% codeblock edit.</description>
+    </item>
+    
+    <item>
+      <title>grep and scan regular expressions in ruby</title>
+      <link>http://iacutone.github.io/posts/post/2013/08/22/grep-and-scan-regular-expressions-in-ruby/</link>
+      <pubDate>Thu, 22 Aug 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/08/22/grep-and-scan-regular-expressions-in-ruby/</guid>
+      <description>I am creating an app to provide food cart locations in Manhattan. Here is the code. Food carts generally post their locations on Twitter; in order to create latitude and longitude coordinates, I needed to parse tweets. This is where scan and grep play their role, to match elements in a tweet string. Let&#39;s say this is our tweet: &#34;53rd and park. Ready by 11!&#34; This string is database column in my locations model.</description>
+    </item>
+    
+    <item>
+      <title>adventures in jquery</title>
+      <link>http://iacutone.github.io/posts/post/2013/08/15/adventures-in-jquery/</link>
+      <pubDate>Thu, 15 Aug 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/08/15/adventures-in-jquery/</guid>
+      <description>I have been developing a quiz app for practice with a more complex schema interface. I wanted to dive deeper into CoffeScript and found the opportunity while trying to figure out how a student can add an answer to a given quiz. If a checkbox for a given answer is checked, I wanted the remaining checkboxes to disappear. Also, if the student checked the incorrect box, the browser should render all checkboxes again.</description>
+    </item>
+    
+    <item>
+      <title>sidekiq and carrierwave</title>
+      <link>http://iacutone.github.io/posts/post/2013/07/15/sidekiq-and-carrierwave/</link>
+      <pubDate>Mon, 15 Jul 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/07/15/sidekiq-and-carrierwave/</guid>
+      <description>I decided to use the Carrierwave Backgrounder Gem in order to asynchronously upload photos to Amazon S3. This is a different gem than the one Ryan Bates uses in his Railscast. I was having difficulty implimenting the Carrierwave Direct Gem However, the Backgrounder Gem works great! This is the last installment of the three part series on uploading photos.
+This is the final version of the avatar_uploader.rb file. Just add line 3, which is in the Backgrounder documentaion.</description>
+    </item>
+    
+    <item>
+      <title>gon gem</title>
+      <link>http://iacutone.github.io/posts/post/2013/06/30/gon-gem/</link>
+      <pubDate>Sun, 30 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/06/30/gon-gem/</guid>
+      <description>I ran into difficulties trying to find a way to implement jQuery in a modal. It is not possible to use remote: true in a form_tag with Twitter Bootstrap. I successfully used the Gon Gem in order to remove elements from the DOM when an instance variable reached a certain number. If you find yourself in the position of needing to remove elements from a modal, this gem seems to be the way to go.</description>
+    </item>
+    
+    <item>
+      <title>pluck method in active record</title>
+      <link>http://iacutone.github.io/posts/post/2013/06/23/pluck-method-in-active-record/</link>
+      <pubDate>Sun, 23 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/06/23/pluck-method-in-active-record/</guid>
+      <description>The past few days, I have been building a database to store some information for my friend Shari, a Peace Corps recruiter. The database includes, a name, email and phone number. Things got tricky building a date/time models and validations. Every given time has six time slots for a user to sign up. My conclusion to this problem was to create a different database column for every given time slot. Then, I used the pluck method on my Active Record database in order to turn all of my time columns into strings in an array.</description>
+    </item>
+    
+    <item>
+      <title>using impress dot js with rails</title>
+      <link>http://iacutone.github.io/posts/post/2013/06/21/using-impress-dot-js-with-rails/</link>
+      <pubDate>Fri, 21 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/06/21/using-impress-dot-js-with-rails/</guid>
+      <description>I recently had an interview at an awesome creative agency, Canvas and wanted to show them something unique in order to make me stand out. I decided to build a thank you card with Impress.js. This is the thank you card I sent to their CTO. I enjoyed playing with Impress.js and will definitely incorporate it into many more applications in the future. However, there is not much documentation about how to get Impress to play nicely in a Rails app.</description>
+    </item>
+    
+    <item>
+      <title>client side validations</title>
+      <link>http://iacutone.github.io/posts/post/2013/06/18/client-side-validations/</link>
+      <pubDate>Tue, 18 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/06/18/client-side-validations/</guid>
+      <description>The Railscast for the Client Side Validations Gem is very outdated and does not function. Furthermore, the documentation for the gem did not completely work with my version of Rails, 3.2.13. The point of this post is to get front end validations to work with Rails 3.2.13.
+gem &amp;lsquo;client_side_validations&amp;rsquo;
+$ rails g client_side_validations:install
+The file below is created, but you must uncomment lines 10 through 16 in order to get it to work.</description>
+    </item>
+    
+    <item>
+      <title>amazon s3</title>
+      <link>http://iacutone.github.io/posts/post/2013/06/10/amazon-s3/</link>
+      <pubDate>Mon, 10 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/06/10/amazon-s3/</guid>
+      <description>So we have Carrierwave uploading pictures to our local server. Perhaps we want the pictures stored on a third party cloud provider. Amazon S3 and Carrierwave work very well together. This blog post describes how to upload your pictures to the Amazon S3 cloud. Again, thanks to Ryan Bates and Railscasts for the great information.
+In order to upload files to Amazon S3, we will be using the Fog Gem.</description>
+    </item>
+    
+    <item>
+      <title>binary search trees</title>
+      <link>http://iacutone.github.io/posts/post/2013/04/22/binary-search-trees/</link>
+      <pubDate>Mon, 22 Apr 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/04/22/binary-search-trees/</guid>
+      <description>Properties  The left subtree of a node contains only nodes with keys less than the node&amp;rsquo;s key. The right subtree of a node contains only nodes with keys greater than the node&amp;rsquo;s key. The left and right subtree must each also be a binary search tree. There must be no duplicate nodes. 
+Benefits  Insert, find and remove any entry Quickly find entry with min/max key Entry nearest another entry, like in a dictionary, but cannot remember how to spell the word</description>
+    </item>
+    
+    <item>
+      <title>the yipit api and whenever gem</title>
+      <link>http://iacutone.github.io/posts/post/2013/04/16/the-yipit-api-and-whenever-gem/</link>
+      <pubDate>Tue, 16 Apr 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/04/16/the-yipit-api-and-whenever-gem/</guid>
+      <description>Last week Alex and I presented Platt101 at our NYC on Rails Meetup, at the Flatiron School. Platt101 let&#39;s a user write reviews about restaurants they have been to and renders those restaurants on a Google Map. The restaurants are based on the 101 best according to New York Magazine. The restaurants a user has been to render in a different color than restaurants a user hasn&#39;t had the pleasure of dining.</description>
+    </item>
+    
+    <item>
+      <title>jambox</title>
+      <link>http://iacutone.github.io/posts/post/2013/03/01/jambox/</link>
+      <pubDate>Fri, 01 Mar 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/03/01/jambox/</guid>
+      <description>AirPlay Learning how Airplay works: it allows wireless streaming of audio, video and photos.  My original idea was to rip the music information going onto the Flatiron AirPlay, then automatically tweet this information via Twitter. I liked this idea because we play so much cool and unfamiliar music. It would be great to keep track of what is playing. Over time, I opened a myriad of tabs and discovered many interesting API&#39;s.</description>
+    </item>
+    
+    <item>
+      <title>adventures in code</title>
+      <link>http://iacutone.github.io/posts/post/2013/02/20/adventures-in-code/</link>
+      <pubDate>Wed, 20 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/02/20/adventures-in-code/</guid>
+      <description>One can run into some cataclysmic errors trying to setup and deploy an Octopress account. Personally, I kept raking new themes from Github to my Octopress account and finally, my blog broke. In order to keep the same url, I deleted my Github repository and recreated an Octopress account.
+Things I learned Knowing:
+ $ subl .
+This saves so much time. The code snipped will open the entire current directory in your terminal.</description>
+    </item>
+    
+    <item>
+      <title>git commandments</title>
+      <link>http://iacutone.github.io/posts/post/2013/02/13/git-commandments/</link>
+      <pubDate>Wed, 13 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/2013/02/13/git-commandments/</guid>
+      <description>Don&amp;#8217;t change master.
+$ git pull &amp;#8211;&amp;#8211;rebase
+ -to pull from the master and then create new branch
+ -now you have an up to date branch to code your magic
+$ git status
+ -run after you change things in your branch
+ -shows you what changed
+$ git add .
+$ git commit -m &amp;#8220;Your message&amp;#8221;
+$ git co master
+ -checkout master before your merge
+$ git pull &amp;#8211;&amp;#8211;rebase</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>understanding union types in elm &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">understanding union types in elm</h1>
+        <div class="post-meta">
+            <time datetime="16 April 2018">
+                16 April 2018
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        
+
+<p>Watching <a href="https://www.youtube.com/watch?v=IcgmSRJHu_8">Making Impossible States Impossible</a> and reading <a href="https://becoming-functional.com/higher-level-coding-with-elm-union-types-2502d1f5a615">Higher Level Coding with Elm Union Types</a> were enlightening in my Elm development. Now, I look for places were I can refine my data model by using union types. Union types allow me to replace conditionals with pattern matching case statements. This pattern is much cleaner and easier to understand. The following is an example of how I used union types to refactor a hamburger.</p>
+
+<h2 id="elm-model">Elm Model</h2>
+
+<pre><code class="language-haskell">-- BEFORE
+
+type Msg
+    = DisplayHamburgerItems
+
+type alias Model = 
+    { hamburger_open : Bool
+    }
+
+-- AFTER
+
+type Msg
+    = DisplayHamburgerItems Hamburger
+
+type Hamburger
+    = Open
+    | Closed
+
+
+type alias Model = 
+    { hamburger : Hamburger
+    }
+</code></pre>
+
+<h2 id="elm-update">Elm Update</h2>
+
+<pre><code class="language-haskell">update : Msg -&gt; Model -&gt; ( Model, Cmd Msg )
+update msg model =
+
+    -- BEFORE
+
+    case msg of
+        DisplayHamburgerItems -&gt;
+            if model.hamburger_open == True then
+                let
+                    items = List.append model.display_hamburger [&quot;About&quot;, &quot;Contact&quot;, &quot;Menu&quot;]
+                in
+                    ( { model | display_hamburger = items, hamburger_open = False }, Cmd.none )
+            else
+                ( { model | display_hamburger = [], hamburger_open = True }, Cmd.none 
+
+
+    -- AFTER
+
+        DisplayHamburgerItems msg -&gt;
+            case msg of
+                Open -&gt;
+                    let
+                        items = List.append model.display_hamburger [&quot;About&quot;, &quot;Contact&quot;, &quot;Menu&quot;]
+                    in
+                        ( { model | hamburger = Open, display_hamburger = items }, Cmd.none )
+                Closed -&gt;
+                    ( { model | hamburger =  Closed, display_hamburger = [] }, Cmd.none )
+</code></pre>
+
+<h2 id="elm-view">Elm View</h2>
+
+<pre><code class="language-haskell">view : Model -&gt; Html Msg
+view model =
+
+    -- BEFORE
+
+    i [ onClick (DisplayHamburgerItems) ] []
+
+    -- AFTER
+
+    i [ onClick (DisplayHamburgerItems (toggleHamburger model.hamburger)) ] []
+
+viewHamburgerItems : Model -&gt; Html Msg
+viewHamburgerItems model =
+
+    -- BEFORE
+
+    if model.hamburger_open == False then
+        div [] (List.map item model.display_hamburger)
+    else
+        div [] []
+
+    -- AFTER
+
+    case model.hamburger of
+        Open -&gt;
+            div [] (List.map item model.display_hamburger)
+        Closed -&gt;
+            div [] []
+</code></pre>
+
+<p>It is easier to reason about <code>Hamburger</code> with <code>Open</code> and <code>Closed</code> types than checking against a <code>Bool</code>. Pattern matching on the union type is expressive and is really helpful when the union types grow in complexity.</p>
+
+<p>Full code <a href="https://github.com/iacutone/menus">here</a>.</p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

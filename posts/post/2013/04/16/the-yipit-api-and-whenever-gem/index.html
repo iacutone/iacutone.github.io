@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>the yipit api and whenever gem &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">the yipit api and whenever gem</h1>
+        <div class="post-meta">
+            <time datetime="16 April 2013">
+                16 April 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p>Last week Alex and I presented Platt101 at our NYC on Rails Meetup, at the Flatiron School.  Platt101 let's a user write reviews about restaurants they have been to and renders those restaurants on a Google Map.  The restaurants are based on the 101 best according to New York Magazine.  The restaurants a user has been to render in a different color than restaurants a user hasn't had the pleasure of dining.  A fellow student (h/t Anthony) suggested we impliment a GroupOn link in our restaurant list in order for a user to provide the user incentive to go dine at given restaurants.</p>
+
+<p> We decided to use the <a href='http://yipit.com/about/api/'>Yipit API</a> in order to aggregate all discount incentives from numerous discount sites such as GroupOn.  We accessed the Yipit API via the Yipit <a href='https://github.com/gangster/yipit'>gem</a> for Ruby on Rails, created by Gangster.  Aside from our client session running a few times, the gem provided for all of our data parsing needs.  The Yelp API we used to seed our database with relevant restaurant information included phone numbers.  We searched the phone numbers in our database against phone numbers on Yipit in order to find deals for the given restaurants on our list.  This functionality is provided with a rake task.  Here is the code: </p><br>
+
+<p><img src = "/images/yipit.png" height = "500" width = "500"></p>
+
+<p> The rake task provides us the ability to use the Whenever gem in order to run the rake task everyday.  This way our database in reseeded with new data about restaurant deals on a daily basis.  The Whenever gem was easy to impliment.</p><br>
+
+<p><img src = "/images/whenever-2.png" height = "500" width = "500"></p>
+
+<p>This code is automatically added to your config > schedule.rb when you run whenever . in terminal.  You can customize Whenever to run whenever you want.</p>
+
+<p>Now, this all works well in development, but Platt101 is deployed on Heroku.  In production, we needed to reset up the Whenever gem.  This is also easy to accomplish on Heroku. Use <a href='https://addons.heroku.com/scheduler'>Heroku Scheduler</a> in order to run a chron job in production.  They do make you use input your credit card info, which is whack, but it says free... we shall see.</p>
+
+<p><a href='http://www.platt101.com'>Platt101 can be found here.</a></p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

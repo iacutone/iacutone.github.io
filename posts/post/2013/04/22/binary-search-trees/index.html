@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>binary search trees &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">binary search trees</h1>
+        <div class="post-meta">
+            <time datetime="22 April 2013">
+                22 April 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p><h2>Properties</h2>
+<ol>
+    <li>The left subtree of a node contains only nodes with keys less than the node&rsquo;s key.</li>
+    <li>The right subtree of a node contains only nodes with keys greater than the node&rsquo;s key.</li>
+    <li>The left and right subtree must each also be a binary search tree.</li>
+    <li>There must be no duplicate nodes.</li>
+</ol></p>
+
+<p><h3>Benefits</h3>
+<ul>
+    <li>Insert, find and remove any entry</li>
+    <li>Quickly find entry with min/max key</li>
+    <li>Entry nearest another entry, like in a dictionary, but cannot remember how to spell the word</li>
+</ul></p>
+
+<p><h3>BST Invariant</h3>
+<p>For any node x, every key in the left subtree of x is &lt;= x&rsquo;s key</p>
+<p>For any node x, every key in the right subtree of x is &gt;= x&rsquo;s key</p>
+<p><img src = "/images/BST.png" height = "500" width = "500"></p><br>
+<p>Inorder traversal of a binary search tree visits nodes in sorted order, the left of root (18) are displayed before the right.<p/></p>
+
+<p><h3>Operations</h3>
+<h4>Entry Find (Object k)</h4>
+<ul>
+    <li>Object looking for compared to object stored in key (if it is there)</li>
+    <li>If true, returns the entry</li>
+    <li>Else returns nil</li>
+    <li>Good for exact matches, can do faster with hash table</li>
+</ul><br>
+<p>How to find smallest key &gt;= k or largest key &lt;= k?<p/>
+    <p>When searching down the tree for a key k that is not in the tree, we encounter both.</p>
+    <ul>
+        <li>Node containing smallest key &gt; k, and</li>
+        <li>Node containing largest key &lt; k </li>
+    </ul><br></p>
+
+<pre><code>&lt;p&gt;Ex. search for 27 as k (from above pic)&lt;/p&gt;
+&lt;ul&gt;
+    &lt;li&gt;Keeps searching nodes to the right, gets to 28 and returns nil&lt;/li&gt;
+    &lt;li&gt;encounters 25 &lt; k and 28 &gt; k&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<h4> Entry first();<br> -If empty return null, otherwise start at root and walk down left repeatedly until you reach node with no left child, that node has minimum key.</h4>
+<h4> Entry last();<br> -Mirror of left, but walks down right tree</h4>
+
+<p><h4>Entry insert(Object k, Object v);</h4>
+<ul>
+    <li>Follow same path through the tree as find();</li>
+    <li>When you reach null reference, replace null with reference to new node with entry(k, v), duplicate keys are allowed.</li>
+    <li>Puts new entry on the left subtree of old one</li>
+</ul></p>
+
+<p><h4>The delete operations (where shit gets complex)</h4>
+<h4>Entry remove(Object k);</h4>
+<ul>
+    <li>Find node n with key k, if k not found return null</li>
+    <li>If n has no children, detach it from parent</li>
+    <li>If n has one child, move child up to take n&rsquo;s place</li>
+    <li>If node has 2 children</li>
+    <ul>
+        <li>Suppose we want to remove 12 from above pic</li>
+        <li>Let x be the node in n&rsquo;s right subtree with smallest key</li>
+        <ul>
+            <li>Keep going to the left, in this case, 13 is node x, only has one child</li>
+            <ul>
+                <li>Remove x, has no left child and therefore, is easily removed</li>
+                <li>Replace n&rsquo;s key with x&rsquo;s key</li>
+            </ul>
+        </ul>
+    </ul>
+</ul></p>
+
+<p><p><img src = "/images/bstexample.png" height = "500" width = "500"></p><br></p>
+
+<p><p>h/t Jonathan Shewchuk at UC Berkeley</p>
+<a href='https://www.youtube.com/watch?v=V_3BM0ykITM'>His lecture via Youtube</a></p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>

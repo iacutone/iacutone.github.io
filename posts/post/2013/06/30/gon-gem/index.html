@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>gon gem &middot; Iacutone Dev Blog</title>
+    <meta name="author" content="Eric Iacutone">
+    <meta name="description" content="My dev blog">
+    <meta name="generator" content="Hugo 0.43" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="http://iacutone.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://iacutone.github.io/css/screen.css">
+    <link rel="stylesheet" href="http://iacutone.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+    
+
+    
+    <link rel="shortcut icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://iacutone.github.io/favicon.ico">
+    
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="home-template">
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="http://iacutone.github.io/">Iacutone Dev Blog</a></h1>
+	
+	
+</header>
+    
+    
+    <main class="content" role="main">
+    
+<article class="post">
+    <header>
+        <h1 class="post-title">gon gem</h1>
+        <div class="post-meta">
+            <time datetime="30 June 2013">
+                30 June 2013
+            </time>
+        </div>
+    </header>
+
+    <section class="post-content">
+        <p>I ran into difficulties trying to find a way to implement jQuery in a modal.  It is not possible to use remote: true in a form_tag with Twitter Bootstrap.  I successfully used the <a href='https://github.com/gazay/gon'>Gon Gem</a> in order to remove elements from the DOM when an instance variable reached a certain number.  If you find yourself in the position of needing to remove elements from a modal, this gem seems to be the way to go.</p>
+
+<p>{% codeblock user_controller.rb lang:ruby %}</p>
+
+<pre><code>def create
+  @user = User.new(params[:user])
+
+  if @user.save
+
+    @day_one_counter = []
+    @day_one_counter = User.pluck(:time1)
+
+    #@day_one_counter outputs an array of elements from the :time1 column. =&gt; [&quot;11:00&quot;, &quot;11:00&quot;, nil, nil, nil]
+
+    b = Hash.new(0)
+
+    @day_one_counter.each do |v|
+      b[v] += 1
+    end
+
+    #the block increments the key/value pairs in the instantiated Hash. =&gt; {&quot;11:00&quot;=&gt;2, nil=&gt;3}
+
+    @time1 = b[&quot;11:00&quot;]
+    gon.time1 = @time1
+
+    #@time1 pulls out the value of the pair =&gt; 2
+    #gon.time1 =&gt; 2, in order to use the @time1 instance variable in users.js
+
+    @time2 = b[&quot;11:20&quot;] 
+    gon.time2 = @time2
+
+    @time3 = b[&quot;11:40&quot;]
+    gon.time3 = @time3
+
+    render :time
+  else
+    render :new
+  end
+end
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p>This is a conintuation of the Pluck Method from my last blog post.  For an overview of what is happening, read the comments provided above.  With the gone.time1 variable, I can now use jQuery in my users.js file in order to remove elements from the DOM that go over a given number, in this case 5.</p>
+
+<p>{% codeblock users.js lang:js %}</p>
+
+<pre><code>if (gon.time1 &gt; 4) {
+    $('.wrapper1').remove();
+}
+
+if (gon.time2 &gt; 4) {
+    $('.wrapper2').remove();
+}
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p>...and the form</p>
+
+<p>{% codeblock _time1.html.erb lang:ruby %}</p>
+
+<pre><code>&lt;%= form_for @user do |f| %&gt;
+    &lt;div class='wrapper1' id='pad'&gt;11:00 A.M. &lt;%= f.radio_button(:time1, '11:00') %&gt;&lt;br /&gt;&lt;%= 5 - @time1 unless @time1 == nil %&gt; spots remaining.&lt;/div&gt; 
+    &lt;div class='wrapper2' id='pad'&gt;11:20 A.M. &lt;%= f.radio_button(:time1, '11:20') %&gt;&lt;br /&gt;&lt;%= 5 - @time2 unless @time2 == nil %&gt; spots remaining.&lt;/div&gt;
+    &lt;div class='wrapper'&gt;&lt;%= f.radio_button(:time1, 'No time.') %&gt;  Interested but not available during these times. Please inform me of future conversation opportunities.&lt;br /&gt;&lt;/div&gt;
+&lt;%= f.hidden_field :day, :value =&gt; 'July 10' %&gt;
+&lt;button class=&quot;btn btn-inverse&quot; type=&quot;submit&quot;class=&quot;actions&quot;&gt;Submit&lt;/button&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<p>Since the @time1 instance variable and therefore, gon.time1 are saved after my create action, the applicable time is > 4 if I want a total of 5 elements for a particular time on my :time1 column.  The next time the modal is visited, the element will be removed!</p>
+
+<p>I am so excited I found this gem and got my modal to work correctly! Also, a thanks for Railscast for the tutorial on the gem.</p>
+
+<p><a href='http://railscasts.com/episodes/324-passing-data-to-javascript'>Passing Data to Javascript</a></p>
+
+    </section>
+
+    
+</article>
+
+    </main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+      
+      <a href="//twitter.com/iacutone" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+      
+      
+      <a href="//www.linkedin.com/in/iacutone" target="_blank" title="linkedIn"><i class="fa fa-2x fa-fw fa-linkedin"></i> <span class="hidden">LinkedIn</span></a>&nbsp;
+      
+      
+      
+      
+      <a href="//www.instagram.com/iacutone" target="_blank" title="Instagram"><i class="fa fa-2x fa-fw fa-instagram"></i> <span class="hidden">Instagram</span></a>&nbsp;
+      
+      
+      <a href="//github.com/iacutone" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+      
+      
+      
+      
+  </section>
+
+		<section class="copyright">&copy; 2018 <a href="http://iacutone.github.io/">Eric Iacutone</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="http://iacutone.github.io/js/index.js"></script>
+<script src="http://iacutone.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-38341110-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+</body>
+</html>
