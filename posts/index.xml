@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Iacutone Dev Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 13 Sep 2018 10:51:44 -0400</lastBuildDate>
+    <lastBuildDate>Tue, 18 Sep 2018 16:57:14 -0400</lastBuildDate>
     
 	<atom:link href="http://iacutone.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>S3 Cmd</title>
+      <link>http://iacutone.github.io/posts/post/s3-cmd/</link>
+      <pubDate>Tue, 18 Sep 2018 16:57:14 -0400</pubDate>
+      
+      <guid>http://iacutone.github.io/posts/post/s3-cmd/</guid>
+      <description>I am a huge fan of S3cmd, a command line utility for pushing files to S3 buckets. Below is a bash script I use to push to an S3 bucket.
+#!/bin/bash set -e branch_name=$(git rev-parse --abbrev-ref HEAD) if [ &amp;quot;$branch_name&amp;quot; == &amp;quot;master&amp;quot;]; then cp style.css build/style.css cp app.js build/app.js cp index.html build/index.html s3cmd sync --recursive build/ s3://&amp;lt;s3-bucket-name&amp;gt; echo -e &amp;quot;\t Successfully deployed to S3&amp;quot; fi  First, I define a branch_name variable.</description>
+    </item>
     
     <item>
       <title>Rails Helper Method</title>

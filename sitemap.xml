@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://iacutone.github.io/posts/post/s3-cmd/</loc>
+    <lastmod>2018-09-18T16:57:14-04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://iacutone.github.io/posts/post/rails-helper-method/</loc>
     <lastmod>2018-09-13T10:51:44-04:00</lastmod>
   </url>
@@ -244,13 +249,13 @@
   
   <url>
     <loc>http://iacutone.github.io/</loc>
-    <lastmod>2018-09-13T10:51:44-04:00</lastmod>
+    <lastmod>2018-09-18T16:57:14-04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://iacutone.github.io/posts/</loc>
-    <lastmod>2018-09-13T10:51:44-04:00</lastmod>
+    <lastmod>2018-09-18T16:57:14-04:00</lastmod>
     <priority>0</priority>
   </url>
   
