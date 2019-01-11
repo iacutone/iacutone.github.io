@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>understanding test doubles &middot; Iacutone Dev Blog</title>
+    <title>S3 Cmd &middot; Iacutone Dev Blog</title>
     <meta name="author" content="Eric Iacutone">
     <meta name="description" content="My dev blog">
     <meta name="generator" content="Hugo 0.50" />
@@ -53,95 +53,34 @@
     
 <article class="post">
     <header>
-        <h1 class="post-title">understanding test doubles</h1>
+        <h1 class="post-title">S3 Cmd</h1>
         <div class="post-meta">
-            <time datetime="24 October 2017">
-                24 October 2017
+            <time datetime="18 September 2018">
+                18 September 2018
             </time>
         </div>
     </header>
 
     <section class="post-content">
-        
+        <p>I am a huge fan of <a href="https://s3tools.org/s3cmd">S3cmd</a>, a command line utility for pushing files to S3 buckets. Below is a bash script I use to push to an S3 bucket.</p>
 
-<p>I refactored credit card payments on an application that uses the <code>ActiveMerchant</code> gem. I was not confident in the test, so, I re-wrote the tests to verify responses from Braintree. Once I verified I did not break anything with my refactor, I decided the best next step was to remove the interaction with Braintree and replace it with stubbed responses. I always forget when and how to use RSpec <code>allow</code>, <code>spy</code> and <code>double</code> methods. This post is meant to help reinforce my knowledge of the aforementioned methods.</p>
+<pre><code class="language-bash">#!/bin/bash
+set -e
 
-<pre><code class="language-ruby">describe CreditCardPayment do
-  let!(:payment) { build(:credit_card_payment) }
+branch_name=$(git rev-parse --abbrev-ref HEAD)
+if [ &quot;$branch_name&quot; == &quot;master&quot;]; then
+  cp style.css build/style.css
+  cp app.js build/app.js
+  cp index.html build/index.html
 
-  describe '#authorize' do
-    before { payment.authorize }
-
-    it 'records the GatewayTransaction' do
-      transaction = GatewayTransaction.last
-
-      expect(transaction.success).to eq true
-      expect(transaction.amount).to eq amount
-      expect(transaction.message).to eq '1000 Approved'
-      expect(transaction.response).to be_present
-      expect(transaction.service_fee).to eq service_fee[:service_fee]
-    end
-  end
-end
+  s3cmd sync --recursive build/ s3://&lt;s3-bucket-name&gt;
+  echo -e &quot;\t Successfully deployed to S3&quot;
+fi
 </code></pre>
 
-<p>Authorize is a wrapper around the payment gateway #authorize method which returns a response from Braintree. I should have confidence that when sending Braintree arguments that the<code>#authorize</code> expects, the response will be successful. This is interaction is what needs to be stubbed in order to not call the Braintree API in the test environment. The benefits of this approach are that the test will be faster and more resilient because there is no communication with an external service. The negatives of this approach is that the API can change.</p>
+<p>First, I define a <code>branch_name</code> variable. Then, when pushing to the master branch in GitHub, a pre-push git hook pushes your changes to a S3 bucket before the changes are committed to GitHub. To try this yourself, put the above bash script in <code>$ touch .git/hooks/pre-push</code>.</p>
 
-<p>Let&rsquo;s update the above codeblock to stub out the interaction with Braintree.</p>
-
-<pre><code class="language-ruby">describe CreditCardPayment do
-  let(:gateway_double) { double('ActiveMerchant::Billing::BraintreeGateway') }
-  let!(:payment) { build(:credit_card_payment, gateway: gateway_double) }
-
-  before { payment.gateway = gateway_double }
-
-  describe '#authorize' do
-    it 'sends a #authorize request to Braintree' do
-      expect(gateway_double).to receive(:authorize).exactly(1).times
-        .with(amount, payment.credit_card, payment.credit_card_descriptor)
-	.and_return(authorize_response_stub)
-
-      payment.authorize
-    end
-
-    it 'creates a GatewayTransaction' do
-      expect { payment.authorize }.to change(GatewayTransaction, :count).by(1)
-    end
-  end
-
-  def authorize_response_stub
-    params = { 'response_from_braintree' =&gt; 'yay' }
-
-     ActiveMerchant::Billing::Response.new(true, '1000 Approved', params, {authorization: '3e4r5q'})
-  end
-end
-</code></pre>
-
-<p>Notice that in the <code>it</code> block the expectation comes before the <code>#payment</code> method call. We could replace the <code>double</code> with a <code>spy</code>. The difference is a spy uses the <code>have_received</code> method. It is your preference to use either a <code>double</code> or a <code>spy</code>.</p>
-
-<pre><code class="language-ruby">  let(:gateway_double) { spy('ActiveMerchant::Billing::BraintreeGateway') }
-  let!(:payment) { build(:credit_card_payment, gateway: gateway_double) }
-
-  before { payment.gateway = gateway_double }
-
-  describe '#authorize' do
-    it 'sends a #authorize request to Braintree' do
-      payment.authorize
-
-      expect(gateway_double).to have_receive(:authorize).exactly(1).times
-        .with(amount, payment.credit_card, payment.credit_card_descriptor)
-	.and_return(authorize_response_stub)
-    end
-
-    it 'creates a GatewayTransaction' do
-      expect { payment.authorize }.to change(GatewayTransaction, :count).by(1)
-    end
-  end
-</code></pre>
-
-<h3 id="helpful-links">Helpful Links</h3>
-
-<p><a href="https://relishapp.com/rspec/rspec-mocks/v/3-6/docs/basics">RSpec Mocks 3.6</a></p>
+<p>I have success with this strategy along with S3 static bucket hosting for websites on AWS S3. Changes to my S3 websites auto push, leaving me with less things to do.</p>
 
     </section>
 
@@ -176,15 +115,15 @@ end
     <section class="share">
     <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
     <p class="info prompt">Share</p>
-    <a href="http://twitter.com/share?text=understanding%20test%20doubles&url=http%3a%2f%2fiacutone.github.io%2fpost%2f2017%2f10%2f24%2funderstanding-test-doubles%2f" title="Share on Twitter"
+    <a href="http://twitter.com/share?text=S3%20Cmd&url=http%3a%2f%2fiacutone.github.io%2fpost%2fs3-cmd%2f" title="Share on Twitter"
         onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
         <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fiacutone.github.io%2fpost%2f2017%2f10%2f24%2funderstanding-test-doubles%2f" title="Share on Facebook"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fiacutone.github.io%2fpost%2fs3-cmd%2f" title="Share on Facebook"
         onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
         <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
     </a>
-    <a href="https://plus.google.com/share?url=http%3a%2f%2fiacutone.github.io%2fpost%2f2017%2f10%2f24%2funderstanding-test-doubles%2f" title="Share on Google+"
+    <a href="https://plus.google.com/share?url=http%3a%2f%2fiacutone.github.io%2fpost%2fs3-cmd%2f" title="Share on Google+"
        onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
         <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
     </a>

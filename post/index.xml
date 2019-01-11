@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Title</title>
+    <title>Posts on Iacutone Dev Blog</title>
     <link>http://iacutone.github.io/post/</link>
-    <description>Recent content in Posts on Title</description>
+    <description>Recent content in Posts on Iacutone Dev Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Apr 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 11 Jan 2019 10:30:36 -0500</lastBuildDate>
     
 	<atom:link href="http://iacutone.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Execute a Ruby Method on Lambda With Api Gateway</title>
+      <link>http://iacutone.github.io/post/execute-ruby-method-on-lambda-with-api-gateway/</link>
+      <pubDate>Fri, 11 Jan 2019 10:30:36 -0500</pubDate>
+      
+      <guid>http://iacutone.github.io/post/execute-ruby-method-on-lambda-with-api-gateway/</guid>
+      <description>Amazon now offers Ruby 2.5 Lambda functions! I was able to take advantage of this at my job. Lambda functions are great when you want to periodically run a script or do some stateless work. In the past, I have created Node and Python functions to pull data, send emails and push data to external API&amp;rsquo;s. In this post, I explore how I use the Ruby implementation of Lambda in order to verify if a URL is valid.</description>
+    </item>
+    
+    <item>
+      <title>S3 Cmd</title>
+      <link>http://iacutone.github.io/post/s3-cmd/</link>
+      <pubDate>Tue, 18 Sep 2018 16:57:14 -0400</pubDate>
+      
+      <guid>http://iacutone.github.io/post/s3-cmd/</guid>
+      <description>I am a huge fan of S3cmd, a command line utility for pushing files to S3 buckets. Below is a bash script I use to push to an S3 bucket.
+#!/bin/bash set -e branch_name=$(git rev-parse --abbrev-ref HEAD) if [ &amp;quot;$branch_name&amp;quot; == &amp;quot;master&amp;quot;]; then cp style.css build/style.css cp app.js build/app.js cp index.html build/index.html s3cmd sync --recursive build/ s3://&amp;lt;s3-bucket-name&amp;gt; echo -e &amp;quot;\t Successfully deployed to S3&amp;quot; fi  First, I define a branch_name variable.</description>
+    </item>
+    
+    <item>
+      <title>Rails Helper Method</title>
+      <link>http://iacutone.github.io/post/rails-helper-method/</link>
+      <pubDate>Thu, 13 Sep 2018 10:51:44 -0400</pubDate>
+      
+      <guid>http://iacutone.github.io/post/rails-helper-method/</guid>
+      <description>Helper methods allow controller methods to be called in the associated layout code.
+# UserController helper_method def current_user @current_user ||= User.find(params[:id]) end  # User Show Page &amp;lt;h1&amp;gt;Hello, &amp;lt;%= current_user %&amp;gt;&amp;lt;/h1&amp;gt;  Why use a helper_method? A helper method is advantageous to use over an instance variable in a variety of ways.
+ Instance variable value is set to nil which can lead to unexpected results  def test @test end # test == nil   Instance variables are more difficult to maintain due to tracking of read and write, especially when @object is used in many places</description>
+    </item>
     
     <item>
       <title>graphql with elm part 2</title>
@@ -46,8 +76,7 @@ GitHub has extensive documentation on communicating with their GraphQL server. I
       <pubDate>Wed, 10 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>http://iacutone.github.io/post/2018/01/10/pr-review-diagram/</guid>
-      <description>I thought I would share my diagram for how I think about PR review. The following diagram received good reception from my team.
-{% img images/pr_review.jpg %}</description>
+      <description>I thought I would share my diagram for how I think about PR review. The following diagram received good reception from my team.</description>
     </item>
     
     <item>

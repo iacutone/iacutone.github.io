@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>understanding test doubles &middot; Iacutone Dev Blog</title>
+    <title>Execute a Ruby Method on Lambda With Api Gateway &middot; Iacutone Dev Blog</title>
     <meta name="author" content="Eric Iacutone">
     <meta name="description" content="My dev blog">
     <meta name="generator" content="Hugo 0.50" />
@@ -53,10 +53,10 @@
     
 <article class="post">
     <header>
-        <h1 class="post-title">understanding test doubles</h1>
+        <h1 class="post-title">Execute a Ruby Method on Lambda With Api Gateway</h1>
         <div class="post-meta">
-            <time datetime="24 October 2017">
-                24 October 2017
+            <time datetime="11 January 2019">
+                11 January 2019
             </time>
         </div>
     </header>
@@ -64,84 +64,80 @@
     <section class="post-content">
         
 
-<p>I refactored credit card payments on an application that uses the <code>ActiveMerchant</code> gem. I was not confident in the test, so, I re-wrote the tests to verify responses from Braintree. Once I verified I did not break anything with my refactor, I decided the best next step was to remove the interaction with Braintree and replace it with stubbed responses. I always forget when and how to use RSpec <code>allow</code>, <code>spy</code> and <code>double</code> methods. This post is meant to help reinforce my knowledge of the aforementioned methods.</p>
+<p>Amazon now offers Ruby 2.5 Lambda functions! I was able to take advantage of this at my job. Lambda functions are great when you want to periodically run a script or do some stateless work. In the past, I have created Node and Python functions to pull data, send emails and push data to external API&rsquo;s. In this post, I explore how I use the Ruby implementation of Lambda in order to verify if a URL is valid.</p>
 
-<pre><code class="language-ruby">describe CreditCardPayment do
-  let!(:payment) { build(:credit_card_payment) }
+<p>Writting this function is Lambda has many advantages that include:</p>
 
-  describe '#authorize' do
-    before { payment.authorize }
+<ol>
+<li>Not having to bear the cost of maintaining software</li>
+<li>Lambda is super cheap in my use case</li>
+</ol>
 
-    it 'records the GatewayTransaction' do
-      transaction = GatewayTransaction.last
+<h3 id="what-is-needed">What is Needed?</h3>
 
-      expect(transaction.success).to eq true
-      expect(transaction.amount).to eq amount
-      expect(transaction.message).to eq '1000 Approved'
-      expect(transaction.response).to be_present
-      expect(transaction.service_fee).to eq service_fee[:service_fee]
-    end
-  end
+<h4 id="create-lambda-and-connect-api-gateway">Create Lambda and Connect API Gateway</h4>
+
+<ol>
+<li>Create a Ruby 2.5 Lambda function</li>
+<li>Under &ldquo;Add triggers&rdquo;, click &ldquo;API Gateway&rdquo;</li>
+<li>Choose API -&gt; Create a new API</li>
+<li>Choose Security -&gt; Open</li>
+<li>Click &ldquo;Add&rdquo; button</li>
+</ol>
+
+<h4 id="test-basic-setup">Test Basic Setup</h4>
+
+<pre><code class="language-ruby">def lambda_handler(event:, context:)
+  { statusCode: 200, body: JSON.generate(&quot;Hello!&quot;) }
 end
 </code></pre>
 
-<p>Authorize is a wrapper around the payment gateway #authorize method which returns a response from Braintree. I should have confidence that when sending Braintree arguments that the<code>#authorize</code> expects, the response will be successful. This is interaction is what needs to be stubbed in order to not call the Braintree API in the test environment. The benefits of this approach are that the test will be faster and more resilient because there is no communication with an external service. The negatives of this approach is that the API can change.</p>
+<p>You should be able to visit the URL provided by the API Gateway and view the text &ldquo;Hello&rdquo;.</p>
 
-<p>Let&rsquo;s update the above codeblock to stub out the interaction with Braintree.</p>
+<h4 id="lambda-parameter-consumption">Lambda Parameter Consumption</h4>
 
-<pre><code class="language-ruby">describe CreditCardPayment do
-  let(:gateway_double) { double('ActiveMerchant::Billing::BraintreeGateway') }
-  let!(:payment) { build(:credit_card_payment, gateway: gateway_double) }
+<ol>
+<li>Go to the API Gateway service</li>
+<li>Go to the gateway hooked up to the lambda function</li>
+<li>Under &ldquo;Actions&rdquo;, click &ldquo;Create Method&rdquo;</li>
+<li>Click on &ldquo;GET&rdquo;</li>
+<li>Under &ldquo;Integration Request&rdquo;, click &ldquo;Lambda Function&rdquo;</li>
+<li>Click to reveal &ldquo;Mapping Templates&rdquo;</li>
+<li>Click &ldquo;When there are no templates defined (recommended)&rdquo; radio</li>
+<li>Add mapping template and set value to &ldquo;application/json&rdquo;</li>
+<li>Generate template &ldquo;Method Request passthrough&rdquo;</li>
+<li>Click &ldquo;Save&rdquo; button</li>
+</ol>
 
-  before { payment.gateway = gateway_double }
+<ul>
+<li>Now, all the request data will be forwarded to the Lambda function</li>
+<li>This means, we can pass a url param in the on the API Gateway which is consumed in the Lambda function</li>
+</ul>
 
-  describe '#authorize' do
-    it 'sends a #authorize request to Braintree' do
-      expect(gateway_double).to receive(:authorize).exactly(1).times
-        .with(amount, payment.credit_card, payment.credit_card_descriptor)
-	.and_return(authorize_response_stub)
+<p>The final Lambda function is:</p>
 
-      payment.authorize
-    end
+<pre><code class="language-ruby">def lambda_handler(event:, context:)
+  url = event.dig('params', 'querystring', 'url')
 
-    it 'creates a GatewayTransaction' do
-      expect { payment.authorize }.to change(GatewayTransaction, :count).by(1)
-    end
-  end
-
-  def authorize_response_stub
-    params = { 'response_from_braintree' =&gt; 'yay' }
-
-     ActiveMerchant::Billing::Response.new(true, '1000 Approved', params, {authorization: '3e4r5q'})
-  end
+  valid = UrlValidator.valid?(url)
+  { statusCode: 200, body: JSON.generate({valid: valid}) }
 end
 </code></pre>
 
-<p>Notice that in the <code>it</code> block the expectation comes before the <code>#payment</code> method call. We could replace the <code>double</code> with a <code>spy</code>. The difference is a spy uses the <code>have_received</code> method. It is your preference to use either a <code>double</code> or a <code>spy</code>.</p>
+<h4 id="debugging">Debugging</h4>
 
-<pre><code class="language-ruby">  let(:gateway_double) { spy('ActiveMerchant::Billing::BraintreeGateway') }
-  let!(:payment) { build(:credit_card_payment, gateway: gateway_double) }
+<p>In order to get the function working, I relied on the method test functionality provided by the API Gateway. On one tab, I had the Lambda code open. While in another tab, I had the client test.</p>
 
-  before { payment.gateway = gateway_double }
+<p>You can find the test functionality by clicking the &ldquo;GET&rdquo; route, then clicking</p>
 
-  describe '#authorize' do
-    it 'sends a #authorize request to Braintree' do
-      payment.authorize
+<p><img src="/post/images/test_lightning.png" alt="this image" /></p>
 
-      expect(gateway_double).to have_receive(:authorize).exactly(1).times
-        .with(amount, payment.credit_card, payment.credit_card_descriptor)
-	.and_return(authorize_response_stub)
-    end
+<p>In order to the the <code>url</code> param:</p>
 
-    it 'creates a GatewayTransaction' do
-      expect { payment.authorize }.to change(GatewayTransaction, :count).by(1)
-    end
-  end
-</code></pre>
-
-<h3 id="helpful-links">Helpful Links</h3>
-
-<p><a href="https://relishapp.com/rspec/rspec-mocks/v/3-6/docs/basics">RSpec Mocks 3.6</a></p>
+<ol>
+<li>On the {urlValidator} text input enter, &ldquo;url=whatever&rdquo;</li>
+<li>Click the test button and see the results of running the Lambda function!</li>
+</ol>
 
     </section>
 
@@ -176,15 +172,15 @@ end
     <section class="share">
     <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
     <p class="info prompt">Share</p>
-    <a href="http://twitter.com/share?text=understanding%20test%20doubles&url=http%3a%2f%2fiacutone.github.io%2fpost%2f2017%2f10%2f24%2funderstanding-test-doubles%2f" title="Share on Twitter"
+    <a href="http://twitter.com/share?text=Execute%20a%20Ruby%20Method%20on%20Lambda%20With%20Api%20Gateway&url=http%3a%2f%2fiacutone.github.io%2fpost%2fexecute-ruby-method-on-lambda-with-api-gateway%2f" title="Share on Twitter"
         onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
         <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fiacutone.github.io%2fpost%2f2017%2f10%2f24%2funderstanding-test-doubles%2f" title="Share on Facebook"
+    <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fiacutone.github.io%2fpost%2fexecute-ruby-method-on-lambda-with-api-gateway%2f" title="Share on Facebook"
         onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
         <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
     </a>
-    <a href="https://plus.google.com/share?url=http%3a%2f%2fiacutone.github.io%2fpost%2f2017%2f10%2f24%2funderstanding-test-doubles%2f" title="Share on Google+"
+    <a href="https://plus.google.com/share?url=http%3a%2f%2fiacutone.github.io%2fpost%2fexecute-ruby-method-on-lambda-with-api-gateway%2f" title="Share on Google+"
        onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
         <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
     </a>
